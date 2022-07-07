@@ -24,6 +24,7 @@ export default {
   },
   methods: {
     clickOperation(operation) {
+      console.log('zhe', this.rawData)
       this.$emit('handleOperation', operation, this.rawData)
     }
   }

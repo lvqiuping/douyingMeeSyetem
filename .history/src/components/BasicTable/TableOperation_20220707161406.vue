@@ -6,7 +6,7 @@
         :key="index"
         :type="op.type"
         :size="op.size"
-        plain
+        round
         @click="clickOperation(op)"
       >
         {{ op.title }}
@@ -24,6 +24,7 @@ export default {
   },
   methods: {
     clickOperation(operation) {
+      console.log('zhe', this.rawData)
       this.$emit('handleOperation', operation, this.rawData)
     }
   }

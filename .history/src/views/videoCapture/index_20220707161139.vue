@@ -6,7 +6,6 @@
       :multiple-table="false"
       :operates="operates"
       :add-slot="true"
-      :operates-width="280"
     >
       <template v-slot:addSlot>
         <div>
@@ -64,17 +63,17 @@ export default {
         label: '操作'
       },
       operations: [
-        {
-          types: 'video',
+          {
+          types: 'edit',
           title: '视频',
-          type: 'success',
+          type: 'video',
           size: 'mini',
           icon: ['fas', 'pen-to-square']
         },
-        {
-          types: 'customer',
+          {
+          types: 'edit',
           title: '客户',
-          type: 'success',
+          type: 'customer',
           size: 'mini',
           icon: ['fas', 'pen-to-square']
         },
@@ -225,13 +224,7 @@ export default {
     },
     // 操作列按钮
     handleOperation(op, row) {
-      if (op.types === 'video') {
-        console.log('video', row)
-        this.$router.push({ path: 'video', query: row.id })
-      } else if (op.types === 'customer') {
-        console.log('customer', row)
-        this.$router.push({ path: 'customer', query: row.id })
-      } else if (op.types === 'edit') {
+      if (op.types === 'edit') {
         console.log(row)
         this.handleUpdate(row)
       } else if (op.types === 'del') {

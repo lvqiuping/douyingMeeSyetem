@@ -225,13 +225,7 @@ export default {
     },
     // 操作列按钮
     handleOperation(op, row) {
-      if (op.types === 'video') {
-        console.log('video', row)
-        this.$router.push({ path: 'video', query: row.id })
-      } else if (op.types === 'customer') {
-        console.log('customer', row)
-        this.$router.push({ path: 'customer', query: row.id })
-      } else if (op.types === 'edit') {
+      if (op.types === 'edit') {
         console.log(row)
         this.handleUpdate(row)
       } else if (op.types === 'del') {

@@ -4,7 +4,7 @@
       <el-button
         v-for="(op,index) in operations"
         :key="index"
-        :type="op.type"
+        type="text"
         :size="op.size"
         plain
         @click="clickOperation(op)"
@@ -24,6 +24,7 @@ export default {
   },
   methods: {
     clickOperation(operation) {
+      console.log('zhe', this.rawData)
       this.$emit('handleOperation', operation, this.rawData)
     }
   }
