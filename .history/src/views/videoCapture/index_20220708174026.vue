@@ -97,55 +97,37 @@ export default {
       ],
       tableTitle: [
         {
-          label: '任务ID',
+          label: 'ID',
           value: 'id',
           sortable: 'custom',
           show: true
         },
         {
-          label: '任务名',
+          label: 'author',
           value: 'author',
           sortable: false,
           show: true
         },
         {
-          label: '采集源',
+          label: 'display_time',
           value: 'display_time',
           sortable: false,
           show: true
         },
         {
-          label: '任务状态',
+          label: 'pageviews',
           value: 'pageviews',
           sortable: true,
           show: true
         },
         {
-          label: '时间筛选',
+          label: 'status',
           value: 'status',
           sortable: true,
           show: true
         },
         {
-          label: '意向客户数',
-          value: 'title',
-          sortable: true,
-          show: true
-        },
-        {
-          label: '线索视频数',
-          value: 'title',
-          sortable: true,
-          show: true
-        },
-        {
-          label: '定时截止时间',
-          value: 'title',
-          sortable: true,
-          show: true
-        },
-        {
-          label: '创建时间',
+          label: 'title',
           value: 'title',
           sortable: true,
           show: true

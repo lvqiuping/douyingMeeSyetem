@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="110px" style="margin-left:50px;margin-right:50px;">
+    <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="110px" style="width: 600px; margin-left:50px;">
       <el-form-item label="任务名" prop="title">
         <el-input v-model="temp.title" placeholder="随意取一个名字吧" />
       </el-form-item>
@@ -12,19 +12,17 @@
         <el-drag-select v-model="value1" style="width:500px;" multiple placeholder="请选择">
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
         </el-drag-select>
-        <div class="secondColor">系统推荐关键词<span class="seatColor">（选择关键词快速添加到词库）</span></div>
+        <div>系统推荐关键词<span style="font-size: 12px; color: #ccc">（选择关键词快速添加到词库）</span></div>
       </el-form-item>
       <el-form-item label="评论屏蔽关键词">
         <el-drag-select v-model="value2" style="width:500px;" multiple placeholder="请选择">
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
         </el-drag-select>
-        <div class="secondColor">系统推荐屏蔽关键词<span class="seatColor">（选择屏蔽关键词快速添加到词库）</span></div>
+        <div>系统推荐屏蔽关键词<span style="font-size: 12px; color: #ccc">（选择屏蔽关键词快速添加到词库）</span></div>
       </el-form-item>
       <el-form-item label="视频标题再筛选">
         <el-input v-model="temp.title3" :autosize="{ minRows: 2, maxRows: 10}" type="textarea" placeholder="如：二手车，北京二手车，车子" />
-        <div class="secondColor">
-          <span class="seatColor">（该功能慎用，设置不正确可能会导致采集不到视频）在分析源搜索出来的视频再做一次筛选，可设置多个关键词，用逗号隔开。比如：二手车，北京二手车，车子</span>
-        </div>
+        <span style="font-size: 12px; color: #ccc">（该功能慎用，设置不正确可能会导致采集不到视频）在分析源搜索出来的视频再做一次筛选，可设置多个关键词，用逗号隔开。比如：二手车，北京二手车，车子</span>
       </el-form-item>
 
       <el-form-item label="搜索排序" prop="searchSort">
@@ -41,16 +39,16 @@
         <el-radio v-model="temp.publicTime" label="6">半年内</el-radio>
       </el-form-item>
       <el-form-item label="消耗点数上限" prop="title4">
-        <el-input-number v-model="temp.title4" :min="0" :max="10" size="small" @change="handleChange1" /><span>点</span>
-        <div class="secondColor"><span class="seatColor">（填0则不限制点数）</span></div>
+        <el-input-number v-model="temp.title4" :min="0" :max="10" @change="handleChange1" /><span>点</span>
+        <div style="font-size: 12px; color: #ccc">（填0则不限制点数）</div>
       </el-form-item>
       <el-form-item label="定时监控频率" prop="title5">
-        <span>每</span><el-input-number v-model="temp.title5" :min="0" size="small" @change="handleChange2" /><span>天运行一次</span>
-        <div class="secondColor"><span class="seatColor">（默认为0，不开启自动监控）</span></div>
+        <span>每</span><el-input-number v-model="temp.title5" :min="0" @change="handleChange2" /><span>天运行一次</span>
+        <div style="font-size: 12px; color: #ccc">（默认为0，不开启自动监控）</div>
       </el-form-item>
       <el-form-item label="最长监控天数" prop="title6">
-        <span>持续监控</span><el-input-number v-model="temp.title6" :min="0" size="small" @change="handleChange3" /><span>天后停止</span>
-        <div class="secondColor"><span class="seatColor">（默认为0，不开启自动监控）</span></div>
+        <span>持续监控</span><el-input-number v-model="temp.title6" :min="0" @change="handleChange3" /><span>天后停止</span>
+        <div style="font-size: 12px; color: #ccc">（默认为0，不开启自动监控）</div>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -146,15 +144,9 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .secondColor{
-  color: #606266;
+  color: #909399;
   font-size: 12px;
-  .seatColor{
-    color: #909399;
-  }
-}
-.dialog-footer{
-  text-align: center;
 }
 </style>

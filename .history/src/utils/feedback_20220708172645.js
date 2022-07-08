@@ -1,9 +1,9 @@
 import { h } from 'vue'
-import { Message, ElMessageBox, ElNotification } from 'element-ui'
+import { ElMessage, ElMessageBox, ElNotification } from 'element-ui'
 
 // 提示框
 const TipsBox = (type, message) => {
-  Message({
+  this.$message({
     type: type,
     message: message
   })

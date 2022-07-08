@@ -1,24 +1,17 @@
 <template>
-  <div class="app-container">
+   <div class="app-container">
     <basic-table
       :table-title="tableTitle"
       :table-data="tableData"
+      :multiple-table="false"
       :operates="operates"
-      :operates-width="180"
-      :status="status"
+      :operates-width="280"
     >
       <template v-slot:addSlot>
         <div>
           <el-button type="primary" @click="handleCreate">添加</el-button>
         </div>
       </template>
-
-      <template v-slot:status="scope">
-        <el-tag :type="scope.scope.row.status | statusFilter">
-          {{ scope.scope.row.status }}
-        </el-tag>
-      </template>
-
       <template v-slot:operates="scope">
         <table-operation
           :operations="operations"
@@ -38,30 +31,30 @@ import { getList } from '@/api/table'
 export default {
   name: 'Video',
   components: { BasicTable, TableOperation, Pagination },
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    }
-  },
   data() {
     return {
-      status: {
-        state: true,
-        label: '状态'
-      },
       operates: {
         operate: true,
         label: '操作'
       },
       operations: [
         {
+          types: 'video',
+          title: '视频',
+          type: 'success',
+          size: 'mini',
+          icon: ['fas', 'pen-to-square']
+        },
+        {
+          types: 'customer',
+          title: '客户',
+          type: 'success',
+          size: 'mini',
+          icon: ['fas', 'pen-to-square']
+        },
+        {
           types: 'edit',
-          title: '扫码私信',
+          title: '编辑',
           type: 'success',
           size: 'mini',
           icon: ['fas', 'pen-to-square']
@@ -77,54 +70,39 @@ export default {
       ],
       tableTitle: [
         {
-          label: '任务ID',
+          label: 'ID',
           value: 'id',
-          // sortable: 'custom',
+          sortable: 'custom',
           show: true
         },
         {
-          label: '任务名',
+          label: 'author',
           value: 'author',
+          sortable: false,
           show: true
         },
         {
-          label: '说明',
+          label: 'display_time',
           value: 'display_time',
+          sortable: false,
           show: true
         },
         {
-          label: '昵称',
+          label: 'pageviews',
           value: 'pageviews',
+          sortable: true,
           show: true
         },
         {
-          label: '内容',
+          label: 'status',
           value: 'status',
+          sortable: true,
           show: true
         },
         {
-          label: '手机',
+          label: 'title',
           value: 'title',
-          show: true
-        },
-        {
-          label: 'WX',
-          value: 'title',
-          show: true
-        },
-        {
-          label: '命中关键词',
-          value: 'title',
-          show: true
-        },
-        {
-          label: '咨询时间',
-          value: 'title',
-          show: true
-        },
-        {
-          label: '分析时间',
-          value: 'title',
+          sortable: true,
           show: true
         }
       ],
@@ -155,30 +133,6 @@ export default {
         this.tableData = response.data.items
         this.total = response.data.total
       })
-    },
-    // 操作列按钮
-    handleOperation(op, row) {
-      if (op.types === 'edit') {
-        console.log(row)
-      } else if (op.types === 'del') {
-        console.log(row.id)
-        // QueryBox()
-        this.$confirm('确定删除此项?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
-      }
     }
   }
 }

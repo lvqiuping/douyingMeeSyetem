@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="110px" style="margin-left:50px;margin-right:50px;">
+    <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="110px" style="width: 600px; margin-left:50px;">
       <el-form-item label="任务名" prop="title">
         <el-input v-model="temp.title" placeholder="随意取一个名字吧" />
       </el-form-item>
@@ -41,15 +41,15 @@
         <el-radio v-model="temp.publicTime" label="6">半年内</el-radio>
       </el-form-item>
       <el-form-item label="消耗点数上限" prop="title4">
-        <el-input-number v-model="temp.title4" :min="0" :max="10" size="small" @change="handleChange1" /><span>点</span>
+        <el-input-number v-model="temp.title4" :min="0" :max="10" @change="handleChange1" /><span>点</span>
         <div class="secondColor"><span class="seatColor">（填0则不限制点数）</span></div>
       </el-form-item>
       <el-form-item label="定时监控频率" prop="title5">
-        <span>每</span><el-input-number v-model="temp.title5" :min="0" size="small" @change="handleChange2" /><span>天运行一次</span>
+        <span>每</span><el-input-number v-model="temp.title5" :min="0" @change="handleChange2" /><span>天运行一次</span>
         <div class="secondColor"><span class="seatColor">（默认为0，不开启自动监控）</span></div>
       </el-form-item>
       <el-form-item label="最长监控天数" prop="title6">
-        <span>持续监控</span><el-input-number v-model="temp.title6" :min="0" size="small" @change="handleChange3" /><span>天后停止</span>
+        <span>持续监控</span><el-input-number v-model="temp.title6" :min="0" @change="handleChange3" /><span>天后停止</span>
         <div class="secondColor"><span class="seatColor">（默认为0，不开启自动监控）</span></div>
       </el-form-item>
     </el-form>
@@ -148,13 +148,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .secondColor{
-  color: #606266;
+  color: #909399;
   font-size: 12px;
   .seatColor{
-    color: #909399;
+    color: #C0C4CC
   }
-}
-.dialog-footer{
-  text-align: center;
 }
 </style>

@@ -4,7 +4,7 @@
       :table-title="tableTitle"
       :table-data="tableData"
       :operates="operates"
-      :operates-width="180"
+      :operates-width="280"
       :status="status"
     >
       <template v-slot:addSlot>
@@ -12,13 +12,6 @@
           <el-button type="primary" @click="handleCreate">添加</el-button>
         </div>
       </template>
-
-      <template v-slot:status="scope">
-        <el-tag :type="scope.scope.row.status | statusFilter">
-          {{ scope.scope.row.status }}
-        </el-tag>
-      </template>
-
       <template v-slot:operates="scope">
         <table-operation
           :operations="operations"
@@ -38,22 +31,13 @@ import { getList } from '@/api/table'
 export default {
   name: 'Video',
   components: { BasicTable, TableOperation, Pagination },
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    }
-  },
   data() {
     return {
-      status: {
-        state: true,
-        label: '状态'
-      },
+        status:{
+            state: true,
+            label: '状态',
+            width: 60
+        },
       operates: {
         operate: true,
         label: '操作'
@@ -79,52 +63,67 @@ export default {
         {
           label: '任务ID',
           value: 'id',
-          // sortable: 'custom',
+          sortable: 'custom',
           show: true
         },
         {
           label: '任务名',
           value: 'author',
+          sortable: false,
           show: true
         },
         {
           label: '说明',
           value: 'display_time',
+          sortable: false,
           show: true
         },
         {
           label: '昵称',
           value: 'pageviews',
+          sortable: true,
           show: true
         },
         {
           label: '内容',
           value: 'status',
+          sortable: true,
           show: true
         },
         {
           label: '手机',
           value: 'title',
+          sortable: true,
           show: true
         },
         {
           label: 'WX',
           value: 'title',
+          sortable: true,
           show: true
         },
         {
           label: '命中关键词',
           value: 'title',
+          sortable: true,
           show: true
         },
         {
           label: '咨询时间',
           value: 'title',
+          sortable: true,
           show: true
         },
         {
           label: '分析时间',
           value: 'title',
+          sortable: true,
+          show: true
+        },
+        {
+          label: '状态',
+          value: 'title',
+          sortable: true,
           show: true
         }
       ],

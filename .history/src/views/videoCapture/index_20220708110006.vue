@@ -10,7 +10,7 @@
     >
       <template v-slot:addSlot>
         <div>
-          <el-button type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>
+          <el-button type="primary" size="medium" @click="handleCreate">添加</el-button>
         </div>
       </template>
       <template v-slot:operates="scope">
@@ -21,9 +21,9 @@
         />
       </template>
     </basic-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPageList" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList2" />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" top="3%">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" top="1%">
       <div class="el-dialog-div">
         <data-form :dialog-status="dialogStatus" @createDataEmit="createDataEmit" @dialogFormVisibleEmit="dialogFormVisibleEmit" />
       </div>
@@ -60,6 +60,7 @@ export default {
         update: '编辑',
         create: '添加'
       },
+      // 操作
       operates: {
         operate: true,
         label: '操作'
@@ -95,63 +96,47 @@ export default {
 
         }
       ],
+      filterColumns: FontFaceSetLoadEvent,
       tableTitle: [
         {
-          label: '任务ID',
+          label: 'ID',
           value: 'id',
           sortable: 'custom',
           show: true
         },
         {
-          label: '任务名',
+          label: 'author',
           value: 'author',
           sortable: false,
           show: true
         },
         {
-          label: '采集源',
+          label: 'display_time',
           value: 'display_time',
           sortable: false,
           show: true
         },
         {
-          label: '任务状态',
+          label: 'pageviews',
           value: 'pageviews',
           sortable: true,
           show: true
         },
         {
-          label: '时间筛选',
+          label: 'status',
           value: 'status',
           sortable: true,
           show: true
         },
         {
-          label: '意向客户数',
-          value: 'title',
-          sortable: true,
-          show: true
-        },
-        {
-          label: '线索视频数',
-          value: 'title',
-          sortable: true,
-          show: true
-        },
-        {
-          label: '定时截止时间',
-          value: 'title',
-          sortable: true,
-          show: true
-        },
-        {
-          label: '创建时间',
+          label: 'title',
           value: 'title',
           sortable: true,
           show: true
         }
       ],
       multipleSelection: [],
+      tableKey: 0,
       tableData: null,
       total: 0,
       listLoading: true,
@@ -162,11 +147,18 @@ export default {
         title: undefined,
         type: undefined,
         sort: '+id'
-      }
+      },
+      importanceOptions: [1, 2, 3],
+      sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
+      statusOptions: ['published', 'draft', 'deleted'],
+      showReviewer: false,
+      dialogPvVisible: false,
+      pvData: [],
+      downloadLoading: false
     }
   },
   created() {
-    this.getPageList()
+    this.getList2()
   },
   methods: {
     handleChange1(value) {
@@ -265,7 +257,7 @@ export default {
       }
     },
     // 获取表格数据
-    getPageList() {
+    getList2() {
       this.listLoading = true
       getList(this.listQuery).then(response => {
         console.log('liebiao', response)
@@ -331,7 +323,7 @@ export default {
     },
     handleFilter() {
       this.listQuery.page = 1
-      this.getPageList()
+      this.getList2()
     },
     // 。。。。。。。。。。。
     getSortClass: function(key) {

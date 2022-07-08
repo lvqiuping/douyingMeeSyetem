@@ -4,7 +4,7 @@
       <div style="display: flex;flex-direction: row;justify-content: space-between; margin-bottom: 20px;">
         <div style="display: flex;flex-direction: row;justify-content: space-between;">
           <slot v-if="addSlot" name="addSlot" />
-          <el-button type="danger" icon="el-icon-delete" style="margin-left: 10px;" @click="batchDeleted">批量删除</el-button>
+          <el-button type="danger" icon="el-icon-delete" style="margin-right: 10px;" @click="batchDeleted">批量删除</el-button>
         </div>
         <div>
           <!-- <el-tooltip class="item" effect="dark" content="刷新" placement="top"> -->

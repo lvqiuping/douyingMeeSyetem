@@ -2,10 +2,10 @@
   <el-row>
     <el-col>
       <div style="display: flex;flex-direction: row;justify-content: space-between; margin-bottom: 20px;">
-        <div style="display: flex;flex-direction: row;justify-content: space-between;">
+        <el-button-group>
+          <el-button type="danger" icon="el-icon-delete" @click="batchDeleted">批量删除</el-button>
           <slot v-if="addSlot" name="addSlot" />
-          <el-button type="danger" icon="el-icon-delete" style="margin-left: 10px;" @click="batchDeleted">批量删除</el-button>
-        </div>
+        </el-button-group>
         <div>
           <!-- <el-tooltip class="item" effect="dark" content="刷新" placement="top"> -->
           <el-button type="" icon="el-icon-refresh" style="margin-right: 10px;" />

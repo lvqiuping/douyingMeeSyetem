@@ -2,9 +2,9 @@
   <el-row>
     <el-col>
       <div style="display: flex;flex-direction: row;justify-content: space-between; margin-bottom: 20px;">
-        <div style="display: flex;flex-direction: row;justify-content: space-between;">
+        <div>
+          <el-button type="danger" icon="el-icon-delete" @click="batchDeleted">批量删除</el-button>
           <slot v-if="addSlot" name="addSlot" />
-          <el-button type="danger" icon="el-icon-delete" style="margin-left: 10px;" @click="batchDeleted">批量删除</el-button>
         </div>
         <div>
           <!-- <el-tooltip class="item" effect="dark" content="刷新" placement="top"> -->
@@ -115,7 +115,7 @@ export default {
     },
     batchDeleted() {
       if (!this.selectDate.length) {
-        TipsBox('warning', '请选择需要删除的数据')
+        TipsBox('success', '请选择需要删除的数据')
       }
     }
   }

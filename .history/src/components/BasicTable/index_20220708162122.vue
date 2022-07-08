@@ -2,9 +2,9 @@
   <el-row>
     <el-col>
       <div style="display: flex;flex-direction: row;justify-content: space-between; margin-bottom: 20px;">
-        <div style="display: flex;flex-direction: row;justify-content: space-between;">
+        <div>
+          <el-button type="danger" icon="el-icon-delete">批量删除</el-button>
           <slot v-if="addSlot" name="addSlot" />
-          <el-button type="danger" icon="el-icon-delete" style="margin-left: 10px;" @click="batchDeleted">批量删除</el-button>
         </div>
         <div>
           <!-- <el-tooltip class="item" effect="dark" content="刷新" placement="top"> -->
@@ -42,23 +42,20 @@
           :sortable="item.sortable === true"
           align="center"
         />
-        <el-table-column
-          v-if="status"
-          :label="status.label"
-          :width="statusWidth"
-          align="center"
-        >
-          <template v-slot="scope">
-            <slot name="status" :scope="scope" />
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-if="operates"
-          :label="operates.label"
-          fixed="right"
-          :width="operatesWidth"
-          align="center"
-        >
+         <el-table-column
+                    :label="status.label"
+                    v-if="status"
+                    prop="status"
+                    :filters="[{ text: '禁用', value: false },{ text: '正常', value: true }]"
+                    :filter-method="filterStatus"
+                    filter-placement="bottom-end"
+                    column-key="status"
+                >
+                    <template v-slot="scope">
+                        <slot name="status" :scope="scope" />
+                    </template>
+                </el-table-column>
+        <el-table-column v-if="operates" :label="operates.label" fixed="right" :width="operatesWidth" align="center">
           <template v-slot="scope">
             <slot name="operates" :scope="scope" />
           </template>
@@ -68,8 +65,6 @@
   </el-row>
 </template>
 <script>
-import { TipsBox } from '@/utils/feedback.js'
-
 export default {
   name: 'BasicTable',
   components: {
@@ -81,12 +76,11 @@ export default {
     tableData: { type: Array, default: Array },
     operates: { type: Object, default: Object },
     operatesWidth: { type: Number, default: 160 },
-    statusWidth: { type: Number, default: 100 },
     multipleTable: { type: Boolean, default: true },
     pagination: { type: Boolean, default: true },
     where: { type: Object, default: Object },
     showTable: { type: Boolean, default: true },
-    status: { type: Object, default: Object },
+    status: { type: Object },
     // 特别操作
     addSlot: { type: Boolean, default: false }
   },
@@ -110,13 +104,7 @@ export default {
   methods: {
     handleSelectionChange(val) {
       this.selectDate = val
-      console.log('多选框值', val)
       // $context.emit('selectDate', selectDate.value)
-    },
-    batchDeleted() {
-      if (!this.selectDate.length) {
-        TipsBox('warning', '请选择需要删除的数据')
-      }
     }
   }
 }

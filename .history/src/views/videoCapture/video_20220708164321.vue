@@ -79,52 +79,61 @@ export default {
         {
           label: '任务ID',
           value: 'id',
-          // sortable: 'custom',
+          sortable: 'custom',
           show: true
         },
         {
           label: '任务名',
           value: 'author',
+          sortable: false,
           show: true
         },
         {
           label: '说明',
           value: 'display_time',
+          sortable: false,
           show: true
         },
         {
           label: '昵称',
           value: 'pageviews',
+          sortable: true,
           show: true
         },
         {
           label: '内容',
           value: 'status',
+          sortable: true,
           show: true
         },
         {
           label: '手机',
           value: 'title',
+          sortable: true,
           show: true
         },
         {
           label: 'WX',
           value: 'title',
+          sortable: true,
           show: true
         },
         {
           label: '命中关键词',
           value: 'title',
+          sortable: true,
           show: true
         },
         {
           label: '咨询时间',
           value: 'title',
+          sortable: true,
           show: true
         },
         {
           label: '分析时间',
           value: 'title',
+          sortable: true,
           show: true
         }
       ],

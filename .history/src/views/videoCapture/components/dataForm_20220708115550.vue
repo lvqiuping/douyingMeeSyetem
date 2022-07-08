@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="110px" style="margin-left:50px;margin-right:50px;">
+    <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="110px" style="width: 600px; margin-left:50px;">
       <el-form-item label="任务名" prop="title">
         <el-input v-model="temp.title" placeholder="随意取一个名字吧" />
       </el-form-item>
@@ -156,5 +156,7 @@ export default {
 }
 .dialog-footer{
   text-align: center;
+  position: fixed;
+  bottom: 0;
 }
 </style>

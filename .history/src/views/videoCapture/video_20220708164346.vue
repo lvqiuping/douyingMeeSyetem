@@ -79,7 +79,7 @@ export default {
         {
           label: '任务ID',
           value: 'id',
-          // sortable: 'custom',
+          sortable: 'custom',
           show: true
         },
         {
