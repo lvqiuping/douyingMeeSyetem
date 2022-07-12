@@ -164,7 +164,7 @@ export default {
     batchDeleted(v) {
       console.log(v)
       if (!v.length) {
-        TipsBox('warning', '请选择需要删除的数据')
+        TipsBox('denger', '请选择需要删除的数据')
         return false
       }
       this.ids = unique(v) // 去重

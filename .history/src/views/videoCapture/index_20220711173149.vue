@@ -170,9 +170,9 @@ export default {
       this.ids = unique(v) // 去重
       console.log('ids', this.ids)
       QueryBox().then(() => {
-        TipsBox('success', '操作成功')
+        TipsBox('success', '删除成功!')
       }).catch(() => {
-        TipsBox('info', '已取消')
+        TipsBox('info', '已取消删除')
       })
     },
     handleChange1(value) {

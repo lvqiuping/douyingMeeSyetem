@@ -55,24 +55,25 @@ export const constantRoutes = [
     }]
   },
 
-  // {
-  //   path: '/table',
-  //   component: Layout,
-  //   redirect: '/table/index',
-  //   name: 'Table', // 设定路由的名字，一定要填写不然使用<keep-alive>时会出现各种问题
-  //   meta: {
-  //     title: '测试表格', // 设置该路由在侧边栏和面包屑中展示的名字
-  //     icon: 'el-icon-s-help'
-  //   },
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: '测试表格',
-  //       component: () => import('@/views/table/index'),
-  //       meta: { title: '测试表格', icon: 'table' }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/table',
+    component: Layout,
+    redirect: '/table/index',
+    name: 'Table', // 设定路由的名字，一定要填写不然使用<keep-alive>时会出现各种问题
+    alwaysShow: true, // will always show the root menu
+    meta: {
+      title: '测试表格', // 设置该路由在侧边栏和面包屑中展示的名字
+      icon: 'el-icon-s-help'
+    },
+    children: [
+      {
+        path: 'index',
+        name: '测试表格',
+        component: () => import('@/views/table/index'),
+        meta: { title: '测试表格', icon: 'table' }
+      }
+    ]
+  },
   {
     path: '/videoCapture',
     component: Layout,
@@ -104,16 +105,16 @@ export const constantRoutes = [
       }
     ]
   },
-  // {
-  //   path: 'external-link',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-  //       meta: { title: 'External Link', icon: 'link' }
-  //     }
-  //   ]
-  // },
+  {
+    path: 'external-link',
+    component: Layout,
+    children: [
+      {
+        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
+        meta: { title: 'External Link', icon: 'link' }
+      }
+    ]
+  },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

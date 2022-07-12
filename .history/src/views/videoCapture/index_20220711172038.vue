@@ -44,9 +44,7 @@ import TableOperation from '@/components/BasicTable/TableOperation.vue'
 import { getList, createTable, updateTable, deleteTable } from '@/api/table'
 import { TipsBox, QueryBox } from '@/utils/feedback.js'
 import DataForm from '@/views/videoCapture/components/dataForm.vue'
-import { StatusFilter } from '@/utils/status-filter.js'
-import { unique } from '@/utils/others.js'
-
+import { StatusFilter, unique } from '@/utils/status-filter.js'
 export default {
   name: 'VideoCapture',
   components: { BasicTable, TableOperation, Pagination, DataForm },
@@ -167,12 +165,17 @@ export default {
         TipsBox('warning', '请选择需要删除的数据')
         return false
       }
-      this.ids = unique(v) // 去重
+      this.ids = unique(v)
+      // v.forEach((item) => {
+      //   if (this.ids.indexOf(item.id) === -1) {
+      //     this.ids.push(item.id)
+      //   }
+      // })
       console.log('ids', this.ids)
       QueryBox().then(() => {
-        TipsBox('success', '操作成功')
+        TipsBox('success', '删除成功!')
       }).catch(() => {
-        TipsBox('info', '已取消')
+        TipsBox('info', '已取消删除')
       })
     },
     handleChange1(value) {

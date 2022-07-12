@@ -7,7 +7,6 @@
       :add-slot="true"
       :operates-width="280"
       :status="status"
-      @batchDeleted="batchDeleted"
     >
       <template v-slot:addSlot>
         <div>
@@ -15,7 +14,7 @@
         </div>
       </template>
       <template v-slot:status="scope">
-        <el-tag :type="scope.scope.row.status | StatusFilter">
+        <el-tag :type="scope.scope.row.status | statusFilter">
           {{ scope.scope.row.status }}
         </el-tag>
       </template>
@@ -41,21 +40,26 @@
 import Pagination from '@/components/BasicTable/Pagination.vue'
 import BasicTable from '@/components/BasicTable/index.vue'
 import TableOperation from '@/components/BasicTable/TableOperation.vue'
-import { getList, createTable, updateTable, deleteTable } from '@/api/table'
-import { TipsBox, QueryBox } from '@/utils/feedback.js'
+import { createTable, updateTable, deleteTable } from '@/api/table'
+import { getList } from '@/api/table'
+import { QueryBox } from '@/utils/feedback.js'
 import DataForm from '@/views/videoCapture/components/dataForm.vue'
 import { StatusFilter } from '@/utils/status-filter.js'
-import { unique } from '@/utils/others.js'
-
 export default {
   name: 'VideoCapture',
   components: { BasicTable, TableOperation, Pagination, DataForm },
   filters: {
-    StatusFilter
+    statusFilter(status) {
+      const statusMap = {
+        published: 'success',
+        draft: 'info',
+        deleted: 'danger'
+      }
+      statusMap[status]
+    }
   },
   data() {
     return {
-      ids: [],
       status: {
         state: true,
         label: '任务状态'
@@ -161,20 +165,6 @@ export default {
     this.getPageList()
   },
   methods: {
-    batchDeleted(v) {
-      console.log(v)
-      if (!v.length) {
-        TipsBox('warning', '请选择需要删除的数据')
-        return false
-      }
-      this.ids = unique(v) // 去重
-      console.log('ids', this.ids)
-      QueryBox().then(() => {
-        TipsBox('success', '操作成功')
-      }).catch(() => {
-        TipsBox('info', '已取消')
-      })
-    },
     handleChange1(value) {
       console.log(value)
     },

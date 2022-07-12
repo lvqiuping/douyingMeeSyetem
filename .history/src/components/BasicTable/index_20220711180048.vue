@@ -26,6 +26,7 @@
       v-loading="loading"
       :data="tableData"
       style="width: 100%"
+      row-key="id"
       border
       @selection-change="handleSelectionChange"
     >
@@ -65,6 +66,9 @@
 <script>
 export default {
   name: 'BasicTable',
+  components: {
+
+  },
   props: {
     // 基本
     tableTitle: { type: Array, default: Array },
@@ -87,6 +91,8 @@ export default {
       total: 0,
       loading: false
     }
+  },
+  created() {
   },
   methods: {
     handleSelectionChange(val) {

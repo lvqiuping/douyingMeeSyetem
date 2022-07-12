@@ -26,6 +26,7 @@
       v-loading="loading"
       :data="tableData"
       style="width: 100%"
+      row-key="id"
       border
       @selection-change="handleSelectionChange"
     >

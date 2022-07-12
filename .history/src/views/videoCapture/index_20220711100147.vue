@@ -3,21 +3,15 @@
     <basic-table
       :table-title="tableTitle"
       :table-data="tableData"
+      :multiple-table="false"
       :operates="operates"
       :add-slot="true"
       :operates-width="280"
-      :status="status"
-      @batchDeleted="batchDeleted"
     >
       <template v-slot:addSlot>
         <div>
           <el-button type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>
         </div>
-      </template>
-      <template v-slot:status="scope">
-        <el-tag :type="scope.scope.row.status | StatusFilter">
-          {{ scope.scope.row.status }}
-        </el-tag>
       </template>
       <template v-slot:operates="scope">
         <table-operation
@@ -41,25 +35,25 @@
 import Pagination from '@/components/BasicTable/Pagination.vue'
 import BasicTable from '@/components/BasicTable/index.vue'
 import TableOperation from '@/components/BasicTable/TableOperation.vue'
-import { getList, createTable, updateTable, deleteTable } from '@/api/table'
-import { TipsBox, QueryBox } from '@/utils/feedback.js'
+import { createTable, updateTable, deleteTable } from '@/api/table'
+import { getList } from '@/api/table'
+import { QueryBox } from '@/utils/feedback.js'
 import DataForm from '@/views/videoCapture/components/dataForm.vue'
-import { StatusFilter } from '@/utils/status-filter.js'
-import { unique } from '@/utils/others.js'
-
 export default {
   name: 'VideoCapture',
   components: { BasicTable, TableOperation, Pagination, DataForm },
   filters: {
-    StatusFilter
+    statusFilter(status) {
+      const statusMap = {
+        published: 'success',
+        draft: 'info',
+        deleted: 'danger'
+      }
+      return statusMap[status]
+    }
   },
   data() {
     return {
-      ids: [],
-      status: {
-        state: true,
-        label: '任务状态'
-      },
       dialogStatus: '',
       dialogFormVisible: false,
       textMap: {
@@ -118,6 +112,11 @@ export default {
           show: true
         },
         {
+          label: '任务状态',
+          value: 'status',
+          show: true
+        },
+        {
           label: '时间筛选',
           value: 'author',
           show: true
@@ -161,20 +160,6 @@ export default {
     this.getPageList()
   },
   methods: {
-    batchDeleted(v) {
-      console.log(v)
-      if (!v.length) {
-        TipsBox('warning', '请选择需要删除的数据')
-        return false
-      }
-      this.ids = unique(v) // 去重
-      console.log('ids', this.ids)
-      QueryBox().then(() => {
-        TipsBox('success', '操作成功')
-      }).catch(() => {
-        TipsBox('info', '已取消')
-      })
-    },
     handleChange1(value) {
       console.log(value)
     },

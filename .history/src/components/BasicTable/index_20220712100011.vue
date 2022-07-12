@@ -26,6 +26,7 @@
       v-loading="loading"
       :data="tableData"
       style="width: 100%"
+      row-key="id"
       border
       @selection-change="handleSelectionChange"
     >
@@ -76,7 +77,7 @@ export default {
     pagination: { type: Boolean, default: true },
     where: { type: Object, default: Object },
     showTable: { type: Boolean, default: true },
-    status: { type: Object, default: null },
+    status: { type: Object, default: Object },
     // 特别操作
     addSlot: { type: Boolean, default: false }
   },

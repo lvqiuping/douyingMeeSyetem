@@ -92,37 +92,17 @@ export default {
           show: true
         },
         {
-          label: '昵称',
-          value: 'pageviews',
+          label: '意向客户数',
+          value: 'display_time',
           show: true
         },
         {
-          label: '内容',
-          value: 'status',
+          label: '线索分析数',
+          value: 'display_time',
           show: true
         },
         {
-          label: '手机',
-          value: 'title',
-          show: true
-        },
-        {
-          label: 'WX',
-          value: 'title',
-          show: true
-        },
-        {
-          label: '命中关键词',
-          value: 'title',
-          show: true
-        },
-        {
-          label: '咨询时间',
-          value: 'title',
-          show: true
-        },
-        {
-          label: '分析时间',
+          label: '挖掘时间',
           value: 'title',
           show: true
         }

@@ -45,8 +45,6 @@ import { getList, createTable, updateTable, deleteTable } from '@/api/table'
 import { TipsBox, QueryBox } from '@/utils/feedback.js'
 import DataForm from '@/views/videoCapture/components/dataForm.vue'
 import { StatusFilter } from '@/utils/status-filter.js'
-import { unique } from '@/utils/others.js'
-
 export default {
   name: 'VideoCapture',
   components: { BasicTable, TableOperation, Pagination, DataForm },
@@ -161,19 +159,31 @@ export default {
     this.getPageList()
   },
   methods: {
+    // unique(arr, newArr) {
+    //   arr.forEach((item) => {
+    //     if (newArr.indexOf(item) === -1) {
+    //       newArr.push(item.id)
+    //     }
+    //     return newArr
+    //   })
+    // },
     batchDeleted(v) {
       console.log(v)
       if (!v.length) {
         TipsBox('warning', '请选择需要删除的数据')
         return false
       }
-      this.ids = unique(v) // 去重
-      console.log('ids', this.ids)
-      QueryBox().then(() => {
-        TipsBox('success', '操作成功')
-      }).catch(() => {
-        TipsBox('info', '已取消')
+      v.forEach((item) => {
+        if (this.ids.indexOf(item.id) === -1) {
+          this.ids.push(item.id)
+        }
       })
+      console.log(this.ids)
+      // QueryBox().then(() => {
+      //   TipsBox('success', '删除成功!')
+      // }).catch(() => {
+      //   TipsBox('info', '已取消删除')
+      // })
     },
     handleChange1(value) {
       console.log(value)
