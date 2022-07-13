@@ -102,10 +102,12 @@ export default {
         if (valid) {
           this.loading = true
           const parmas = `userName=${this.loginForm.userName}&password=${this.loginForm.password}`
-          this.$store.dispatch('user/login', parmas).then(() => {
+          console.log(parmas)
+          this.$store.dispatch('user/login', parmas).then((res) => {
             console.log('ok')
+            console.log(res)
             //   this.$router.push({ path: this.redirect || '/' })
-            this.loading = false
+            // this.loading = false
           }).catch(() => {
             this.loading = false
           })

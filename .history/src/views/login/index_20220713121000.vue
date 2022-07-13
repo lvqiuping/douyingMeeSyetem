@@ -6,12 +6,12 @@
         <h3 class="title">登录</h3>
       </div>
 
-      <el-form-item prop="username">
+      <el-form-item prop="userName">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
         <el-input
-          ref="username"
+          ref="userName"
           v-model="loginForm.userName"
           placeholder="用户名"
           name="userName"
@@ -60,7 +60,7 @@ export default {
     return {
       loginForm: {
         userName: 'admin',
-        password: '123456'
+        password: '111111'
       },
       loginRules: {
         userName: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -90,21 +90,12 @@ export default {
         this.$refs.password.focus()
       })
     },
-    formataJson(params) {
-      const formData = new FormData()
-      Object.keys(params).forEach((key) => {
-        formData.append(key, params[key])
-      })
-      return formData
-    },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          const parmas = `userName=${this.loginForm.userName}&password=${this.loginForm.password}`
-          this.$store.dispatch('user/login', parmas).then(() => {
-            console.log('ok')
-            //   this.$router.push({ path: this.redirect || '/' })
+          this.$store.dispatch('user/login', this.loginForm).then(() => {
+            this.$router.push({ path: this.redirect || '/' })
             this.loading = false
           }).catch(() => {
             this.loading = false

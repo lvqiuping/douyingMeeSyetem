@@ -5,7 +5,7 @@ export function login(data) {
     // url: '/vue-admin-template/user/login',
     url: '/api/user/login',
     method: 'post',
-    data: data
+    data
   })
 }
 

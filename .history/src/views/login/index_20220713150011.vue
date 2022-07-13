@@ -90,22 +90,14 @@ export default {
         this.$refs.password.focus()
       })
     },
-    formataJson(params) {
-      const formData = new FormData()
-      Object.keys(params).forEach((key) => {
-        formData.append(key, params[key])
-      })
-      return formData
-    },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          const parmas = `userName=${this.loginForm.userName}&password=${this.loginForm.password}`
-          this.$store.dispatch('user/login', parmas).then(() => {
+          this.$store.dispatch('user/login', this.loginForm).then(() => {
             console.log('ok')
             //   this.$router.push({ path: this.redirect || '/' })
-            this.loading = false
+            // this.loading = false
           }).catch(() => {
             this.loading = false
           })

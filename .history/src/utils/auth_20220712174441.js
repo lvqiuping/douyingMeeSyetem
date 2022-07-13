@@ -34,6 +34,7 @@ export function removeToken() {
 //   if (!name) {
 //     name = TokenKey
 //   }
+  
 //   return Cookies.remove(name)
 // }
 

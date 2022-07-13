@@ -1,14 +1,12 @@
 import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
-import Cookies from 'js-cookie'
 
 const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    avatar: '',
-    permission: ''
+    avatar: ''
   }
 }
 
@@ -32,15 +30,12 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    const { userName, password } = userInfo
+    const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login(userInfo).then(response => {
-        console.log('response', response)
-        // const { data } = response
-        console.log('data.data', response.data)
-        commit('SET_TOKEN', response.data)
-        setToken(response.data)
-        Cookies.set('permission', 'normal')
+      login({ username: username.trim(), password: password }).then(response => {
+        const { data } = response
+        commit('SET_TOKEN', data.token)
+        setToken(null, data.token)
         resolve()
       }).catch(error => {
         reject(error)

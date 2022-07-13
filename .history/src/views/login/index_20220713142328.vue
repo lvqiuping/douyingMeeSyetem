@@ -60,7 +60,7 @@ export default {
     return {
       loginForm: {
         userName: 'admin',
-        password: '123456'
+        password: '111111'
       },
       loginRules: {
         userName: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -90,21 +90,14 @@ export default {
         this.$refs.password.focus()
       })
     },
-    formataJson(params) {
-      const formData = new FormData()
-      Object.keys(params).forEach((key) => {
-        formData.append(key, params[key])
-      })
-      return formData
-    },
     handleLogin() {
+      console.log('1')
       this.$refs.loginForm.validate(valid => {
         if (valid) {
+           console.log('1')
           this.loading = true
-          const parmas = `userName=${this.loginForm.userName}&password=${this.loginForm.password}`
-          this.$store.dispatch('user/login', parmas).then(() => {
-            console.log('ok')
-            //   this.$router.push({ path: this.redirect || '/' })
+          this.$store.dispatch('user/login', this.loginForm).then(() => {
+            this.$router.push({ path: this.redirect || '/' })
             this.loading = false
           }).catch(() => {
             this.loading = false

@@ -35,11 +35,10 @@ const actions = {
     const { userName, password } = userInfo
     return new Promise((resolve, reject) => {
       login(userInfo).then(response => {
-        console.log('response', response)
-        // const { data } = response
-        console.log('data.data', response.data)
-        commit('SET_TOKEN', response.data)
-        setToken(response.data)
+        console.log(response)
+        const { data } = response
+        commit('SET_TOKEN', data.token)
+        setToken(data.token)
         Cookies.set('permission', 'normal')
         resolve()
       }).catch(error => {
