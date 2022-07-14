@@ -7,7 +7,6 @@
       :add-slot="true"
       :operates-width="280"
       :status="status"
-      :search-form="'videoCapture'"
       @batchDeleted="batchDeleted"
     >
       <template v-slot:addSlot>

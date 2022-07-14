@@ -5,8 +5,7 @@
         <slot v-if="addSlot" name="addSlot" />
         <el-button type="danger" icon="el-icon-delete" style="margin-left: 10px;" @click="batchDeleted">批量删除</el-button>
       </div>
-      <div style="display: flex;flex-direction: row;justify-content: space-between;">
-        <search-form :search-form="searchForm" />
+      <div>
         <el-button type="" icon="el-icon-refresh" style="margin-right: 10px;" />
         <el-popover
           placement="bottom"
@@ -64,10 +63,8 @@
   </div>
 </template>
 <script>
-import SearchForm from '@/components/SearchForm/index.vue'
 export default {
   name: 'BasicTable',
-  components: { SearchForm },
   props: {
     // 基本
     tableTitle: { type: Array, default: Array },
@@ -80,7 +77,6 @@ export default {
     where: { type: Object, default: Object },
     showTable: { type: Boolean, default: true },
     status: { type: Object, default: null },
-    searchForm: { type: String, default: null },
     // 特别操作
     addSlot: { type: Boolean, default: false }
   },

@@ -1,5 +1,9 @@
 <template>
   <div>
+    <el-button-group>
+  <el-button type="primary" icon="el-icon-arrow-left">上一页</el-button>
+  <el-button type="primary">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+</el-button-group>
     <div style="display: flex;flex-direction: row;justify-content: space-between; margin-bottom: 20px;">
       <div style="display: flex;flex-direction: row;justify-content: space-between;">
         <slot v-if="addSlot" name="addSlot" />

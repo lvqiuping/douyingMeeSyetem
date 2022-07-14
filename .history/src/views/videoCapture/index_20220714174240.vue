@@ -7,7 +7,6 @@
       :add-slot="true"
       :operates-width="280"
       :status="status"
-      :search-form="'videoCapture'"
       @batchDeleted="batchDeleted"
     >
       <template v-slot:addSlot>
@@ -47,9 +46,10 @@ import { TipsBox, QueryBox } from '@/utils/feedback.js'
 import DataForm from '@/views/videoCapture/components/dataForm.vue'
 import { StatusFilter } from '@/utils/status-filter.js'
 import { unique } from '@/utils/others.js'
+import SearchForm from '@/components/SearchForm/index.vue'
 export default {
   name: 'VideoCapture',
-  components: { BasicTable, TableOperation, Pagination, DataForm },
+  components: { BasicTable, TableOperation, Pagination, DataForm, SearchForm },
   filters: {
     StatusFilter
   },
