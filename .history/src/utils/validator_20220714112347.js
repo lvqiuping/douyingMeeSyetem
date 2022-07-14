@@ -1,4 +1,4 @@
-// import { validUsername } from '@/utils/validate'
+import { validUsername } from '@/utils/validate'
 const validateUsername = (rule, value, callback) => {
   // if (!validUsername(value)) {
   //   callback(new Error('请输入正确的用户名'))
@@ -6,7 +6,7 @@ const validateUsername = (rule, value, callback) => {
   //   callback()
   // }
   if (!value) {
-    callback(new Error('请输入用户名'))
+    callback(new Error('请输入正确的用户名'))
   } else {
     callback()
   }

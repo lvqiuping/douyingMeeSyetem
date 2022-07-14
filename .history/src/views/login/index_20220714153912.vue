@@ -80,6 +80,9 @@ export default {
       immediate: true
     }
   },
+  created() {
+    console.log('zhe', getToken())
+  },
   methods: {
     showPwd() {
       if (this.passwordType === 'password') {

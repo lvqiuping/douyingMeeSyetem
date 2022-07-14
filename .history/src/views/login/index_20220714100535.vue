@@ -60,8 +60,8 @@ export default {
   data() {
     return {
       loginForm: {
-        userName: '',
-        password: ''
+        userName: 'admin',
+        password: '123456'
       },
       loginRules: {
         userName: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -79,6 +79,9 @@ export default {
       },
       immediate: true
     }
+  },
+  created() {
+    console.log(getToken('vue_admin_template_token'))
   },
   methods: {
     showPwd() {
@@ -104,7 +107,8 @@ export default {
           this.loading = true
           const parmas = `userName=${this.loginForm.userName}&password=${this.loginForm.password}`
           this.$store.dispatch('user/login', parmas).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
+            console.log('ok')
+            //   this.$router.push({ path: this.redirect || '/' })
             this.loading = false
           }).catch(() => {
             this.loading = false

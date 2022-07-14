@@ -57,7 +57,7 @@
       <el-button @click="dialogFormVisible = $emit('dialogFormVisibleEmit', false)">
         取消
       </el-button>
-      <el-button type="primary" :loading="loading" @click="dialogStatus==='create'?createData():updateData()">
+      <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
         确认
       </el-button>
     </div>
@@ -66,14 +66,13 @@
 
 <script>
 import ElDragSelect from '@/components/DragSelect' // base on element-ui
-import { updateTable } from '@/api/table'
+import { createTable, updateTable } from '@/api/table'
 import { validateUsername } from '@/utils/validator'
 export default {
   name: 'DataForm',
   components: { ElDragSelect },
   props: {
-    dialogStatus: { type: String, default: String },
-    loading: { type: Boolean, default: false }
+    dialogStatus: { type: String, default: String }
   },
   data() {
     return {

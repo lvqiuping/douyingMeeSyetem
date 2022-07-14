@@ -14,6 +14,10 @@ import router from './router'
 
 import '@/icons' // icon
 import '@/permission' // permission control
+import { getToken, setToken, removeToken } from '@/utils/auth'
+Vue.prototype.$getToken = getToken
+Vue.prototype.$setToken = setToken
+Vue.prototype.$removeToken = removeToken
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

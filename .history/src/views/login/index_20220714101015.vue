@@ -60,8 +60,8 @@ export default {
   data() {
     return {
       loginForm: {
-        userName: '',
-        password: ''
+        userName: 'admin',
+        password: '123456'
       },
       loginRules: {
         userName: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -79,6 +79,9 @@ export default {
       },
       immediate: true
     }
+  },
+  created() {
+    console.log('zhe', getToken())
   },
   methods: {
     showPwd() {

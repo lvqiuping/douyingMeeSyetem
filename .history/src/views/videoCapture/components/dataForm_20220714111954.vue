@@ -57,7 +57,7 @@
       <el-button @click="dialogFormVisible = $emit('dialogFormVisibleEmit', false)">
         取消
       </el-button>
-      <el-button type="primary" :loading="loading" @click="dialogStatus==='create'?createData():updateData()">
+      <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
         确认
       </el-button>
     </div>
@@ -66,14 +66,13 @@
 
 <script>
 import ElDragSelect from '@/components/DragSelect' // base on element-ui
-import { updateTable } from '@/api/table'
+import { createTable, updateTable } from '@/api/table'
 import { validateUsername } from '@/utils/validator'
 export default {
   name: 'DataForm',
   components: { ElDragSelect },
   props: {
-    dialogStatus: { type: String, default: String },
-    loading: { type: Boolean, default: false }
+    dialogStatus: { type: String, default: String }
   },
   data() {
     return {
@@ -86,16 +85,16 @@ export default {
         SortBy: '',
         PublishFromNowDay: '',
         // eslint-disable-next-line no-dupe-keys
-        CommentKeyWords: '',
+        CommentKeyWords: [],
         // eslint-disable-next-line no-dupe-keys
-        CommentShieldWords: ''
+        CommentShieldWords: []
 
       },
       rules: {
-        TaskName: [{ required: true, trigger: 'blur', validator: validateUsername }]
+        TaskName: [{ required: true, trigger: 'blur', message: 'qing'}]
       },
-      CommentKeyWords: [],
-      CommentShieldWords: [],
+      CommentKeyWords: ['Apple', 'Banana', 'Orange'],
+      CommentShieldWords: ['Banana', 'Orange'],
       options: [{
         value: 'Apple',
         label: 'Apple'
@@ -118,10 +117,9 @@ export default {
     createData() {
       this.temp.CommentKeyWords = this.CommentKeyWords
       this.temp.CommentShieldWords = this.CommentShieldWords
-      this.temp2 = `TaskName=${this.temp.TaskName}&TaskSource=${this.temp.TaskSource}&CommentKeyWords=${this.temp.CommentKeyWords}&CommentShieldWords=${this.temp.CommentShieldWords}&TitleKeyWords=${this.temp.TitleKeyWords}&SortBy=${this.temp.SortBy}&PublishFromNowDay=${this.temp.PublishFromNowDay}`
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.$emit('createDataEmit', this.temp2)
+          this.$emit('createDataEmit', this.temp)
         }
       })
     },

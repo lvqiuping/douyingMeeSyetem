@@ -31,7 +31,7 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" top="3%">
       <div class="el-dialog-div">
-        <data-form :dialog-status="dialogStatus" :loading="loading" @createDataEmit="createDataEmit" @dialogFormVisibleEmit="dialogFormVisibleEmit" />
+        <data-form :dialog-status="dialogStatus" @createDataEmit="createDataEmit" @dialogFormVisibleEmit="dialogFormVisibleEmit" />
       </div>
     </el-dialog>
   </div>
@@ -55,7 +55,6 @@ export default {
   },
   data() {
     return {
-      loading: false,
       ids: [],
       status: {
         state: true,
@@ -212,22 +211,16 @@ export default {
     //
     createDataEmit(v) {
       console.log('新增参数', v)
-      createTable(v).then((res) => {
-        this.loading = true
-        if (res.statusCode === 200) {
-          this.loading = false
-          TipsBox('success', res.data)
-          this.dialogFormVisible = false
-          this.getPageList()
-        }
-        // this.list.unshift(this.temp)
-        // this.dialogFormVisible = false
-        // this.$notify({
-        //   title: 'Success',
-        //   message: 'Created Successfully',
-        //   type: 'success',
-        //   duration: 2000
-        // })
+      // this.temp.author = 'vue-element-admin'
+      createTable(v).then(() => {
+        this.list.unshift(this.temp)
+        this.dialogFormVisible = false
+        this.$notify({
+          title: 'Success',
+          message: 'Created Successfully',
+          type: 'success',
+          duration: 2000
+        })
       })
     },
     // 编辑

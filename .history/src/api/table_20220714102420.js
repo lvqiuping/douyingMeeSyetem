@@ -9,7 +9,7 @@ export function getList(query) {
 }
 export function createTable(data) {
   return request({
-    url: '/api/Task/AddGrabTask',
+    url: '/vue-element-admin/article/create',
     method: 'post',
     data
   })

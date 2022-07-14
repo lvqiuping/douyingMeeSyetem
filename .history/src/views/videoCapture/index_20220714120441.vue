@@ -218,7 +218,6 @@ export default {
           this.loading = false
           TipsBox('success', res.data)
           this.dialogFormVisible = false
-          this.getPageList()
         }
         // this.list.unshift(this.temp)
         // this.dialogFormVisible = false
