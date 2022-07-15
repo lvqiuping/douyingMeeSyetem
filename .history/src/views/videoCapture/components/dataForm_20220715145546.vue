@@ -88,8 +88,13 @@ export default {
         CommentKeyWords: '',
         CommentShieldWords: '',
         TitleKeyWords: '',
-        SortBy: '0',
-        PublishFromNowDay: '0'
+        SortBy: '',
+        PublishFromNowDay: '',
+        // eslint-disable-next-line no-dupe-keys
+        CommentKeyWords: '',
+        // eslint-disable-next-line no-dupe-keys
+        CommentShieldWords: ''
+
       },
       rules: {
         TaskName: [{ required: true, trigger: 'blur', validator: validateUsername }]

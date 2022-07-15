@@ -5,9 +5,9 @@ import Cookies from 'js-cookie'
 
 const getDefaultState = () => {
   return {
-    // 这些都是state的信息
     token: getToken(),
-    userName: '',
+    name: '',
+    avatar: '',
     permission: ''
   }
 }
@@ -21,21 +21,21 @@ const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
   },
-  SET_USER_NAME: (state, userName) => {
-    state.userName = userName
+  SET_NAME: (state, name) => {
+    state.name = name
+  },
+  SET_AVATAR: (state, avatar) => {
+    state.avatar = avatar
   }
 }
+
 const actions = {
   // user login
   login({ commit }, userInfo) {
+    const { userName, password } = userInfo
     return new Promise((resolve, reject) => {
       login(userInfo).then(response => {
-        var str = userInfo.split('&')
-        var obj = {}
-        str.map((e) => {
-          obj[e.split('=')[0]] = e.split('=')[1]
-        })
-        commit('SET_USER_NAME', obj.userName)
+        // const { data } = response
         commit('SET_TOKEN', response.data)
         setToken(response.data)
         Cookies.set('permission', 'normal')
@@ -48,8 +48,9 @@ const actions = {
 
   // user logout
   logout({ commit, state }) {
+    console.log('state', state)
     return new Promise((resolve, reject) => {
-      logout(state.userName).then(() => {
+      logout(state.token).then(() => {
         removeToken() // must remove  token  first
         resetRouter()
         commit('RESET_STATE')
@@ -70,10 +71,10 @@ const actions = {
           return reject('Verification failed, please Login again.')
         }
 
-        const { userName } = data
+        const { name, avatar } = data
 
-        commit('SET_USER_NAME', userName)
-        // commit('SET_AVATAR')
+        commit('SET_NAME', name)
+        commit('SET_AVATAR', avatar)
         resolve(data)
       }).catch(error => {
         reject(error)

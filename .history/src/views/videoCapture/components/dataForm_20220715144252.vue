@@ -4,12 +4,12 @@
       <el-form-item label="任务名" prop="TaskName">
         <el-input v-model="temp.TaskName" placeholder="随意取一个名字吧" />
       </el-form-item>
-
+      
       <el-form-item label="分析源" prop="TaskSource">
         <el-input v-model="temp.TaskSource" placeholder="输入采集源" />
         <div class="secondColor">分析全网视频关键词，只能单个词。例如： 北京二手车</div>
       </el-form-item>
-
+      
       <el-form-item label="评论筛选关键词">
         <el-drag-select v-model="CommentKeyWords" style="width:500px;" multiple placeholder="请选择">
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
@@ -62,7 +62,7 @@
       <el-button @click="dialogFormVisible = $emit('dialogFormVisibleEmit', false)">
         取消
       </el-button>
-      <el-button type="primary" :loading="loading" @click="dialogStatus==='create'?createData() : updateData()">
+      <el-button type="primary" :loading="loading" @click="dialogStatus==='create'?createData():updateData()">
         确认
       </el-button>
     </div>
@@ -88,8 +88,13 @@ export default {
         CommentKeyWords: '',
         CommentShieldWords: '',
         TitleKeyWords: '',
-        SortBy: '0',
-        PublishFromNowDay: '0'
+        SortBy: '',
+        PublishFromNowDay: '',
+        // eslint-disable-next-line no-dupe-keys
+        CommentKeyWords: '',
+        // eslint-disable-next-line no-dupe-keys
+        CommentShieldWords: ''
+
       },
       rules: {
         TaskName: [{ required: true, trigger: 'blur', validator: validateUsername }]

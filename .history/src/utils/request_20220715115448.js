@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
+import { TipsBox } from '@/utils/feedback.js'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 
@@ -68,6 +69,7 @@ service.interceptors.response.use(
       }
       return Promise.reject(new Error(res.errors || 'Error'))
     } else {
+      TipsBox('success', res.data)
       return res
     }
   },

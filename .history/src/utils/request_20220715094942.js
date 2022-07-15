@@ -44,7 +44,7 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-    // console.log('请求返回', res)
+    console.log('请求返回', res)
     // if the custom code is not 20000, it is judged as an error.
     if (res.statusCode !== 200) {
       Message({

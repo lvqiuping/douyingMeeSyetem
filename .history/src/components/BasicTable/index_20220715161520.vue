@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div style="display: flex;flex-direction: row;justify-content: space-between; margin-bottom: 20px;height: 40px;">
+    <div style="display: flex;flex-direction: row;justify-content: space-between; margin-bottom: 20px;height: 60px;">
       <div style="display: flex;flex-direction: row;justify-content: space-between;">
         <slot v-if="addSlot" name="addSlot" />
         <el-button type="danger" icon="el-icon-delete" style="margin-left: 10px;" @click="batchDeleted">批量删除</el-button>
       </div>
       <div style="display: flex;flex-direction: row;justify-content: space-between;">
-        <!-- <search-form :search-form="searchForm" /> -->
+        <search-form :search-form="searchForm" />
         <el-button type="" icon="el-icon-refresh" style="margin-right: 10px;" />
         <el-popover
           placement="bottom"

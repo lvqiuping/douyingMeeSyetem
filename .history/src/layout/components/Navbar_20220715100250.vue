@@ -52,6 +52,7 @@ export default {
       this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {
+      // const parmas = `userName=${this.loginForm.userName}`
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
