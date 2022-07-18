@@ -208,12 +208,15 @@ export default {
     },
     //
     createDataEmit(v) {
+      console.log('新增参数', v)
       var str = v.split('&')
       var obj = {}
       str.map((e) => {
         obj[e.split('=')[0]] = e.split('=')[1]
       })
+      console.log('obj', obj.TaskName)
       createTable(v).then((res) => {
+        console.log('添加成功', res)
         this.loading = true
         if (res.statusCode === 200) {
           this.loading = false

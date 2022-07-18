@@ -32,7 +32,6 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    debugger
     const { userName, password } = userInfo
     return new Promise((resolve, reject) => {
       login(userInfo).then(response => {

@@ -149,9 +149,12 @@ export default {
       total: 0,
       listLoading: true,
       listQuery: {
-        pageIndex: 1,
-        pageSize: 10,
-        taskName: ''
+        page: 1,
+        limit: 10,
+        importance: undefined,
+        title: undefined,
+        type: undefined,
+        sort: '+id'
       }
     }
   },
@@ -208,18 +211,14 @@ export default {
     },
     //
     createDataEmit(v) {
-      var str = v.split('&')
-      var obj = {}
-      str.map((e) => {
-        obj[e.split('=')[0]] = e.split('=')[1]
-      })
+      console.log('新增参数', v)
       createTable(v).then((res) => {
         this.loading = true
         if (res.statusCode === 200) {
           this.loading = false
           TipsBox('success', res.data)
           this.dialogFormVisible = false
-          this.getPageList(obj.TaskName)
+          this.getPageList()
         }
         // this.list.unshift(this.temp)
         // this.dialogFormVisible = false
@@ -278,10 +277,9 @@ export default {
       }
     },
     // 获取表格数据
-    getPageList(TaskName) {
+    getPageList() {
       this.listLoading = true
-      const parmas = `pageIndex=${this.listQuery.pageIndex}&pageSize=${this.listQuery.pageSize}&taskName=${TaskName}`
-      getList(parmas).then(response => {
+      getList(this.listQuery).then(response => {
         console.log('liebiao', response)
         this.tableData = response.data.items
         this.total = response.data.total
