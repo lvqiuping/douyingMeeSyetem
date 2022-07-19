@@ -16,13 +16,9 @@
         </div>
       </template>
       <template v-slot:status="scope">
-        <el-link :type="scope.scope.row.taskStatus | StatusFilter">
-          <span v-if="scope.scope.row.taskStatus === 0">已创建</span>
-          <span v-if="scope.scope.row.taskStatus === 1">进行中</span>
-          <span v-if="scope.scope.row.taskStatus === 2">已暂停</span>
-          <span v-if="scope.scope.row.taskStatus === 3">已完成</span>
-          <span v-if="scope.scope.row.taskStatus === 4">已作废</span>
-        </el-link>
+        <el-tag :type="scope.scope.row.status | StatusFilter">
+          {{ scope.scope.row.status }}
+        </el-tag>
       </template>
       <template v-slot:operates="scope">
         <table-operation
@@ -114,27 +110,37 @@ export default {
         },
         {
           label: '任务名',
-          value: 'taskName',
+          value: 'author',
           show: true
         },
         {
-          label: '分析源',
-          value: 'taskSource',
+          label: '采集源',
+          value: 'display_time',
           show: true
         },
         {
-          label: '评论筛选关键词',
-          value: 'commentKeyWords',
+          label: '时间筛选',
+          value: 'author',
           show: true
         },
         {
-          label: '评论屏蔽关键词',
-          value: 'commentShieldWords',
+          label: '意向客户数',
+          value: 'title',
           show: true
         },
         {
-          label: '视频标题再筛选',
-          value: 'titleKeyWords',
+          label: '线索视频数',
+          value: 'title',
+          show: true
+        },
+        {
+          label: '定时截止时间',
+          value: 'title',
+          show: true
+        },
+        {
+          label: '创建时间',
+          value: 'title',
           show: true
         }
       ],
@@ -274,13 +280,17 @@ export default {
     // 获取表格数据
     getPageList(TaskName) {
       this.listLoading = true
-      // 用json格式
-      const parmas = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskName': TaskName }
-      console.log(parmas)
+      const parmas = `pageIndex=${this.listQuery.pageIndex}&pageSize=${this.listQuery.pageSize}&taskName=${TaskName}`
+      return
       getList(parmas).then(response => {
         console.log('liebiao', response)
-        this.tableData = response.data.pageList
-        this.total = response.data.totalRowCount
+        this.tableData = response.data.items
+        this.total = response.data.total
+
+        // Just to simulate the time of the request
+        setTimeout(() => {
+          this.listLoading = false
+        }, 1.5 * 1000)
       })
     },
     // 删除

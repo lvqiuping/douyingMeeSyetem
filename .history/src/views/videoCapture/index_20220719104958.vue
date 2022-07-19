@@ -16,13 +16,13 @@
         </div>
       </template>
       <template v-slot:status="scope">
-        <el-link :type="scope.scope.row.taskStatus | StatusFilter">
+        <el-tag :type="scope.scope.row.taskStatus | StatusFilter">
           <span v-if="scope.scope.row.taskStatus === 0">已创建</span>
           <span v-if="scope.scope.row.taskStatus === 1">进行中</span>
           <span v-if="scope.scope.row.taskStatus === 2">已暂停</span>
           <span v-if="scope.scope.row.taskStatus === 3">已完成</span>
           <span v-if="scope.scope.row.taskStatus === 4">已作废</span>
-        </el-link>
+        </el-tag>
       </template>
       <template v-slot:operates="scope">
         <table-operation
