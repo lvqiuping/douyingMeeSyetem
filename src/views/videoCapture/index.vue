@@ -32,7 +32,7 @@
         />
       </template>
     </basic-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPageList" />
+    <pagination v-show="total > 0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPageList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" top="3%">
       <div class="el-dialog-div">
@@ -275,9 +275,9 @@ export default {
     getPageList(TaskName) {
       this.listLoading = true
       // 用json格式
-      const parmas = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskName': TaskName }
-      console.log(parmas)
-      getList(parmas).then(response => {
+      const params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskName': TaskName }
+      console.log(params)
+      getList(params).then(response => {
         console.log('liebiao', response)
         this.tableData = response.data.pageList
         this.total = response.data.totalRowCount

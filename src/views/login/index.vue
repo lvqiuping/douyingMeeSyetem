@@ -102,8 +102,8 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          const parmas = `userName=${this.loginForm.userName}&password=${this.loginForm.password}`
-          this.$store.dispatch('user/login', parmas).then(() => {
+          const params = `userName=${this.loginForm.userName}&password=${this.loginForm.password}`
+          this.$store.dispatch('user/login', params).then(() => {
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
           }).catch(() => {
