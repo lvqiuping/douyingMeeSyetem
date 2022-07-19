@@ -32,7 +32,7 @@
         />
       </template>
     </basic-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPageList" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageIndex" :limit.sync="listQuery.pageSize" @pagination="getPageList(TaskNameCopy)" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" top="3%">
       <div class="el-dialog-div">
@@ -146,7 +146,8 @@ export default {
         pageIndex: 1,
         pageSize: 10,
         taskName: ''
-      }
+      },
+      TaskNameCopy: ''
     }
   },
   created() {
@@ -207,6 +208,7 @@ export default {
       str.map((e) => {
         obj[e.split('=')[0]] = e.split('=')[1]
       })
+      this.TaskNameCopy = obj.TaskName
       createTable(v).then((res) => {
         this.loading = true
         if (res.statusCode === 200) {
@@ -276,7 +278,6 @@ export default {
       this.listLoading = true
       // 用json格式
       const parmas = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskName': TaskName }
-      console.log(parmas)
       getList(parmas).then(response => {
         console.log('liebiao', response)
         this.tableData = response.data.pageList
