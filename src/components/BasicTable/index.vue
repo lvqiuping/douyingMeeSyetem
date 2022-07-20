@@ -7,7 +7,8 @@
       </div>
       <div style="display: flex;flex-direction: row;justify-content: space-between;">
         <!-- <search-form :search-form="searchForm" /> -->
-        <el-button type="" icon="el-icon-refresh" style="margin-right: 10px;" />
+        <!-- <el-button type="primary" icon="el-icon-search" style="margin-right: 10px;" /> -->
+        <el-button type="" icon="el-icon-refresh" style="margin-right: 10px; margin-left: 10px;" />
         <el-popover
           placement="bottom"
           width="90"
