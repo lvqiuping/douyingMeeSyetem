@@ -91,6 +91,18 @@ export const constantRoutes = [
         meta: { title: '关键词分析', icon: 'table' }
       },
       {
+        path: 'peerBlogger',
+        name: '同行博主分析',
+        component: () => import('@/views/videoCapture/peerBlogger'),
+        meta: { title: '同行博主分析', icon: 'table' }
+      },
+      {
+        path: 'accurateVideo',
+        name: '精准视频分析',
+        component: () => import('@/views/videoCapture/accurateVideo'),
+        meta: { title: '精准视频分析', icon: 'table' }
+      },
+      {
         path: 'video',
         name: '视频库',
         component: () => import('@/views/videoCapture/video'),

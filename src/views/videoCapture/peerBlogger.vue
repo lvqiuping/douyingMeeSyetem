@@ -36,7 +36,7 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" top="3%">
       <div class="el-dialog-div">
-        <data-form :dialog-status="dialogStatus" :loading="loading" :task-type="0" @createDataEmit="createDataEmit" @dialogFormVisibleEmit="dialogFormVisibleEmit" />
+        <data-form :dialog-status="dialogStatus" :loading="loading" :task-type="1" @createDataEmit="createDataEmit" @dialogFormVisibleEmit="dialogFormVisibleEmit" />
       </div>
     </el-dialog>
   </div>
@@ -204,7 +204,6 @@ export default {
     //
     createDataEmit(v) {
       console.log('添加参数', v)
-      return
       var str = v.split('&')
       var obj = {}
       str.map((e) => {

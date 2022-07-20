@@ -4,7 +4,16 @@
       <el-form-item label="任务名" prop="TaskName">
         <el-input v-model="temp.TaskName" placeholder="随意取一个名字吧" />
       </el-form-item>
-
+      <!-- <el-form-item label="任务类型" prop="TaskType">
+        <el-select v-model="temp.TaskType" placeholder="请选择">
+          <el-option
+            v-for="item in TaskTypeOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item> -->
       <el-form-item label="分析源" prop="TaskSource">
         <el-input v-model="temp.TaskSource" placeholder="输入采集源" />
         <div class="secondColor">分析全网视频关键词，只能单个词。例如： 北京二手车</div>
@@ -72,18 +81,20 @@
 <script>
 import ElDragSelect from '@/components/DragSelect' // base on element-ui
 import { updateTable } from '@/api/table'
-import { validateUsername } from '@/utils/validator'
+import { validateTaskName } from '@/utils/validator'
 export default {
   name: 'DataForm',
   components: { ElDragSelect },
   props: {
     dialogStatus: { type: String, default: String },
-    loading: { type: Boolean, default: false }
+    loading: { type: Boolean, default: false },
+    taskType: { type: Number, default: null }
   },
   data() {
     return {
       temp: {
         TaskName: '',
+        TaskType: this.taskType, // 这是后台让传的参数：关键词分析。必填
         TaskSource: '',
         CommentKeyWords: '',
         CommentShieldWords: '',
@@ -92,7 +103,7 @@ export default {
         PublishFromNowDay: '0'
       },
       rules: {
-        TaskName: [{ required: true, trigger: 'blur', validator: validateUsername }]
+        TaskName: [{ required: true, trigger: 'blur', validator: validateTaskName }]
       },
       CommentKeyWords: [],
       CommentShieldWords: [],
@@ -118,7 +129,7 @@ export default {
     createData() {
       this.temp.CommentKeyWords = this.CommentKeyWords
       this.temp.CommentShieldWords = this.CommentShieldWords
-      this.temp2 = `TaskName=${this.temp.TaskName}&TaskSource=${this.temp.TaskSource}&CommentKeyWords=${this.temp.CommentKeyWords}&CommentShieldWords=${this.temp.CommentShieldWords}&TitleKeyWords=${this.temp.TitleKeyWords}&SortBy=${this.temp.SortBy}&PublishFromNowDay=${this.temp.PublishFromNowDay}`
+      this.temp2 = `TaskName=${this.temp.TaskName}&TaskType=${this.temp.TaskType}&TaskSource=${this.temp.TaskSource}&CommentKeyWords=${this.temp.CommentKeyWords}&CommentShieldWords=${this.temp.CommentShieldWords}&TitleKeyWords=${this.temp.TitleKeyWords}&SortBy=${this.temp.SortBy}&PublishFromNowDay=${this.temp.PublishFromNowDay}`
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.$emit('createDataEmit', this.temp2)
