@@ -6,8 +6,9 @@
         <el-button type="danger" icon="el-icon-delete" style="margin-left: 10px;" @click="batchDeleted">批量删除</el-button>
       </div>
       <div style="display: flex;flex-direction: row;justify-content: space-between;">
-        <!-- <search-form :search-form="searchForm" /> -->
-        <!-- <el-button type="primary" icon="el-icon-search" style="margin-right: 10px;" /> -->
+        <search-form 
+        :search-form="searchForm" 
+        @searchFormEmit="searchFormEmit" />
         <el-button type="" icon="el-icon-refresh" style="margin-right: 10px; margin-left: 10px;" />
         <el-popover
           placement="bottom"
@@ -90,10 +91,15 @@ export default {
       selectDate: [],
       selectTableData: [],
       total: 0,
-      loading: false
+      loading: false,
+      b_data: ''
     }
   },
   methods: {
+    searchFormEmit(v) {
+      this.b_data = v
+      this.$emit('searchFormEmit2', this.b_data)
+    },
     handleSelectionChange(val) {
       this.selectDate = val
     },
