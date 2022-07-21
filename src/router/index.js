@@ -54,25 +54,6 @@ export const constantRoutes = [
       meta: { title: '操作盘', icon: 'dashboard' }
     }]
   },
-
-  // {
-  //   path: '/table',
-  //   component: Layout,
-  //   redirect: '/table/index',
-  //   name: 'Table', // 设定路由的名字，一定要填写不然使用<keep-alive>时会出现各种问题
-  //   meta: {
-  //     title: '测试表格', // 设置该路由在侧边栏和面包屑中展示的名字
-  //     icon: 'el-icon-s-help'
-  //   },
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: '测试表格',
-  //       component: () => import('@/views/table/index'),
-  //       meta: { title: '测试表格', icon: 'table' }
-  //     }
-  //   ]
-  // },
   {
     path: '/videoCapture',
     component: Layout,
@@ -89,6 +70,18 @@ export const constantRoutes = [
         name: '关键词分析',
         component: () => import('@/views/videoCapture/index'),
         meta: { title: '关键词分析', icon: 'table' }
+      },
+      {
+        path: 'peerBlogger',
+        name: '同行博主分析',
+        component: () => import('@/views/videoCapture/peerBlogger'),
+        meta: { title: '同行博主分析', icon: 'table' }
+      },
+      {
+        path: 'accurateVideo',
+        name: '精准视频分析',
+        component: () => import('@/views/videoCapture/accurateVideo'),
+        meta: { title: '精准视频分析', icon: 'table' }
       },
       {
         path: 'video',

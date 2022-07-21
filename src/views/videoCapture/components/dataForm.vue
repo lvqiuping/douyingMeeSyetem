@@ -4,7 +4,16 @@
       <el-form-item label="任务名" prop="TaskName">
         <el-input v-model="temp.TaskName" placeholder="随意取一个名字吧" />
       </el-form-item>
-
+      <!-- <el-form-item label="任务类型" prop="TaskType">
+        <el-select v-model="temp.TaskType" placeholder="请选择">
+          <el-option
+            v-for="item in TaskTypeOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item> -->
       <el-form-item label="分析源" prop="TaskSource">
         <el-input v-model="temp.TaskSource" placeholder="输入采集源" />
         <div class="secondColor">分析全网视频关键词，只能单个词。例如： 北京二手车</div>
@@ -30,7 +39,14 @@
           <span class="seatColor">（该功能慎用，设置不正确可能会导致采集不到视频）在分析源搜索出来的视频再做一次筛选，可设置多个关键词，用逗号隔开。比如：二手车，北京二手车，车子</span>
         </div>
       </el-form-item>
-
+      <el-form-item label="视频抓取数量上限" prop="VideoUpLimitCount">
+        <el-input-number v-model="temp.VideoUpLimitCount" :min="0" :max="10" size="small" @change="changeVideoUpLimitCount" />
+        <!-- <div class="secondColor"><span class="seatColor">（填0则不限制点数）</span></div> -->
+      </el-form-item>
+      <el-form-item label="评论抓取数量上限" prop="CommentUpLimitCount">
+        <el-input-number v-model="temp.CommentUpLimitCount" :min="0" :max="10" size="small" @change="changeCommentUpLimitCount" />
+        <!-- <div class="secondColor"><span class="seatColor">（填0则不限制点数）</span></div> -->
+      </el-form-item>
       <el-form-item label="搜索排序" prop="SortBy">
         <el-radio v-model="temp.SortBy" label="0">默认排序</el-radio>
         <el-radio v-model="temp.SortBy" label="1">最多点赞</el-radio>
@@ -45,18 +61,6 @@
         <el-radio v-model="temp.PublishFromNowDay" label="4">一个月内</el-radio>
         <el-radio v-model="temp.PublishFromNowDay" label="5">半年内</el-radio>
       </el-form-item>
-      <!-- <el-form-item label="消耗点数上限" prop="title4">
-        <el-input-number v-model="temp.title4" :min="0" :max="10" size="small" @change="handleChange1" /><span>点</span>
-        <div class="secondColor"><span class="seatColor">（填0则不限制点数）</span></div>
-      </el-form-item>
-      <el-form-item label="定时监控频率" prop="title5">
-        <span>每</span><el-input-number v-model="temp.title5" :min="0" size="small" @change="handleChange2" /><span>天运行一次</span>
-        <div class="secondColor"><span class="seatColor">（默认为0，不开启自动监控）</span></div>
-      </el-form-item>
-      <el-form-item label="最长监控天数" prop="title6">
-        <span>持续监控</span><el-input-number v-model="temp.title6" :min="0" size="small" @change="handleChange3" /><span>天后停止</span>
-        <div class="secondColor"><span class="seatColor">（默认为0，不开启自动监控）</span></div>
-      </el-form-item> -->
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = $emit('dialogFormVisibleEmit', false)">
@@ -72,27 +76,31 @@
 <script>
 import ElDragSelect from '@/components/DragSelect' // base on element-ui
 import { updateTable } from '@/api/table'
-import { validateUsername } from '@/utils/validator'
+import { validateTaskName } from '@/utils/validator'
 export default {
   name: 'DataForm',
   components: { ElDragSelect },
   props: {
     dialogStatus: { type: String, default: String },
-    loading: { type: Boolean, default: false }
+    loading: { type: Boolean, default: false },
+    taskType: { type: Number, default: null }
   },
   data() {
     return {
       temp: {
         TaskName: '',
+        TaskType: this.taskType, // 这是后台让传的参数：关键词分析0，同行分析1，精准分析2。必填
         TaskSource: '',
         CommentKeyWords: '',
         CommentShieldWords: '',
         TitleKeyWords: '',
         SortBy: '0',
-        PublishFromNowDay: '0'
+        PublishFromNowDay: '0',
+        VideoUpLimitCount: 0,
+        CommentUpLimitCount: 0
       },
       rules: {
-        TaskName: [{ required: true, trigger: 'blur', validator: validateUsername }]
+        TaskName: [{ required: true, trigger: 'blur', validator: validateTaskName }]
       },
       CommentKeyWords: [],
       CommentShieldWords: [],
@@ -115,10 +123,25 @@ export default {
     }
   },
   methods: {
+    changeVideoUpLimitCount(value) {
+      this.VideoUpLimitCount = value
+    },
+    changeCommentUpLimitCount(value) {
+      this.CommentUpLimitCount = value
+    },
     createData() {
       this.temp.CommentKeyWords = this.CommentKeyWords
       this.temp.CommentShieldWords = this.CommentShieldWords
-      this.temp2 = `TaskName=${this.temp.TaskName}&TaskSource=${this.temp.TaskSource}&CommentKeyWords=${this.temp.CommentKeyWords}&CommentShieldWords=${this.temp.CommentShieldWords}&TitleKeyWords=${this.temp.TitleKeyWords}&SortBy=${this.temp.SortBy}&PublishFromNowDay=${this.temp.PublishFromNowDay}`
+      this.temp2 = `TaskName=${this.temp.TaskName}
+      &TaskType=${this.temp.TaskType}
+      &TaskSource=${this.temp.TaskSource}
+      &CommentKeyWords=${this.temp.CommentKeyWords}
+      &CommentShieldWords=${this.temp.CommentShieldWords}
+      &TitleKeyWords=${this.temp.TitleKeyWords}
+      &SortBy=${this.temp.SortBy}
+      &PublishFromNowDay=${this.temp.PublishFromNowDay}
+      &VideoUpLimitCount=${this.temp.VideoUpLimitCount}
+      &CommentUpLimitCount=${this.temp.CommentUpLimitCount}`
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.$emit('createDataEmit', this.temp2)

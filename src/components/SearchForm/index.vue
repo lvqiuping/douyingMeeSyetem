@@ -2,7 +2,7 @@
   <div>
     <el-form ref="searchForm" :rules="rules" :model="temp" label-position="" label-width="">
       <el-form-item v-show="searchForm === 'videoCapture'" prop="TaskName">
-        <el-input v-model="temp.TaskName" placeholder="随意取一个名字吧" />
+        <el-input v-model="temp.TaskName" placeholder="请输入任务名" />
       </el-form-item>
       <el-form-item v-show="searchForm === 'videoCapture2'" label="分析源" prop="TaskSource">
         <el-input v-model="temp.TaskSource" placeholder="输入采集源" />

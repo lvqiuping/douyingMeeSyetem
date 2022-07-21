@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <analysis-template :task-type="0" />
+    <analysis-template :task-type="1" />
   </div>
 </template>
 <script>
