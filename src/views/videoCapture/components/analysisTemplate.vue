@@ -9,6 +9,7 @@
       :status="status"
       :search-form="'videoCapture'"
       @batchDeleted="batchDeleted"
+      @searchFormEmit2="searchFormEmit2"
     >
       <template v-slot:addSlot>
         <div>
@@ -170,6 +171,9 @@ export default {
     this.getPageList(this.taskType)
   },
   methods: {
+    searchFormEmit2(v) {
+      console.log('页面', v)
+    },
     batchDeleted(v) {
       console.log(v)
       if (!v.length) {
