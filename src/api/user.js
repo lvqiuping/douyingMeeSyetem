@@ -4,7 +4,10 @@ export function login(data) {
   return request({
     url: '/api/user/login',
     method: 'post',
-    data: data
+    data: data,
+    // headers: {
+    //   'Content-Type': 'application/x-www-form-urlencoded'
+    // }
   })
 }
 export function logout() {

@@ -30,15 +30,14 @@ const actions = {
   login({ commit }, userInfo) {
     return new Promise((resolve, reject) => {
       login(userInfo).then(response => {
-        var str = userInfo.split('&')
-        var obj = {}
-        str.map((e) => {
-          obj[e.split('=')[0]] = e.split('=')[1]
-        })
-        commit('SET_USER_NAME', obj.userName)
+        // var str = userInfo.split('&')
+        // var obj = {}
+        // str.map((e) => {
+        //   obj[e.split('=')[0]] = e.split('=')[1]
+        // })
+        commit('SET_USER_NAME', userInfo.get('userName'))
         commit('SET_TOKEN', response.data)
         setToken(response.data)
-        Cookies.set('permission', 'normal')
         resolve()
       }).catch(error => {
         reject(error)
