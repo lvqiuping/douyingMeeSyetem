@@ -2,7 +2,7 @@
   <div>
     <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="110px" style="margin-left:50px;margin-right:50px;">
       <el-form-item label="任务名" prop="TaskName">
-        <el-input v-model="temp.TaskName" placeholder="随意取一个名字吧" />
+        <el-input v-model.trim="temp.TaskName" placeholder="随意取一个名字吧" />
       </el-form-item>
       <!-- <el-form-item label="任务类型" prop="TaskType">
         <el-select v-model="temp.TaskType" placeholder="请选择">
@@ -15,7 +15,7 @@
         </el-select>
       </el-form-item> -->
       <el-form-item label="分析源" prop="TaskSource">
-        <el-input v-model="temp.TaskSource" placeholder="输入采集源" />
+        <el-input v-model.trim="temp.TaskSource" placeholder="输入采集源" />
         <div class="secondColor">分析全网视频关键词，只能单个词。例如： 北京二手车</div>
       </el-form-item>
 
@@ -34,7 +34,7 @@
       </el-form-item>
 
       <el-form-item label="视频标题再筛选">
-        <el-input v-model="temp.TitleKeyWords" :autosize="{ minRows: 2, maxRows: 10}" type="textarea" placeholder="如：二手车，北京二手车，车子" />
+        <el-input v-model.trim="temp.TitleKeyWords" :autosize="{ minRows: 2, maxRows: 10}" type="textarea" placeholder="如：二手车，北京二手车，车子" />
         <div class="secondColor">
           <span class="seatColor">（该功能慎用，设置不正确可能会导致采集不到视频）在分析源搜索出来的视频再做一次筛选，可设置多个关键词，用逗号隔开。比如：二手车，北京二手车，车子</span>
         </div>

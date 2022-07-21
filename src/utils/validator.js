@@ -14,7 +14,7 @@ const validateUsername = (rule, value, callback) => {
 
 const validatePassword = (rule, value, callback) => {
   if (value.length < 6) {
-    callback(new Error('请输入正确的密码'))
+    callback(new Error('请输入6位数的密码'))
   } else {
     callback()
   }

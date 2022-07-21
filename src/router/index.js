@@ -97,6 +97,25 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/systemManagement',
+    component: Layout,
+    redirect: '/systemManagement/index',
+    alwaysShow: true,
+    name: '系统管理',
+    meta: {
+      title: '系统管理',
+      icon: 'el-icon-s-help'
+    },
+    children: [
+      {
+        path: 'index',
+        name: '系统用户管理',
+        component: () => import('@/views/systemManagement/index'),
+        meta: { title: '系统用户管理', icon: 'table' }
+      }
+    ]
+  },
   // {
   //   path: 'external-link',
   //   component: Layout,
