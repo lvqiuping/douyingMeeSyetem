@@ -173,6 +173,7 @@ export default {
   methods: {
     searchFormEmit2(v) {
       console.log('页面', v)
+      this.getPageList(this.taskType, v)
     },
     batchDeleted(v) {
       console.log(v)
@@ -278,10 +279,10 @@ export default {
       }
     },
     // 获取表格数据
-    getPageList(taskType) {
+    getPageList(taskType, taskName) {
       this.listLoading = true
       // 用json格式
-      const parmas = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskType': taskType }
+      const parmas = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskType': taskType, 'taskName': taskName }
       getList(parmas).then(response => {
         console.log('列表', response)
         this.tableData = response.data.pageList
