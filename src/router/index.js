@@ -51,7 +51,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '操作盘', icon: 'dashboard' }
+      meta: { title: '操作盘', icon: 'el-icon-s-platform' }
     }]
   },
   {
@@ -69,31 +69,31 @@ export const constantRoutes = [
         path: 'index',
         name: '关键词分析',
         component: () => import('@/views/videoCapture/index'),
-        meta: { title: '关键词分析', icon: 'table' }
+        meta: { title: '关键词分析', icon: 'el-icon-s-order' }
       },
       {
         path: 'peerBlogger',
         name: '同行博主分析',
         component: () => import('@/views/videoCapture/peerBlogger'),
-        meta: { title: '同行博主分析', icon: 'table' }
+        meta: { title: '同行博主分析', icon: 'el-icon-s-order' }
       },
       {
         path: 'accurateVideo',
         name: '精准视频分析',
         component: () => import('@/views/videoCapture/accurateVideo'),
-        meta: { title: '精准视频分析', icon: 'table' }
+        meta: { title: '精准视频分析', icon: 'el-icon-s-order' }
       },
       {
         path: 'video',
         name: '视频库',
         component: () => import('@/views/videoCapture/video'),
-        meta: { title: '视频库', icon: 'table' }
+        meta: { title: '视频库', icon: 'el-icon-video-camera-solid' }
       },
       {
         path: 'customer',
         name: '客户库',
         component: () => import('@/views/videoCapture/customer'),
-        meta: { title: '客户库', icon: 'table' }
+        meta: { title: '客户库', icon: 'el-icon-s-custom' }
       }
     ]
   },
