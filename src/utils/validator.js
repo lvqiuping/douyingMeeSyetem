@@ -36,9 +36,18 @@ const validateTaskType = (rule, value, callback) => {
   }
 }
 
+const validateTaskSource = (rule, value, callback) => {
+  if (value === '') {
+    callback(new Error('请输入正确的分析源'))
+  } else {
+    callback()
+  }
+}
+
 export {
   validateUsername,
   validatePassword,
   validateTaskName,
-  validateTaskType
+  validateTaskType,
+  validateTaskSource
 }

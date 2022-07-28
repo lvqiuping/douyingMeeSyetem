@@ -4,21 +4,12 @@
       <el-form-item label="任务名" prop="TaskName">
         <el-input v-model.trim="temp.TaskName" placeholder="随意取一个名字吧" />
       </el-form-item>
-      <!-- <el-form-item label="任务类型" prop="TaskType">
-        <el-select v-model="temp.TaskType" placeholder="请选择">
-          <el-option
-            v-for="item in TaskTypeOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </el-form-item> -->
       <el-form-item label="分析源" prop="TaskSource">
         <el-input v-model.trim="temp.TaskSource" placeholder="输入采集源" />
-        <div class="secondColor">分析全网视频关键词，只能单个词。例如： 北京二手车</div>
+        <div v-show="taskType === 0"> <div class="secondColor">填只能单个的关键词。例如： 北京二手车</div></div>
+        <div v-show="taskType === 1"> <div class="secondColor">填抖音当前博主首页的网址。例如： https://www.douyin.com/user/***</div></div>
+        <div v-show="taskType === 2"> <div class="secondColor">填当前分析视频的网址（搜索视频列表点击详情，或者博主作品点击进去的地址）。例如： https://www.douyin.com/video/***</div></div>
       </el-form-item>
-
       <el-form-item label="评论筛选关键词">
         <el-drag-select v-model="CommentKeyWords" style="width:500px;" multiple placeholder="请选择">
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
@@ -40,11 +31,15 @@
         </div>
       </el-form-item>
       <el-form-item label="视频抓取数量上限" prop="VideoUpLimitCount">
-        <el-input-number v-model="temp.VideoUpLimitCount" :min="0" :max="10" size="small" @change="changeVideoUpLimitCount" />
+        <el-input-number v-model="temp.VideoUpLimitCount" :min="0" :max="300" size="small" @change="changeVideoUpLimitCount" />
         <!-- <div class="secondColor"><span class="seatColor">（填0则不限制点数）</span></div> -->
       </el-form-item>
-      <el-form-item label="评论抓取数量上限" prop="CommentUpLimitCount">
-        <el-input-number v-model="temp.CommentUpLimitCount" :min="0" :max="10" size="small" @change="changeCommentUpLimitCount" />
+      <el-form-item v-show="taskType === 1" label="评论抓取数量上限" prop="CommentUpLimitCount">
+        <el-input-number v-model="temp.CommentUpLimitCount" :min="0" :max="1000" size="small" @change="changeCommentUpLimitCount" />
+        <!-- <div class="secondColor"><span class="seatColor">（填0则不限制点数）</span></div> -->
+      </el-form-item>
+      <el-form-item v-show="taskType === 2" label="评论抓取数量上限" prop="CommentUpLimitCount">
+        <el-input-number v-model="temp.CommentUpLimitCount" :min="0" :max="10000" size="small" @change="changeCommentUpLimitCount" />
         <!-- <div class="secondColor"><span class="seatColor">（填0则不限制点数）</span></div> -->
       </el-form-item>
       <el-form-item label="搜索排序" prop="SortBy">
@@ -96,11 +91,12 @@ export default {
         TitleKeyWords: '',
         SortBy: '0',
         PublishFromNowDay: '0',
-        VideoUpLimitCount: 0,
-        CommentUpLimitCount: 0
+        VideoUpLimitCount: 300,
+        CommentUpLimitCount: 10000
       },
       rules: {
-        TaskName: [{ required: true, trigger: 'blur', validator: validateTaskName }]
+        TaskName: [{ required: true, trigger: 'blur', validator: validateTaskName }],
+        TaskSource: [{ required: true, trigger: 'blur', validator: this.validateTaskSource }]
       },
       CommentKeyWords: [],
       CommentShieldWords: [],
@@ -123,6 +119,29 @@ export default {
     }
   },
   methods: {
+    // 单独验证分析源
+    validateTaskSource(rule, value, callback) {
+      // var reg = /^(http([s]{0, 1}):\/\/)(www.douyin.com\/user\/.+)$/gi
+      if (this.taskType === 0) {
+        if (value === '') {
+          callback(new Error('请输入分析源'))
+        } else {
+          callback()
+        }
+      } else if (this.taskType === 1) {
+        if (value.indexOf('https://www.douyin.com/user/') < 0) {
+          callback(new Error('请输入正确的分析源'))
+        } else {
+          callback()
+        }
+      } else if (this.taskType === 2) {
+        if (value.indexOf('https://www.douyin.com/video/') < 0) {
+          callback(new Error('请输入正确的分析源'))
+        } else {
+          callback()
+        }
+      }
+    },
     changeVideoUpLimitCount(value) {
       this.VideoUpLimitCount = value
     },
@@ -132,16 +151,7 @@ export default {
     createData() {
       this.temp.CommentKeyWords = this.CommentKeyWords
       this.temp.CommentShieldWords = this.CommentShieldWords
-      this.temp2 = `TaskName=${this.temp.TaskName}
-      &TaskType=${this.temp.TaskType}
-      &TaskSource=${this.temp.TaskSource}
-      &CommentKeyWords=${this.temp.CommentKeyWords}
-      &CommentShieldWords=${this.temp.CommentShieldWords}
-      &TitleKeyWords=${this.temp.TitleKeyWords}
-      &SortBy=${this.temp.SortBy}
-      &PublishFromNowDay=${this.temp.PublishFromNowDay}
-      &VideoUpLimitCount=${this.temp.VideoUpLimitCount}
-      &CommentUpLimitCount=${this.temp.CommentUpLimitCount}`
+      this.temp2 = `TaskName=${this.temp.TaskName}&TaskType=${this.temp.TaskType}&TaskSource=${this.temp.TaskSource}&CommentKeyWords=${this.temp.CommentKeyWords}&CommentShieldWords=${this.temp.CommentShieldWords}&TitleKeyWords=${this.temp.TitleKeyWords}&SortBy=${this.temp.SortBy}&PublishFromNowDay=${this.temp.PublishFromNowDay}&VideoUpLimitCount=${this.temp.VideoUpLimitCount}&CommentUpLimitCount=${this.temp.CommentUpLimitCount}`
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.$emit('createDataEmit', this.temp2)

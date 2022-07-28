@@ -47,7 +47,7 @@
 import Pagination from '@/components/BasicTable/Pagination.vue'
 import BasicTable from '@/components/BasicTable/index.vue'
 import TableOperation from '@/components/BasicTable/TableOperation.vue'
-import { getList, createTable, updateTable, deleteTable } from '@/api/table'
+import { getList, createTable, deleteTable } from '@/api/table'
 import { TipsBox, QueryBox } from '@/utils/feedback.js'
 import DataForm from '@/views/videoCapture/components/dataForm.vue'
 import { StatusFilter } from '@/utils/status-filter.js'
@@ -140,18 +140,17 @@ export default {
           label: '视频标题再筛选',
           value: 'titleKeyWords',
           show: true
+        },
+        {
+          label: '视频数量',
+          value: 'videoCount',
+          show: true
+        },
+        {
+          label: '评论数量',
+          value: 'commentCount',
+          show: true
         }
-        // ,
-        // {
-        //   label: '视频抓取数量上限',
-        //   value: 'titleKeyWords',
-        //   show: true
-        // },
-        // {
-        //   label: '评论抓取数量上限',
-        //   value: 'titleKeyWords',
-        //   show: true
-        // }
       ],
       multipleSelection: [],
       tableData: null,
@@ -215,6 +214,7 @@ export default {
     //
     createDataEmit(v) {
       console.log('添加参数', v)
+      // return
       // 把formdata 转json
       // var str = v.split('&')
       // var obj = {}
