@@ -8,13 +8,27 @@
       :operates-width="280"
       :status="status"
       :search-form="'videoCapture'"
+      :comment-count="commentCount"
+      :video-count="videoCount"
+      :loading="loading"
       @batchDeleted="batchDeleted"
       @searchFormEmit2="searchFormEmit2"
+      @refresh="getPageList"
     >
       <template v-slot:addSlot>
         <div>
           <el-button type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>
         </div>
+      </template>
+      <template v-slot:videoCount="scope">
+        <router-link :to="{path: 'video', query: {taskId: scope.scope.row.id}}" :style="{'color': '#409eff' }">
+          <span> {{ scope.scope.row.videoCount }}</span>
+        </router-link>
+      </template>
+      <template v-slot:commentCount="scope">
+        <router-link :to="{path: 'comment', query: {taskId: scope.scope.row.id}}" :style="{'color': '#409eff' }">
+          <span>{{ scope.scope.row.commentCount }}</span>
+        </router-link>
       </template>
       <template v-slot:status="scope">
         <el-link :type="scope.scope.row.taskStatus | StatusFilter">
@@ -63,7 +77,13 @@ export default {
   },
   data() {
     return {
-      loading: false,
+      commentCount: {
+        label: '评论数'
+      },
+      videoCount: {
+        label: '视频数'
+      },
+      loading: true,
       ids: [],
       status: {
         state: true,
@@ -80,13 +100,6 @@ export default {
         label: '操作'
       },
       operations: [
-        {
-          types: 'video',
-          title: '视频',
-          type: 'success',
-          size: 'mini',
-          icon: ['fas', 'pen-to-square']
-        },
         {
           types: 'customer',
           title: '客户',
@@ -139,16 +152,6 @@ export default {
         {
           label: '视频标题再筛选',
           value: 'titleKeyWords',
-          show: true
-        },
-        {
-          label: '视频数量',
-          value: 'videoCount',
-          show: true
-        },
-        {
-          label: '评论数量',
-          value: 'commentCount',
           show: true
         }
       ],
@@ -248,10 +251,11 @@ export default {
     },
     // 操作列按钮
     handleOperation(op, row) {
-      if (op.types === 'video') {
-        console.log('video', row.id)
-        this.$router.push({ path: 'video', query: { taskId: row.id }})
-      } else if (op.types === 'customer') {
+      // if (op.types === 'video') {
+      //   console.log('video', row.id)
+      //   this.$router.push({ path: 'video', query: { taskId: row.id }})
+      // } else
+      if (op.types === 'customer') {
         console.log('customer', row.id)
         this.$router.push({ path: 'customer', query: { id: row.id }})
       } else if (op.types === 'edit') {
@@ -279,13 +283,15 @@ export default {
     },
     // 获取表格数据
     getPageList(taskType, taskName) {
-      this.listLoading = true
+      this.loading = true
       // 用json格式
       const parmas = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskType': taskType, 'taskName': taskName }
       getList(parmas).then(response => {
-        console.log('列表', response)
-        this.tableData = response.data.pageList
-        this.total = response.data.totalRowCount
+        if (response.statusCode === 200) {
+          this.loading = false
+          this.tableData = response.data.pageList
+          this.total = response.data.totalRowCount
+        }
       })
     },
     // 删除

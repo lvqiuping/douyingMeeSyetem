@@ -4,7 +4,6 @@
       :table-title="tableTitle"
       :table-data="tableData"
       :operates="operates"
-      :operates-width="180"
     >
       <template v-slot:operates="scope">
         <table-operation
@@ -14,14 +13,14 @@
         />
       </template>
     </basic-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageIndex" :limit.sync="listQuery.pageSize" @pagination="getPageList(taskId)" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageIndex" :limit.sync="listQuery.pageSize" @pagination="getPageList" />
   </div>
 </template>
 <script>
 import Pagination from '@/components/BasicTable/Pagination.vue'
 import BasicTable from '@/components/BasicTable/index.vue'
 import TableOperation from '@/components/BasicTable/TableOperation.vue'
-import { getVideoList, getCommentCountList } from '@/api/table'
+import { getCommentCountList } from '@/api/table'
 export default {
   name: 'Comment',
   components: { BasicTable, TableOperation, Pagination },
@@ -38,7 +37,6 @@ export default {
           type: 'danger',
           size: 'mini',
           icon: ['far', 'trash-can']
-
         }
       ],
       tableTitle: [
@@ -72,7 +70,6 @@ export default {
           value: 'commentTime',
           show: true
         }
-
       ],
       multipleSelection: [],
       taskId: '',
@@ -85,8 +82,7 @@ export default {
         pageSize: 10,
         taskId: '',
         videoId: ''
-      },
-      dialogFormVisible: false
+      }
     }
   },
   created() {
@@ -96,12 +92,17 @@ export default {
   },
   methods: {
     getPageList() {
-      const parmas = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskId': this.taskId, 'videoId': this.videoId }
-      console.log(parmas)
+      var parmas = {}
+      if (this.taskId) {
+        parmas = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskId': this.taskId }
+      } else if (this.videoId) {
+        parmas = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'videoId': this.videoId }
+      }
       getCommentCountList(parmas).then(response => {
-        console.log('liebiao2', response)
-        this.tableData = response.data.pageList
-        this.total = response.data.totalRowCount
+        if (response.statusCode === 200) {
+          this.tableData = response.data.pageList
+          this.total = response.data.totalRowCount
+        }
       })
     },
     handleOperation(op, row) {

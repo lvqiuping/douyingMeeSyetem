@@ -43,6 +43,24 @@
         align="center"
       />
       <el-table-column
+        v-if="videoCount"
+        :label="videoCount.label"
+        align="center"
+      >
+        <template v-slot="scope">
+          <slot name="videoCount" :scope="scope" />
+        </template>
+      </el-table-column>
+      <el-table-column
+        v-if="commentCount"
+        :label="commentCount.label"
+        align="center"
+      >
+        <template v-slot="scope">
+          <slot name="commentCount" :scope="scope" />
+        </template>
+      </el-table-column>
+      <el-table-column
         v-if="status"
         :label="status.label"
         :width="statusWidth"
@@ -50,15 +68,6 @@
       >
         <template v-slot="scope">
           <slot name="status" :scope="scope" />
-        </template>
-      </el-table-column>
-       <el-table-column
-        v-if="commentCount"
-        :label="commentCount.label"
-        align="center"
-      >
-        <template v-slot="scope">
-          <slot name="commentCount" :scope="scope" />
         </template>
       </el-table-column>
       <el-table-column
@@ -103,17 +112,18 @@ export default {
     showTable: { type: Boolean, default: true },
     status: { type: Object, default: null },
     searchForm: { type: String, default: null },
+    loading: { type: Boolean, default: false },
     // 特别操作
     addSlot: { type: Boolean, default: false },
     playUrl: { type: Object, default: null },
-    commentCount: { type: Object, default: null }
+    commentCount: { type: Object, default: null },
+    videoCount: { type: Object, default: null }
   },
   data() {
     return {
       selectDate: [],
       selectTableData: [],
       total: 0,
-      loading: false,
       b_data: ''
     }
   },
@@ -127,6 +137,9 @@ export default {
     },
     batchDeleted() {
       this.$emit('batchDeleted', this.selectDate)
+    },
+    refresh() {
+      this.$emit('refresh')
     }
   }
 }

@@ -9,10 +9,7 @@
       :comment-count="commentCount"
     >
       <template v-slot:commentCount="scope">
-        <!-- <div :style="{'color': '#409eff' }" @click="comment(scope.scope.row.id)">
-          {{ scope.scope.row.commentCount }} {name: '', params:{ taskId: taskId, videoId: scope.scope.row.id }}
-        </div> -->
-        <router-link :to="{path: 'comment', query: {taskId: taskId, videoId: scope.scope.row.id}}" :style="{'color': '#409eff' }">
+        <router-link :to="{path: 'comment', query: {videoId: scope.scope.row.id}}" :style="{'color': '#409eff' }">
           <span> {{ scope.scope.row.commentCount }}</span>
         </router-link>
       </template>
@@ -41,7 +38,7 @@
 import Pagination from '@/components/BasicTable/Pagination.vue'
 import BasicTable from '@/components/BasicTable/index.vue'
 import TableOperation from '@/components/BasicTable/TableOperation.vue'
-import { getVideoList, getCommentCountList } from '@/api/table'
+import { getVideoList } from '@/api/table'
 export default {
   name: 'Video',
   components: { BasicTable, TableOperation, Pagination },
@@ -89,12 +86,12 @@ export default {
       ],
       tableTitle: [
         {
-          label: '任务ID',
+          label: '视频ID',
           value: 'id',
           show: true
         },
         {
-          label: '任务名',
+          label: '视频名',
           value: 'title',
           show: true
         },
@@ -136,16 +133,6 @@ export default {
     this.getPageList()
   },
   methods: {
-    //
-    comment(r) {
-      console.log(r)
-      const parmas = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskId': this.taskId, 'videoId': r }
-      getCommentCountList(parmas).then(response => {
-        console.log('liebiao2', response)
-        // this.tableData = response.data.pageList
-        // this.total = response.data.totalRowCount
-      })
-    },
     //
     play(r) {
       console.log(r)
