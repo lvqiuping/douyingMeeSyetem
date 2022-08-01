@@ -86,9 +86,17 @@ export const constantRoutes = [
       {
         path: 'video',
         name: '视频库',
-        component: () => import('@/views/videoCapture/video'),
+        component: () => import('@/views/videoCapture/video/index'),
         meta: { title: '视频库', icon: 'table' }
       },
+      {
+        path: 'comment/:taskId?/:videoId?',
+        name: '评论列表',
+        hidden: true,
+        component: () => import('@/views/videoCapture/video/comment'),
+        meta: { title: '评论列表', icon: 'table' }
+      },
+
       {
         path: 'customer',
         name: '客户库',

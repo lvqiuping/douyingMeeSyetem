@@ -27,3 +27,19 @@ export function deleteTable(id) {
     method: 'delete'
   })
 }
+
+export function getVideoList(query) {
+  return request({
+    url: '/api/Video/GetPageList',
+    method: 'get',
+    params: query
+  })
+}
+
+export function getCommentCountList(query) {
+  return request({
+    url: '/api/Comment/GetPageList',
+    method: 'get',
+    params: query
+  })
+}

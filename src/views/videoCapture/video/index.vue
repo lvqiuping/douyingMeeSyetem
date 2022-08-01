@@ -5,17 +5,20 @@
       :table-data="tableData"
       :operates="operates"
       :operates-width="180"
-      :status="status"
+      :play-url="playUrl"
+      :comment-count="commentCount"
     >
-      <template v-slot:addSlot>
-        <div>
-          <el-button type="primary" @click="handleCreate">添加</el-button>
-        </div>
+      <template v-slot:commentCount="scope">
+        <!-- <div :style="{'color': '#409eff' }" @click="comment(scope.scope.row.id)">
+          {{ scope.scope.row.commentCount }} {name: '', params:{ taskId: taskId, videoId: scope.scope.row.id }}
+        </div> -->
+        <router-link :to="{path: 'comment', query: {taskId: taskId, videoId: scope.scope.row.id}}" :style="{'color': '#409eff' }">
+          <span> {{ scope.scope.row.commentCount }}</span>
+        </router-link>
       </template>
-
-      <template v-slot:status="scope">
-        <el-tag :type="scope.scope.row.status | statusFilter">
-          {{ scope.scope.row.status }}
+      <template v-slot:playUrl="scope">
+        <el-tag @click="play(scope.scope.row.playUrl)">
+          {{ scope.scope.row.playUrl }}
         </el-tag>
       </template>
 
@@ -27,14 +30,18 @@
         />
       </template>
     </basic-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPageList" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageIndex" :limit.sync="listQuery.pageSize" @pagination="getPageList(taskId)" />
+
+    <el-dialog title="视频查看" :visible.sync="dialogFormVisible" top="3%">
+      <video src="https://www.douyin.com/video/6670682915216706827" controls autoplay width="100%" />
+    </el-dialog>
   </div>
 </template>
 <script>
 import Pagination from '@/components/BasicTable/Pagination.vue'
 import BasicTable from '@/components/BasicTable/index.vue'
 import TableOperation from '@/components/BasicTable/TableOperation.vue'
-import { getList } from '@/api/table'
+import { getVideoList, getCommentCountList } from '@/api/table'
 export default {
   name: 'Video',
   components: { BasicTable, TableOperation, Pagination },
@@ -50,9 +57,14 @@ export default {
   },
   data() {
     return {
-      status: {
+      url: '',
+      commentCount: {
+        label: '评论数'
+      },
+      playUrl: {
         state: true,
-        label: '任务状态'
+        label: '播放地址',
+        width: 400
       },
       operates: {
         operate: true,
@@ -83,27 +95,27 @@ export default {
         },
         {
           label: '任务名',
-          value: 'author',
-          show: true
-        },
-        {
-          label: '说明',
-          value: 'display_time',
-          show: true
-        },
-        {
-          label: '意向客户数',
-          value: 'display_time',
-          show: true
-        },
-        {
-          label: '线索分析数',
-          value: 'display_time',
-          show: true
-        },
-        {
-          label: '挖掘时间',
           value: 'title',
+          show: true
+        },
+        {
+          label: '博客名',
+          value: 'bloggerName',
+          show: true
+        },
+        {
+          label: '发布时间',
+          value: 'publishTime',
+          show: true
+        },
+        {
+          label: '创建人',
+          value: 'createBy',
+          show: true
+        },
+        {
+          label: '创建时间',
+          value: 'createOn',
           show: true
         }
       ],
@@ -112,27 +124,42 @@ export default {
       total: 0,
       listLoading: true,
       listQuery: {
-        page: 1,
-        limit: 10,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
-        sort: '+id'
-      }
+        pageIndex: 1,
+        pageSize: 10,
+        taskId: ''
+      },
+      dialogFormVisible: false
     }
   },
   created() {
-    console.log(this.$route.query)
+    this.taskId = this.$route.query.taskId
     this.getPageList()
   },
   methods: {
+    //
+    comment(r) {
+      console.log(r)
+      const parmas = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskId': this.taskId, 'videoId': r }
+      getCommentCountList(parmas).then(response => {
+        console.log('liebiao2', response)
+        // this.tableData = response.data.pageList
+        // this.total = response.data.totalRowCount
+      })
+    },
+    //
+    play(r) {
+      console.log(r)
+      // this.dialogFormVisible = true
+      this.url = r
+    },
     // 获取表格数据
     getPageList() {
       this.listLoading = true
-      getList(this.listQuery).then(response => {
+      const parmas = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskId': this.taskId }
+      getVideoList(parmas).then(response => {
         console.log('liebiao', response)
-        this.tableData = response.data.items
-        this.total = response.data.total
+        this.tableData = response.data.pageList
+        this.total = response.data.totalRowCount
       })
     },
     // 操作列按钮

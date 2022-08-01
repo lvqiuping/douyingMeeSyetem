@@ -161,7 +161,6 @@ export default {
         pageSize: 10,
         taskName: '',
         taskType: ''
-
       },
       taskNameCopy: ''
     }
@@ -251,7 +250,7 @@ export default {
     handleOperation(op, row) {
       if (op.types === 'video') {
         console.log('video', row.id)
-        this.$router.push({ path: 'video', query: { id: row.id }})
+        this.$router.push({ path: 'video', query: { taskId: row.id }})
       } else if (op.types === 'customer') {
         console.log('customer', row.id)
         this.$router.push({ path: 'customer', query: { id: row.id }})

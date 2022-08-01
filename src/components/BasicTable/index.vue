@@ -52,6 +52,25 @@
           <slot name="status" :scope="scope" />
         </template>
       </el-table-column>
+       <el-table-column
+        v-if="commentCount"
+        :label="commentCount.label"
+        align="center"
+      >
+        <template v-slot="scope">
+          <slot name="commentCount" :scope="scope" />
+        </template>
+      </el-table-column>
+      <el-table-column
+        v-if="playUrl"
+        :label="playUrl.label"
+        :width="playUrl.width"
+        align="center"
+      >
+        <template v-slot="scope">
+          <slot name="playUrl" :scope="scope" />
+        </template>
+      </el-table-column>
       <el-table-column
         v-if="operates"
         :label="operates.label"
@@ -85,7 +104,9 @@ export default {
     status: { type: Object, default: null },
     searchForm: { type: String, default: null },
     // 特别操作
-    addSlot: { type: Boolean, default: false }
+    addSlot: { type: Boolean, default: false },
+    playUrl: { type: Object, default: null },
+    commentCount: { type: Object, default: null }
   },
   data() {
     return {
