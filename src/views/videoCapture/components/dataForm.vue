@@ -12,14 +12,14 @@
       </el-form-item>
       <el-form-item label="评论筛选关键词">
         <el-drag-select v-model="CommentKeyWords" style="width:500px;" multiple placeholder="请选择">
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+          <el-option v-for="item in options1" :key="item" :label="item" :value="item" />
         </el-drag-select>
         <div class="secondColor">系统推荐关键词<span class="seatColor">（选择关键词快速添加到词库）</span></div>
       </el-form-item>
 
       <el-form-item label="评论屏蔽关键词">
         <el-drag-select v-model="CommentShieldWords" style="width:500px;" multiple placeholder="请选择">
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+          <el-option v-for="item in options2" :key="item" :label="item" :value="item" />
         </el-drag-select>
         <div class="secondColor">系统推荐屏蔽关键词<span class="seatColor">（选择屏蔽关键词快速添加到词库）</span></div>
       </el-form-item>
@@ -78,7 +78,10 @@ export default {
   props: {
     dialogStatus: { type: String, default: String },
     loading: { type: Boolean, default: false },
-    taskType: { type: Number, default: null }
+    taskType: { type: Number, default: null },
+    options1: { type: Array, default: null },
+    options2: { type: Array, default: null }
+
   },
   data() {
     return {
@@ -86,8 +89,6 @@ export default {
         TaskName: '',
         TaskType: this.taskType, // 这是后台让传的参数：关键词分析0，同行分析1，精准分析2。必填
         TaskSource: '',
-        CommentKeyWords: '',
-        CommentShieldWords: '',
         TitleKeyWords: '',
         SortBy: '0',
         PublishFromNowDay: '0',
@@ -99,23 +100,7 @@ export default {
         TaskSource: [{ required: true, trigger: 'blur', validator: this.validateTaskSource }]
       },
       CommentKeyWords: [],
-      CommentShieldWords: [],
-      options: [{
-        value: 'Apple',
-        label: 'Apple'
-      }, {
-        value: 'Banana',
-        label: 'Banana'
-      }, {
-        value: 'Orange',
-        label: 'Orange'
-      }, {
-        value: 'Pear',
-        label: 'Pear'
-      }, {
-        value: 'Strawberry',
-        label: 'Strawberry'
-      }]
+      CommentShieldWords: []
     }
   },
   methods: {

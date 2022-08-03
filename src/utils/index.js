@@ -1,6 +1,9 @@
-/**
- * Created by PanJiaChen on 16/11/18.
- */
+// import request from '@/utils/request'
+
+// const REQUEST_API = {
+//   GetPageList: '/api/Video/GetPageList', // 请求数据列表
+//   DeleteVideos: '/api/Video/DeleteVideos'
+// }
 
 /**
  * Parse the time to string
@@ -114,4 +117,22 @@ export function param2Obj(url) {
     }
   })
   return obj
+}
+
+/**
+ * @param {string} url
+ * @returns {Object}
+ * {
+ *  type: VEDIO
+ *  fun: GetPageList
+ * }
+ */
+export function getList(obj, api, params) {
+  api(params).then(response => {
+    if (response.statusCode === 200) {
+      obj.loading = false
+      obj.tableData = response.data.pageList
+      obj.total = response.data.totalRowCount
+    }
+  })
 }

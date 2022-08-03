@@ -4,9 +4,12 @@
       :table-title="tableTitle"
       :table-data="tableData"
       :operates="operates"
+      :loading="loading"
       :operates-width="180"
       :play-url="playUrl"
       :comment-count="commentCount"
+      @batchDeleted="batchDeleted"
+      @refresh="getPageList"
     >
       <template v-slot:commentCount="scope">
         <router-link :to="{path: 'comment', query: {videoId: scope.scope.row.id}}" :style="{'color': '#409eff' }">
@@ -38,7 +41,10 @@
 import Pagination from '@/components/BasicTable/Pagination.vue'
 import BasicTable from '@/components/BasicTable/index.vue'
 import TableOperation from '@/components/BasicTable/TableOperation.vue'
-import { getVideoList } from '@/api/table'
+import { getVideoList, DeleteVideos } from '@/api/table'
+import { TipsBox, QueryBox } from '@/utils/feedback.js'
+import { unique, getFormData } from '@/utils/others.js'
+import { getList } from '@/utils'
 export default {
   name: 'Video',
   components: { BasicTable, TableOperation, Pagination },
@@ -55,6 +61,7 @@ export default {
   data() {
     return {
       url: '',
+      loading: false,
       commentCount: {
         label: '评论数'
       },
@@ -116,10 +123,8 @@ export default {
           show: true
         }
       ],
-      multipleSelection: [],
       tableData: null,
       total: 0,
-      listLoading: true,
       listQuery: {
         pageIndex: 1,
         pageSize: 10,
@@ -141,37 +146,41 @@ export default {
     },
     // 获取表格数据
     getPageList() {
-      this.listLoading = true
-      const parmas = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskId': this.taskId }
-      getVideoList(parmas).then(response => {
-        console.log('liebiao', response)
-        this.tableData = response.data.pageList
-        this.total = response.data.totalRowCount
-      })
+      this.loading = true
+      const params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskId': this.taskId }
+      getList(this, getVideoList, params)
     },
     // 操作列按钮
     handleOperation(op, row) {
       if (op.types === 'edit') {
         console.log(row)
       } else if (op.types === 'del') {
-        console.log(row.id)
-        // QueryBox()
-        this.$confirm('确定删除此项?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
+        QueryBox().then(() => {
+          const form = getFormData(row.id, 'videoIds[]')
+          this.del(form)
         })
+          .catch(err => { console.error(err) })
       }
+    },
+    batchDeleted(v) {
+      console.log(v)
+      if (!v.length) {
+        TipsBox('warning', '请选择需要删除的数据')
+        return false
+      }
+      QueryBox().then(() => {
+        var parmas = unique(v) // 去重
+        const form = getFormData(parmas, 'videoIds[]')
+        this.del(form)
+      })
+    },
+    del(p) {
+      DeleteVideos(p).then(response => {
+        if (response.statusCode === 200) {
+          TipsBox('success', response.data)
+          this.getPageList(this.taskId)
+        }
+      })
     }
   }
 }

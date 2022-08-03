@@ -10,3 +10,21 @@ const unique = (arr) => {
 }
 
 export { unique }
+
+/**
+ * 表单数据收集
+ */
+export function getFormData(params, idsName) {
+  let p = []
+  if (typeof params === 'string') {
+    p.push(params)
+  } else {
+    p = params
+  }
+  const form = new FormData()
+  for (let i = 0; i < p.length; i++) {
+    form.append(idsName, p[i])
+  }
+
+  return form
+}

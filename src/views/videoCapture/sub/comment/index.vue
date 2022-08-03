@@ -4,6 +4,9 @@
       :table-title="tableTitle"
       :table-data="tableData"
       :operates="operates"
+      :loading="loading"
+      @batchDeleted="batchDeleted"
+      @refresh="getPageList"
     >
       <template v-slot:operates="scope">
         <table-operation
@@ -20,12 +23,16 @@
 import Pagination from '@/components/BasicTable/Pagination.vue'
 import BasicTable from '@/components/BasicTable/index.vue'
 import TableOperation from '@/components/BasicTable/TableOperation.vue'
-import { getCommentCountList } from '@/api/table'
+import { getCommentCountList, DeleteComments } from '@/api/table'
+import { QueryBox, TipsBox } from '@/utils/feedback'
+import { unique, getFormData } from '@/utils/others.js'
+import { getList } from '@/utils'
 export default {
   name: 'Comment',
   components: { BasicTable, TableOperation, Pagination },
   data() {
     return {
+      loading: false,
       operates: {
         operate: true,
         label: '操作'
@@ -76,7 +83,6 @@ export default {
       videoId: '',
       tableData: null,
       total: 0,
-      listLoading: true,
       listQuery: {
         pageIndex: 1,
         pageSize: 10,
@@ -92,24 +98,43 @@ export default {
   },
   methods: {
     getPageList() {
-      var parmas = {}
-      if (this.taskId) {
-        parmas = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskId': this.taskId }
+      var params = {}
+      if (this.taskId) { // 从任务进来或则从视频进来
+        params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskId': this.taskId }
       } else if (this.videoId) {
-        parmas = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'videoId': this.videoId }
+        params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'videoId': this.videoId }
       }
-      getCommentCountList(parmas).then(response => {
-        if (response.statusCode === 200) {
-          this.tableData = response.data.pageList
-          this.total = response.data.totalRowCount
-        }
-      })
+      getList(this, getCommentCountList, params)
     },
     handleOperation(op, row) {
       if (op.types === 'del') {
-        console.log(row.id)
+        QueryBox().then(() => {
+          const params = `commentIds=${row.id}`
+          this.del(params)
+        })
+          .catch(err => { console.error(err) })
       }
+    },
+    batchDeleted(v) {
+      if (!v.length) {
+        TipsBox('warning', '请选择需要删除的数据')
+        return false
+      }
+      QueryBox().then(() => {
+        var params = unique(v) // 去重
+        const form = getFormData(params, 'commentIds[]')
+        this.del(form)
+      })
+    },
+    del(p) {
+      DeleteComments(p).then(response => {
+        if (response.statusCode === 200) {
+          TipsBox('success', response.data)
+          this.getPageList()
+        }
+      })
     }
+
   }
 }
 </script>

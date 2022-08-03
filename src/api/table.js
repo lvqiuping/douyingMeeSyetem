@@ -1,33 +1,42 @@
 import request from '@/utils/request'
-
-export function getList(query) {
+/**
+ *
+ * @param {*} query
+ * @returns
+ */
+export function getTaskList(query) {
   return request({
     url: '/api/Task/GetPageList',
     method: 'get',
     params: query
   })
 }
-export function createTable(data) {
+export function AddGrabTask(data) {
   return request({
     url: '/api/Task/AddGrabTask',
     method: 'post',
     data
   })
 }
-export function updateTable(data) {
+export function DeleteTasks(data) {
   return request({
-    url: '/vue-element-admin/article/create',
+    url: '/api/Task/DeleteTasks',
     method: 'post',
     data
   })
 }
-export function deleteTable(id) {
+export function GetTaskParameters(query) {
   return request({
-    url: `/vue-element-admin/role/${id}`,
-    method: 'delete'
+    url: '/api/Task/GetTaskParameters',
+    method: 'get',
+    params: query
   })
 }
-
+/**
+ *
+ * @param {*} query
+ * @returns
+ */
 export function getVideoList(query) {
   return request({
     url: '/api/Video/GetPageList',
@@ -35,7 +44,18 @@ export function getVideoList(query) {
     params: query
   })
 }
-
+export function DeleteVideos(data) {
+  return request({
+    url: '/api/Video/DeleteVideos',
+    method: 'post',
+    data
+  })
+}
+/**
+ *
+ * @param {*} query
+ * @returns
+ */
 export function getCommentCountList(query) {
   return request({
     url: '/api/Comment/GetPageList',
@@ -43,3 +63,11 @@ export function getCommentCountList(query) {
     params: query
   })
 }
+export function DeleteComments(data) {
+  return request({
+    url: '/api/Comment/DeleteComments',
+    method: 'post',
+    data
+  })
+}
+

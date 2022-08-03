@@ -51,7 +51,15 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" top="3%">
       <div class="el-dialog-div">
-        <data-form :dialog-status="dialogStatus" :loading="loading" :task-type="taskType" @createDataEmit="createDataEmit" @dialogFormVisibleEmit="dialogFormVisibleEmit" />
+        <data-form
+          :dialog-status="dialogStatus"
+          :loading="loading"
+          :task-type="taskType"
+          :options1="options1"
+          :options2="options2"
+          @createDataEmit="createDataEmit"
+          @dialogFormVisibleEmit="dialogFormVisibleEmit"
+        />
       </div>
     </el-dialog>
   </div>
@@ -61,11 +69,12 @@
 import Pagination from '@/components/BasicTable/Pagination.vue'
 import BasicTable from '@/components/BasicTable/index.vue'
 import TableOperation from '@/components/BasicTable/TableOperation.vue'
-import { getList, createTable, deleteTable } from '@/api/table'
+import { getTaskList, AddGrabTask, DeleteTasks, GetTaskParameters } from '@/api/table'
 import { TipsBox, QueryBox } from '@/utils/feedback.js'
 import DataForm from '@/views/videoCapture/components/dataForm.vue'
 import { StatusFilter } from '@/utils/status-filter.js'
-import { unique } from '@/utils/others.js'
+import { unique, getFormData } from '@/utils/others.js'
+import { getList } from '@/utils'
 export default {
   name: 'VideoCapture',
   components: { BasicTable, TableOperation, Pagination, DataForm },
@@ -77,14 +86,15 @@ export default {
   },
   data() {
     return {
+      options1: [],
+      options2: [],
       commentCount: {
         label: '评论数'
       },
       videoCount: {
         label: '视频数'
       },
-      loading: true,
-      ids: [],
+      loading: false,
       status: {
         state: true,
         label: '任务状态'
@@ -155,10 +165,8 @@ export default {
           show: true
         }
       ],
-      multipleSelection: [],
       tableData: null,
       total: 0,
-      listLoading: true,
       listQuery: {
         pageIndex: 1,
         pageSize: 10,
@@ -176,20 +184,6 @@ export default {
       console.log('页面', v)
       this.getPageList(this.taskType, v)
     },
-    batchDeleted(v) {
-      console.log(v)
-      if (!v.length) {
-        TipsBox('warning', '请选择需要删除的数据')
-        return false
-      }
-      this.ids = unique(v) // 去重
-      console.log('ids', this.ids)
-      QueryBox().then(() => {
-        TipsBox('success', '操作成功')
-      }).catch(() => {
-        TipsBox('info', '已取消')
-      })
-    },
     resetTemp() {
       this.temp = {
         TaskName: '',
@@ -204,7 +198,6 @@ export default {
         CommentUpLimitCount: 0
       }
     },
-    // 新增
     handleCreate() {
       this.resetTemp()
       this.dialogStatus = 'create'
@@ -212,19 +205,16 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
+      GetTaskParameters().then((res) => {
+        var a = res.data.commnetFilterWords.split(',')
+        var b = res.data.commnetShiledWords.split(',')
+        this.options1 = a
+        this.options2 = b
+      })
     },
-    //
     createDataEmit(v) {
       console.log('添加参数', v)
-      // return
-      // 把formdata 转json
-      // var str = v.split('&')
-      // var obj = {}
-      // str.map((e) => {
-      //   obj[e.split('=')[0]] = e.split('=')[1]
-      // })
-      // this.taskNameCopy = obj.taskName
-      createTable(v).then((res) => {
+      AddGrabTask(v).then((res) => {
         this.loading = true
         if (res.statusCode === 200) {
           this.loading = false
@@ -234,7 +224,6 @@ export default {
         }
       })
     },
-    // 编辑
     handleUpdate(row) {
       console.log('row', row)
       this.temp = Object.assign({}, row) // copy obj 热更新
@@ -245,16 +234,10 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
-    //
     dialogFormVisibleEmit(v) {
       this.dialogFormVisible = v
     },
-    // 操作列按钮
     handleOperation(op, row) {
-      // if (op.types === 'video') {
-      //   console.log('video', row.id)
-      //   this.$router.push({ path: 'video', query: { taskId: row.id }})
-      // } else
       if (op.types === 'customer') {
         console.log('customer', row.id)
         this.$router.push({ path: 'customer', query: { id: row.id }})
@@ -262,97 +245,38 @@ export default {
         console.log(row)
         this.handleUpdate(row)
       } else if (op.types === 'del') {
-        console.log(row.id)
-        // QueryBox()
-        this.$confirm('确定删除此项?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
+        QueryBox().then(() => {
+          const params = `taskIds=${row.id}`
+          this.del(params)
         })
+          .catch(err => { console.error(err) })
       }
     },
     // 获取表格数据
     getPageList(taskType, taskName) {
       this.loading = true
-      // 用json格式
-      const parmas = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskType': taskType, 'taskName': taskName }
-      getList(parmas).then(response => {
+      // get用json格式
+      const params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskType': taskType, 'taskName': taskName }
+      getList(this, getTaskList, params)
+    },
+    batchDeleted(v) {
+      if (!v.length) {
+        TipsBox('warning', '请选择需要删除的数据')
+        return false
+      }
+      QueryBox().then(() => {
+        var params = unique(v) // 去重
+        const form = getFormData(params, 'taskIds[]')
+        this.del(form)
+      })
+    },
+    del(p) {
+      DeleteTasks(p).then(response => {
         if (response.statusCode === 200) {
-          this.loading = false
-          this.tableData = response.data.pageList
-          this.total = response.data.totalRowCount
+          TipsBox('success', response.data)
+          this.getPageList(this.taskType)
         }
       })
-    },
-    // 删除
-    handleDelete(row, $index) {
-      console.log(row)
-      console.log($index)
-      this.$confirm('Confirm to remove the role?', 'Warning', {
-        confirmButtonText: 'Confirm',
-        cancelButtonText: 'Cancel',
-        type: 'warning'
-      })
-        .then(async() => {
-          await deleteTable(row.key)
-          this.rolesList.splice($index, 1)
-          this.$message({
-            type: 'success',
-            message: 'Delete succed!'
-          })
-        })
-        .catch(err => { console.error(err) })
-    },
-    // 多选
-    handleSelectionChange(val) {
-      this.multipleSelection = val
-    },
-    // 批量删除
-    handleBatchDeleted() {
-      if (this.multipleSelection.length) {
-        console.log(this.multipleSelection)
-      } else {
-        this.$message({
-          message: 'Please select at least one item',
-          type: 'warning'
-        })
-      }
-    },
-    //
-    sortChange(data) {
-      console.log(data)
-      const { prop, order } = data
-      if (prop === 'id') {
-        this.sortByID(order)
-      }
-    },
-    sortByID(order) {
-      console.log(order)
-      if (order === 'ascending') {
-        this.listQuery.sort = '+id'
-      } else {
-        this.listQuery.sort = '-id'
-      }
-      this.handleFilter()
-    },
-    handleFilter() {
-      this.listQuery.page = 1
-      this.getPageList()
-    },
-    // 。。。。。。。。。。。
-    getSortClass: function(key) {
-      const sort = this.listQuery.sort
-      return sort === `+${key}` ? 'ascending' : 'descending'
     }
   }
 }
