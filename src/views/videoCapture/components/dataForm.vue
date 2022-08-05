@@ -14,8 +14,13 @@
         <el-drag-select v-model="CommentKeyWords" style="width:500px;" multiple placeholder="请选择">
           <el-option v-for="item in options1" :key="item" :label="item" :value="item" />
         </el-drag-select>
-        <div class="secondColor">系统推荐关键词<span class="seatColor">（选择关键词快速添加到词库）</span></div>
+        <div style="display: flex;">
+          <div class="secondColor">系统推荐关键词<span class="seatColor">（选择关键词快速添加到词库）</span></div>
+          <!-- <span style="color: #409eff" @click="zidingyi=!zidingyi">自定义</span> -->
+        </div>
+        <el-input v-show="zidingyi === true" v-model="CommentKeyWords2" placeholder="如：二手车，北京二手车，车子" />
       </el-form-item>
+      <!-- <el-input v-show="zidingyi === true" v-model="CommentKeyWords2" placeholder="如：二手车，北京二手车，车子" /> -->
 
       <el-form-item label="评论屏蔽关键词">
         <el-drag-select v-model="CommentShieldWords" style="width:500px;" multiple placeholder="请选择">
@@ -32,7 +37,6 @@
       </el-form-item>
       <el-form-item label="视频抓取数量上限" prop="VideoUpLimitCount">
         <el-input-number v-model="temp.VideoUpLimitCount" :min="0" :max="300" size="small" @change="changeVideoUpLimitCount" />
-        <!-- <div class="secondColor"><span class="seatColor">（填0则不限制点数）</span></div> -->
       </el-form-item>
       <el-form-item v-show="taskType === 0" label="评论抓取数量上限" prop="CommentUpLimitCount">
         <el-input-number v-model="temp.CommentUpLimitCount" :min="0" :max="taskTypeComment" size="small" @change="changeCommentUpLimitCount" />
@@ -87,6 +91,7 @@ export default {
   },
   data() {
     return {
+      zidingyi: false,
       temp: {
         TaskName: '',
         TaskType: this.taskType, // 这是后台让传的参数：关键词分析0，同行分析1，精准分析2。必填
@@ -102,6 +107,7 @@ export default {
         TaskSource: [{ required: true, trigger: 'blur', validator: this.validateTaskSource }]
       },
       CommentKeyWords: [],
+      CommentKeyWords2: '',
       CommentShieldWords: []
     }
   },
@@ -142,8 +148,13 @@ export default {
     },
     createData() {
       this.temp.CommentKeyWords = this.CommentKeyWords
+      // console.log(this.CommentKeyWords)
+      // console.log(this.CommentKeyWords2)
+      // console.log(this.CommentKeyWords.push(this.CommentKeyWords2))
       this.temp.CommentShieldWords = this.CommentShieldWords
       this.temp2 = `TaskName=${this.temp.TaskName}&TaskType=${this.temp.TaskType}&TaskSource=${this.temp.TaskSource}&CommentKeyWords=${this.temp.CommentKeyWords}&CommentShieldWords=${this.temp.CommentShieldWords}&TitleKeyWords=${this.temp.TitleKeyWords}&SortBy=${this.temp.SortBy}&PublishFromNowDay=${this.temp.PublishFromNowDay}&VideoUpLimitCount=${this.temp.VideoUpLimitCount}&CommentUpLimitCount=${this.temp.CommentUpLimitCount}`
+      console.log(this.temp2)
+      return
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.$emit('createDataEmit', this.temp2)

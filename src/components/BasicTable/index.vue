@@ -80,7 +80,7 @@
           <slot name="playUrl" :scope="scope" />
         </template>
       </el-table-column>
-       <el-table-column
+      <el-table-column
         v-if="userHomeUrl"
         :label="userHomeUrl.label"
         :width="userHomeUrl.width"

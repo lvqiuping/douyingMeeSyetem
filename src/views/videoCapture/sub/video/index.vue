@@ -93,12 +93,12 @@ export default {
       ],
       tableTitle: [
         {
-          label: '视频ID',
+          label: 'ID',
           value: 'id',
           show: true
         },
         {
-          label: '视频名',
+          label: '标题',
           value: 'title',
           show: true
         },
