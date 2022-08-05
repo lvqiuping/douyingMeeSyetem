@@ -136,18 +136,14 @@ export default {
     },
     changeVideoUpLimitCount(value) {
       this.VideoUpLimitCount = value
-      console.log(this.VideoUpLimitCount)
     },
     changeCommentUpLimitCount(value) {
       this.temp.CommentUpLimitCount = value
-      console.log(this.temp.CommentUpLimitCount)
     },
     createData() {
       this.temp.CommentKeyWords = this.CommentKeyWords
       this.temp.CommentShieldWords = this.CommentShieldWords
       this.temp2 = `TaskName=${this.temp.TaskName}&TaskType=${this.temp.TaskType}&TaskSource=${this.temp.TaskSource}&CommentKeyWords=${this.temp.CommentKeyWords}&CommentShieldWords=${this.temp.CommentShieldWords}&TitleKeyWords=${this.temp.TitleKeyWords}&SortBy=${this.temp.SortBy}&PublishFromNowDay=${this.temp.PublishFromNowDay}&VideoUpLimitCount=${this.temp.VideoUpLimitCount}&CommentUpLimitCount=${this.temp.CommentUpLimitCount}`
-      console.log(this.temp2)
-      return
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.$emit('createDataEmit', this.temp2)
