@@ -32,6 +32,14 @@ export function GetTaskParameters(query) {
     params: query
   })
 }
+export function RevokeTask(data) {
+  return request({
+    url: '/api/Task/RevokeTask',
+    method: 'post',
+    data
+  })
+}
+
 /**
  *
  * @param {*} query

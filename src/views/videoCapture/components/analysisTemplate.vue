@@ -34,14 +34,14 @@
         <el-link :type="scope.scope.row.taskStatus | StatusFilter">
           <span v-if="scope.scope.row.taskStatus === 0">已创建</span>
           <span v-if="scope.scope.row.taskStatus === 1">进行中</span>
-          <span v-if="scope.scope.row.taskStatus === 2">已暂停</span>
+          <span v-if="scope.scope.row.taskStatus === 2">已撤销</span>
           <span v-if="scope.scope.row.taskStatus === 3">已完成</span>
-          <span v-if="scope.scope.row.taskStatus === 4">已作废</span>
         </el-link>
       </template>
       <template v-slot:operates="scope">
+        <!-- 当任务状态为已创建时，操作按钮为开始；当任务状态为进行中时，操作按钮为撤销；当任务状态为已完成/已撤销时，操作按钮为删除； -->
         <table-operation
-          :operations="operations"
+          :operations=" scope.scope.row.taskStatus === 0 ? operations2 : scope.scope.row.taskStatus === 1 ? operations3: operations"
           :raw-data="scope.scope.row"
           @handleOperation="handleOperation"
         />
@@ -55,6 +55,7 @@
           :dialog-status="dialogStatus"
           :loading="loading"
           :task-type="taskType"
+          :task-type-comment="taskTypeComment"
           :options1="options1"
           :options2="options2"
           @createDataEmit="createDataEmit"
@@ -69,7 +70,7 @@
 import Pagination from '@/components/BasicTable/Pagination.vue'
 import BasicTable from '@/components/BasicTable/index.vue'
 import TableOperation from '@/components/BasicTable/TableOperation.vue'
-import { getTaskList, AddGrabTask, DeleteTasks, GetTaskParameters } from '@/api/table'
+import { getTaskList, AddGrabTask, DeleteTasks, GetTaskParameters, RevokeTask } from '@/api/table'
 import { TipsBox, QueryBox } from '@/utils/feedback.js'
 import DataForm from '@/views/videoCapture/components/dataForm.vue'
 import { StatusFilter } from '@/utils/status-filter.js'
@@ -82,17 +83,18 @@ export default {
     StatusFilter
   },
   props: {
-    taskType: { type: Number, default: 0 }
+    taskType: { type: Number, default: 0 },
+    taskTypeComment: { type: Number, default: null }
   },
   data() {
     return {
       options1: [],
       options2: [],
       commentCount: {
-        label: '评论数'
+        label: '意向客户数'
       },
       videoCount: {
-        label: '视频数'
+        label: '线索视频数'
       },
       loading: false,
       status: {
@@ -111,15 +113,15 @@ export default {
       },
       operations: [
         {
-          types: 'customer',
-          title: '客户',
+          types: 'video',
+          title: '视频',
           type: 'success',
           size: 'mini',
           icon: ['fas', 'pen-to-square']
         },
         {
-          types: 'edit',
-          title: '编辑',
+          types: 'comment',
+          title: '客户',
           type: 'success',
           size: 'mini',
           icon: ['fas', 'pen-to-square']
@@ -130,7 +132,52 @@ export default {
           type: 'danger',
           size: 'mini',
           icon: ['far', 'trash-can']
-
+        }
+      ],
+      operations2: [
+        {
+          types: 'video',
+          title: '视频',
+          type: 'success',
+          size: 'mini',
+          icon: ['fas', 'pen-to-square']
+        },
+        {
+          types: 'comment',
+          title: '客户',
+          type: 'success',
+          size: 'mini',
+          icon: ['fas', 'pen-to-square']
+        },
+        {
+          types: 'start',
+          title: '开始',
+          type: 'primary',
+          size: 'mini',
+          icon: ['far', 'trash-can']
+        }
+      ],
+      operations3: [
+        {
+          types: 'video',
+          title: '视频',
+          type: 'success',
+          size: 'mini',
+          icon: ['fas', 'pen-to-square']
+        },
+        {
+          types: 'comment',
+          title: '客户',
+          type: 'success',
+          size: 'mini',
+          icon: ['fas', 'pen-to-square']
+        },
+        {
+          types: 'revoke',
+          title: '撤销',
+          type: 'warning',
+          size: 'mini',
+          icon: ['far', 'trash-can']
         }
       ],
       tableTitle: [
@@ -238,9 +285,12 @@ export default {
       this.dialogFormVisible = v
     },
     handleOperation(op, row) {
-      if (op.types === 'customer') {
-        console.log('customer', row.id)
-        this.$router.push({ path: 'customer', query: { id: row.id }})
+      if (op.types === 'video') {
+        console.log('video', row.id)
+        this.$router.push({ path: 'video', query: { taskId: row.id }})
+      } else if (op.types === 'comment') {
+        console.log('comment', row.id)
+        this.$router.push({ path: 'comment', query: { taskId: row.id }})
       } else if (op.types === 'edit') {
         console.log(row)
         this.handleUpdate(row)
@@ -250,6 +300,12 @@ export default {
           this.del(params)
         })
           .catch(err => { console.error(err) })
+      } else if (op.types === 'revoke') {
+        QueryBox('是否撤销该数据?').then(() => {
+          const params = `taskId=${row.id}`
+          console.log(params)
+          this.revoke(params)
+        })
       }
     },
     // 获取表格数据
@@ -264,14 +320,33 @@ export default {
         TipsBox('warning', '请选择需要删除的数据')
         return false
       }
-      QueryBox().then(() => {
-        var params = unique(v) // 去重
-        const form = getFormData(params, 'taskIds[]')
-        this.del(form)
+      var a = []
+      const b = [0, 1]
+      v.forEach(element => {
+        a.push(element.taskStatus)
       })
+      var result = a.filter((num) => { return b.indexOf(num) !== (-1) }) // 取2个数组的交集
+      if (result.length === 0) {
+        QueryBox().then(() => {
+          var params = unique(v) // 去重
+          const form = getFormData(params, 'taskIds[]')
+          this.del(form)
+        })
+      } else {
+        TipsBox('warning', '选项包含了不能删除项')
+        return
+      }
     },
     del(p) {
       DeleteTasks(p).then(response => {
+        if (response.statusCode === 200) {
+          TipsBox('success', response.data)
+          this.getPageList(this.taskType)
+        }
+      })
+    },
+    revoke(p) {
+      RevokeTask(p).then(response => {
         if (response.statusCode === 200) {
           TipsBox('success', response.data)
           this.getPageList(this.taskType)

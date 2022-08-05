@@ -34,13 +34,14 @@
         <el-input-number v-model="temp.VideoUpLimitCount" :min="0" :max="300" size="small" @change="changeVideoUpLimitCount" />
         <!-- <div class="secondColor"><span class="seatColor">（填0则不限制点数）</span></div> -->
       </el-form-item>
+      <el-form-item v-show="taskType === 0" label="评论抓取数量上限" prop="CommentUpLimitCount">
+        <el-input-number v-model="temp.CommentUpLimitCount" :min="0" :max="taskTypeComment" size="small" @change="changeCommentUpLimitCount" />
+      </el-form-item>
       <el-form-item v-show="taskType === 1" label="评论抓取数量上限" prop="CommentUpLimitCount">
-        <el-input-number v-model="temp.CommentUpLimitCount" :min="0" :max="1000" size="small" @change="changeCommentUpLimitCount" />
-        <!-- <div class="secondColor"><span class="seatColor">（填0则不限制点数）</span></div> -->
+        <el-input-number v-model="temp.CommentUpLimitCount" :min="0" :max="taskTypeComment" size="small" @change="changeCommentUpLimitCount" />
       </el-form-item>
       <el-form-item v-show="taskType === 2" label="评论抓取数量上限" prop="CommentUpLimitCount">
-        <el-input-number v-model="temp.CommentUpLimitCount" :min="0" :max="10000" size="small" @change="changeCommentUpLimitCount" />
-        <!-- <div class="secondColor"><span class="seatColor">（填0则不限制点数）</span></div> -->
+        <el-input-number v-model="temp.CommentUpLimitCount" :min="0" :max="taskTypeComment" size="small" @change="changeCommentUpLimitCount" />
       </el-form-item>
       <el-form-item label="搜索排序" prop="SortBy">
         <el-radio v-model="temp.SortBy" label="0">默认排序</el-radio>
@@ -79,6 +80,7 @@ export default {
     dialogStatus: { type: String, default: String },
     loading: { type: Boolean, default: false },
     taskType: { type: Number, default: null },
+    taskTypeComment: { type: Number, default: null },
     options1: { type: Array, default: null },
     options2: { type: Array, default: null }
 
@@ -93,7 +95,7 @@ export default {
         SortBy: '0',
         PublishFromNowDay: '0',
         VideoUpLimitCount: 300,
-        CommentUpLimitCount: 10000
+        CommentUpLimitCount: this.taskTypeComment
       },
       rules: {
         TaskName: [{ required: true, trigger: 'blur', validator: validateTaskName }],
@@ -102,6 +104,10 @@ export default {
       CommentKeyWords: [],
       CommentShieldWords: []
     }
+  },
+  created() {
+    console.log(this.temp.taskTypeComment)
+    console.log(this.temp.CommentUpLimitCount)
   },
   methods: {
     // 单独验证分析源
@@ -122,6 +128,7 @@ export default {
       } else if (this.taskType === 2) {
         if (value.indexOf('https://www.douyin.com/video/') < 0) {
           callback(new Error('请输入正确的分析源'))
+          return false
         } else {
           callback()
         }
@@ -129,14 +136,18 @@ export default {
     },
     changeVideoUpLimitCount(value) {
       this.VideoUpLimitCount = value
+      console.log(this.VideoUpLimitCount)
     },
     changeCommentUpLimitCount(value) {
-      this.CommentUpLimitCount = value
+      this.temp.CommentUpLimitCount = value
+      console.log(this.temp.CommentUpLimitCount)
     },
     createData() {
       this.temp.CommentKeyWords = this.CommentKeyWords
       this.temp.CommentShieldWords = this.CommentShieldWords
       this.temp2 = `TaskName=${this.temp.TaskName}&TaskType=${this.temp.TaskType}&TaskSource=${this.temp.TaskSource}&CommentKeyWords=${this.temp.CommentKeyWords}&CommentShieldWords=${this.temp.CommentShieldWords}&TitleKeyWords=${this.temp.TitleKeyWords}&SortBy=${this.temp.SortBy}&PublishFromNowDay=${this.temp.PublishFromNowDay}&VideoUpLimitCount=${this.temp.VideoUpLimitCount}&CommentUpLimitCount=${this.temp.CommentUpLimitCount}`
+      console.log(this.temp2)
+      return
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.$emit('createDataEmit', this.temp2)

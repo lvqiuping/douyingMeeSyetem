@@ -5,9 +5,16 @@
       :table-data="tableData"
       :operates="operates"
       :loading="loading"
+      :operates-width="180"
+      :user-home-url="userHomeUrl"
       @batchDeleted="batchDeleted"
       @refresh="getPageList"
     >
+      <template v-slot:userHomeUrl="scope">
+        <a :href="scope.scope.row.userHomePageUrl" target="_blank" style="color: #409eff">
+          {{ scope.scope.row.userHomePageUrl }}
+        </a>
+      </template>
       <template v-slot:operates="scope">
         <table-operation
           :operations="operations"
@@ -39,6 +46,13 @@ export default {
       },
       operations: [
         {
+          types: 'wechart',
+          title: '扫码私信',
+          type: 'success',
+          size: 'mini',
+          icon: ['far', 'trash-can']
+        },
+        {
           types: 'del',
           title: '删除',
           type: 'danger',
@@ -46,15 +60,25 @@ export default {
           icon: ['far', 'trash-can']
         }
       ],
+      userHomeUrl: {
+        state: true,
+        label: '用户主页地址'
+        // width: 600
+      },
       tableTitle: [
         {
-          label: '评论内容',
+          label: '任务ID',
+          value: 'id',
+          show: true
+        },
+        {
+          label: '内容',
           value: 'content',
           show: true
         },
         {
-          label: '用户主页地址',
-          value: 'userHomePageUrl',
+          label: '命中关键词',
+          value: 'hitFilterWords',
           show: true
         },
         {
@@ -70,6 +94,11 @@ export default {
         {
           label: '用户微信',
           value: 'userWechat',
+          show: true
+        },
+        {
+          label: '用户描述',
+          value: 'userDescribe',
           show: true
         },
         {
@@ -107,7 +136,9 @@ export default {
       getList(this, getCommentCountList, params)
     },
     handleOperation(op, row) {
-      if (op.types === 'del') {
+      if (op.types === 'wechart') {
+       
+      } else if (op.types === 'del') {
         QueryBox().then(() => {
           const params = `commentIds=${row.id}`
           this.del(params)

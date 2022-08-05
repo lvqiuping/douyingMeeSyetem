@@ -80,6 +80,16 @@
           <slot name="playUrl" :scope="scope" />
         </template>
       </el-table-column>
+       <el-table-column
+        v-if="userHomeUrl"
+        :label="userHomeUrl.label"
+        :width="userHomeUrl.width"
+        align="center"
+      >
+        <template v-slot="scope">
+          <slot name="userHomeUrl" :scope="scope" />
+        </template>
+      </el-table-column>
       <el-table-column
         v-if="operates"
         :label="operates.label"
@@ -116,6 +126,7 @@ export default {
     // 特别操作
     addSlot: { type: Boolean, default: false },
     playUrl: { type: Object, default: null },
+    userHomeUrl: { type: Object, default: null },
     commentCount: { type: Object, default: null },
     videoCount: { type: Object, default: null }
   },

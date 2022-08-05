@@ -17,9 +17,9 @@
         </router-link>
       </template>
       <template v-slot:playUrl="scope">
-        <el-tag @click="play(scope.scope.row.playUrl)">
+        <a :href="scope.scope.row.playUrl" target="_blank" style="color: #409eff">
           {{ scope.scope.row.playUrl }}
-        </el-tag>
+        </a>
       </template>
 
       <template v-slot:operates="scope">
@@ -138,12 +138,6 @@ export default {
     this.getPageList()
   },
   methods: {
-    //
-    play(r) {
-      console.log(r)
-      // this.dialogFormVisible = true
-      this.url = r
-    },
     // 获取表格数据
     getPageList() {
       this.loading = true
