@@ -7,13 +7,12 @@ const getDefaultState = () => {
   return {
     // 这些都是state的信息
     token: getToken(),
-    userName: '',
+    userName: Cookies.get('permission'),
     permission: ''
   }
 }
 
 const state = getDefaultState()
-
 const mutations = {
   RESET_STATE: (state) => {
     Object.assign(state, getDefaultState())
@@ -38,12 +37,10 @@ const actions = {
         str.map((e) => {
           obj[e.split('=')[0]] = e.split('=')[1]
         })
-        console.log('用户名', obj.userName)
         commit('SET_USER_NAME', obj.userName)
         commit('SET_TOKEN', response.data)
-        commit('SET_PERMISSION', 'normal')
         setToken(response.data)
-        Cookies.set('permission', 'normal')
+        Cookies.set('permission', obj.userName)
         resolve()
       }).catch(error => {
         reject(error)
@@ -54,8 +51,10 @@ const actions = {
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
-      logout(state.userName).then(() => {
+      const params = `userName=${state.userName}`
+      logout(params).then(() => {
         removeToken() // must remove  token  first
+        Cookies.remove('permission')
         resetRouter()
         commit('RESET_STATE')
         resolve()
@@ -67,7 +66,6 @@ const actions = {
 
   // get user info
   getInfo({ commit, state }) {
-    console.log('getInfo', state)
     // return new Promise((resolve, reject) => {
     //   getInfo(state.token).then(response => {
     //     const { data } = response

@@ -98,17 +98,16 @@ export default {
     ])
   },
   created() {
-    console.log(this)
-    console.log(this.$store.state.user)
+    this.user = this.$store.state.user
+    console.log(this.user.userName)
     this.getPageList()
   },
   methods: {
     // 获取表格数据
     getPageList() {
       this.loading = true
-      this.user = { userName: this.userName }
       console.log(this.user)
-      const params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'userName': this.store }
+      const params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'userName': this.user.userName }
       console.log(params)
       return
       getList(this, getVideoList, params)

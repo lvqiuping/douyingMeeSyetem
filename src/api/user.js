@@ -7,10 +7,11 @@ export function login(data) {
     data: data
   })
 }
-export function logout() {
+export function logout(data) {
   return request({
     url: '/api/User/LogOut',
-    method: 'post'
+    method: 'post',
+    data: data
   })
 }
 export function getInfo(token) {
