@@ -24,8 +24,8 @@ const mutations = {
   SET_USER_NAME: (state, userName) => {
     state.userName = userName
   },
-  SET_PERMISSION: (state, userName) => {
-    state.userName = userName
+  SET_PERMISSION: (state, permission) => {
+    state.permission = permission
   }
 }
 const actions = {
