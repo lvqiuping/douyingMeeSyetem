@@ -18,7 +18,7 @@ const store = new Vuex.Store({
     device: state => state.app.device,
     token: state => state.user.token,
     // avatar: state => state.user.avatar,
-    userNname(state) {
+    userName(state) {
       return state.user.userName
     },
     permission: state => state.user.permission
