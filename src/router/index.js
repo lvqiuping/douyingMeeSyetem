@@ -96,14 +96,15 @@ export const constantRoutes = [
         hidden: true,
         component: () => import('@/views/videoCapture/sub/comment/index'),
         meta: { title: '评论列表', icon: 'table' }
-      },
-      {
-        path: 'customer',
-        name: '客户库',
-        hidden: true,
-        component: () => import('@/views/videoCapture/sub/customer/index'),
-        meta: { title: '客户库', icon: 'table' }
       }
+      // ,
+      // {
+      //   path: 'customer',
+      //   name: '客户库',
+      //   hidden: true,
+      //   component: () => import('@/views/videoCapture/sub/customer/index'),
+      //   meta: { title: '客户库', icon: 'table' }
+      // }
     ]
   },
   {
@@ -119,9 +120,15 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        name: '系统用户管理',
+        name: '新增系统用户',
         component: () => import('@/views/systemManagement/index'),
-        meta: { title: '系统用户管理', icon: 'table' }
+        meta: { title: '新增系统用户', icon: 'table' }
+      },
+      {
+        path: 'systemUser',
+        name: '系统用户列表',
+        component: () => import('@/views/systemManagement/systemUser'),
+        meta: { title: '系统用户列表', icon: 'table' }
       }
     ]
   },

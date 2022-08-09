@@ -24,6 +24,14 @@
       </template>
     </basic-table>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageIndex" :limit.sync="listQuery.pageSize" @pagination="getPageList" />
+    <!-- 弹框 -->
+    <el-dialog
+      title="用抖音APP扫描下方二维码"
+      :visible.sync="qrCodeDialogVisible"
+      width="20%"
+    >
+      <qr-code :link="link" />
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -34,11 +42,16 @@ import { getCommentCountList, DeleteComments } from '@/api/table'
 import { QueryBox, TipsBox } from '@/utils/feedback'
 import { unique, getFormData } from '@/utils/others.js'
 import { getList } from '@/utils'
+import QrCode from '@/views/videoCapture/sub/comment/sub/qrCode.vue'
 export default {
   name: 'Comment',
-  components: { BasicTable, TableOperation, Pagination },
+  components: { BasicTable, TableOperation, Pagination, QrCode },
   data() {
     return {
+      qrCodeId: 'qrCodeId',
+      flag: false,
+      qrCodeDialogVisible: false,
+      qrCodesId: '',
       loading: false,
       operates: {
         operate: true,
@@ -117,7 +130,8 @@ export default {
         pageSize: 10,
         taskId: '',
         videoId: ''
-      }
+      },
+      link: ''
     }
   },
   created() {
@@ -137,7 +151,8 @@ export default {
     },
     handleOperation(op, row) {
       if (op.types === 'wechart') {
-       
+        this.qrCodeDialogVisible = true
+        this.link = row.homePageUrl
       } else if (op.types === 'del') {
         QueryBox().then(() => {
           const params = `commentIds=${row.id}`

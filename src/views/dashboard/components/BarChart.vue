@@ -1,5 +1,5 @@
-<!-- <template>
-  <div :class="className" :style="{height:height,width:width}" />
+<template>
+  <div :id="id" :class="className" :style="{height:height,width:width}" />
 </template>
 
 <script>
@@ -12,6 +12,10 @@ const animationDuration = 6000
 export default {
   mixins: [resize],
   props: {
+    id: {
+      type: String,
+      default: 'chart'
+    },
     className: {
       type: String,
       default: 'chart'
@@ -23,6 +27,10 @@ export default {
     height: {
       type: String,
       default: '300px'
+    },
+    barChartData: {
+      type: Object,
+      default: Object
     }
   },
   data() {
@@ -30,9 +38,21 @@ export default {
       chart: null
     }
   },
+  // watch: {
+  //   barChartData: {
+  //     deep: true,
+  //     handler(val) {
+  //       console.log('kkkkkkkkkkkkkkkk222222222', val)
+  //       this.setOptions(val)
+  //     }
+  //   }
+  // },
+  // created() {
+  // },
   mounted() {
     this.$nextTick(() => {
       this.initChart()
+      this.setOptions(this.barChartData)
     })
   },
   beforeDestroy() {
@@ -44,17 +64,20 @@ export default {
   },
   methods: {
     initChart() {
-      this.chart = echarts.init(this.$el, 'macarons')
-
+      this.chart = echarts.init(document.getElementById(this.id))
+      this.chart.setOption(this.barChartData)
+    },
+    setOptions({ expectedData, actualData } = {}) {
       this.chart.setOption({
+        title: { text: '任务获客量统计' },
         tooltip: {
           trigger: 'axis',
           axisPointer: { // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow' this.barChartData.data
           }
         },
         grid: {
-          top: 10,
+          top: 50,
           left: '2%',
           right: '2%',
           bottom: '3%',
@@ -62,7 +85,7 @@ export default {
         },
         xAxis: [{
           type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: actualData,
           axisTick: {
             alignWithLabel: true
           }
@@ -74,29 +97,15 @@ export default {
           }
         }],
         series: [{
-          name: 'pageA',
+          name: '获客',
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: [79, 52, 200, 334, 390, 330, 220],
-          animationDuration
-        }, {
-          name: 'pageB',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '60%',
-          data: [80, 52, 200, 334, 390, 330, 220],
-          animationDuration
-        }, {
-          name: 'pageC',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '60%',
-          data: [30, 52, 200, 334, 390, 330, 220],
+          data: expectedData,
           animationDuration
         }]
       })
     }
   }
 }
-</script> -->
+</script>

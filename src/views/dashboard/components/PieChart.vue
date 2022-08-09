@@ -1,15 +1,20 @@
-<!-- <template>
-  <div :class="className" :style="{height:height,width:width}" />
+<template>
+  <div :id="id" :class="className" :style="{height:height,width:width}" />
 </template>
 
 <script>
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
+import { unref } from 'vue'
 
 export default {
   mixins: [resize],
   props: {
+    id: {
+      type: String,
+      default: 'pie'
+    },
     className: {
       type: String,
       default: 'chart'
@@ -21,6 +26,10 @@ export default {
     height: {
       type: String,
       default: '300px'
+    },
+    pieChartData: {
+      type: Array,
+      default: Array
     }
   },
   data() {
@@ -30,7 +39,7 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.initChart()
+      this.initChart(this.pieChartData)
     })
   },
   beforeDestroy() {
@@ -41,10 +50,10 @@ export default {
     this.chart = null
   },
   methods: {
-    initChart() {
-      this.chart = echarts.init(this.$el, 'macarons')
-
+    initChart(pieChartData) {
+      this.chart = echarts.init(document.getElementById(this.id))
       this.chart.setOption({
+        title: { text: '历史统计分析' },
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b} : {c} ({d}%)'
@@ -61,13 +70,7 @@ export default {
             roseType: 'radius',
             radius: [15, 95],
             center: ['50%', '38%'],
-            data: [
-              { value: 320, name: 'Industries' },
-              { value: 240, name: 'Technology' },
-              { value: 149, name: 'Forex' },
-              { value: 100, name: 'Gold' },
-              { value: 59, name: 'Forecasts' }
-            ],
+            data: pieChartData,
             animationEasing: 'cubicInOut',
             animationDuration: 2600
           }
@@ -76,4 +79,4 @@ export default {
     }
   }
 }
-</script> -->
+</script>

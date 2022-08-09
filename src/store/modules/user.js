@@ -23,6 +23,9 @@ const mutations = {
   },
   SET_USER_NAME: (state, userName) => {
     state.userName = userName
+  },
+  SET_PERMISSION: (state, userName) => {
+    state.userName = userName
   }
 }
 const actions = {
@@ -35,8 +38,10 @@ const actions = {
         str.map((e) => {
           obj[e.split('=')[0]] = e.split('=')[1]
         })
+        console.log('用户名', obj.userName)
         commit('SET_USER_NAME', obj.userName)
         commit('SET_TOKEN', response.data)
+        commit('SET_PERMISSION', 'normal')
         setToken(response.data)
         Cookies.set('permission', 'normal')
         resolve()
@@ -62,6 +67,7 @@ const actions = {
 
   // get user info
   getInfo({ commit, state }) {
+    console.log('getInfo', state)
     // return new Promise((resolve, reject) => {
     //   getInfo(state.token).then(response => {
     //     const { data } = response

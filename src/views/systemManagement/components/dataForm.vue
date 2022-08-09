@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { updateTable } from '@/api/table'
+// import { updateTable } from '@/api/table'
 import { validateUsername, validatePassword } from '@/utils/validator'
 export default {
   name: 'DataForm',
@@ -50,27 +50,27 @@ export default {
           this.$emit('createDataEmit', this.temp2)
         }
       })
-    },
-    // 确认编辑
-    updateData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          const tempData = Object.assign({}, this.temp)
-          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateTable(tempData).then(() => {
-            const index = this.list.findIndex(v => v.id === this.temp.id)
-            this.list.splice(index, 1, this.temp)
-            this.dialogFormVisible = false
-            this.$notify({
-              title: 'Success',
-              message: 'Update Successfully',
-              type: 'success',
-              duration: 2000
-            })
-          })
-        }
-      })
     }
+    // 确认编辑
+    // updateData() {
+    //   this.$refs['dataForm'].validate((valid) => {
+    //     if (valid) {
+    //       const tempData = Object.assign({}, this.temp)
+    //       tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+    //       updateTable(tempData).then(() => {
+    //         const index = this.list.findIndex(v => v.id === this.temp.id)
+    //         this.list.splice(index, 1, this.temp)
+    //         this.dialogFormVisible = false
+    //         this.$notify({
+    //           title: 'Success',
+    //           message: 'Update Successfully',
+    //           type: 'success',
+    //           duration: 2000
+    //         })
+    //       })
+    //     }
+    //   })
+    // }
   }
 }
 </script>

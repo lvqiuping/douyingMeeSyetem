@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import getters from './getters'
+// import getters from './getters'
 import app from './modules/app'
 import settings from './modules/settings'
 import user from './modules/user'
@@ -13,7 +13,16 @@ const store = new Vuex.Store({
     settings,
     user
   },
-  getters
+  getters: {
+    sidebar: state => state.app.sidebar,
+    device: state => state.app.device,
+    token: state => state.user.token,
+    // avatar: state => state.user.avatar,
+    userNname(state) {
+      return state.user.userName
+    },
+    permission: state => state.user.permission
+  }
 })
 
 export default store
