@@ -10,23 +10,26 @@
         <div v-show="taskType === 1"> <div class="secondColor">填抖音当前博主首页的网址。例如： https://www.douyin.com/user/***</div></div>
         <div v-show="taskType === 2"> <div class="secondColor">填当前分析视频的网址（搜索视频列表点击详情，或者博主作品点击进去的地址）。例如： https://www.douyin.com/video/***</div></div>
       </el-form-item>
-      <el-form-item label="评论筛选关键词">
+      <el-form-item label="筛选关键词">
         <el-drag-select v-model="CommentKeyWords" style="width:500px;" multiple placeholder="请选择">
           <el-option v-for="item in options1" :key="item" :label="item" :value="item" />
         </el-drag-select>
         <div style="display: flex;">
           <div class="secondColor">系统推荐关键词<span class="seatColor">（选择关键词快速添加到词库）</span></div>
-          <!-- <span style="color: #409eff" @click="zidingyi=!zidingyi">自定义</span> -->
+          <span style="color: #409eff" @click="zidingyi2=!zidingyi2">点击自定义值(每次定义一个值，回车即可)</span>
         </div>
-        <el-input v-show="zidingyi === true" v-model="CommentKeyWords2" placeholder="如：二手车，北京二手车，车子" />
+        <el-input v-show="zidingyi2 === true" v-model.trim="CommentKeyWords2" @keyup.enter.native="getWords2(CommentKeyWords2)" placeholder="如：二手车" />
       </el-form-item>
-      <!-- <el-input v-show="zidingyi === true" v-model="CommentKeyWords2" placeholder="如：二手车，北京二手车，车子" /> -->
 
-      <el-form-item label="评论屏蔽关键词">
+      <el-form-item label="屏蔽关键词">
         <el-drag-select v-model="CommentShieldWords" style="width:500px;" multiple placeholder="请选择">
           <el-option v-for="item in options2" :key="item" :label="item" :value="item" />
         </el-drag-select>
-        <div class="secondColor">系统推荐屏蔽关键词<span class="seatColor">（选择屏蔽关键词快速添加到词库）</span></div>
+        <div style="display: flex;">
+          <div class="secondColor">系统推荐屏蔽关键词<span class="seatColor">（选择屏蔽关键词快速添加到词库)</span></div>
+          <span style="color: #409eff" @click="zidingyi3=!zidingyi3">点击自定义值(每次定义一个值，回车即可)</span>
+        </div>
+        <el-input v-show="zidingyi3 === true" v-model.trim="CommentShieldWords2" @keyup.enter.native="getWords3(CommentShieldWords2)" placeholder="如：二手车" />
       </el-form-item>
 
       <el-form-item label="视频标题再筛选">
@@ -38,13 +41,13 @@
       <el-form-item label="视频抓取数量上限" prop="VideoUpLimitCount">
         <el-input-number v-model="temp.VideoUpLimitCount" :min="0" :max="300" size="small" @change="changeVideoUpLimitCount" />
       </el-form-item>
-      <el-form-item v-show="taskType === 0" label="评论抓取数量上限" prop="CommentUpLimitCount">
+      <el-form-item v-show="taskType === 0" label="抓取数量上限" prop="CommentUpLimitCount">
         <el-input-number v-model="temp.CommentUpLimitCount" :min="0" :max="taskTypeComment" size="small" @change="changeCommentUpLimitCount" />
       </el-form-item>
-      <el-form-item v-show="taskType === 1" label="评论抓取数量上限" prop="CommentUpLimitCount">
+      <el-form-item v-show="taskType === 1" label="抓取数量上限" prop="CommentUpLimitCount">
         <el-input-number v-model="temp.CommentUpLimitCount" :min="0" :max="taskTypeComment" size="small" @change="changeCommentUpLimitCount" />
       </el-form-item>
-      <el-form-item v-show="taskType === 2" label="评论抓取数量上限" prop="CommentUpLimitCount">
+      <el-form-item v-show="taskType === 2" label="抓取数量上限" prop="CommentUpLimitCount">
         <el-input-number v-model="temp.CommentUpLimitCount" :min="0" :max="taskTypeComment" size="small" @change="changeCommentUpLimitCount" />
       </el-form-item>
       <el-form-item label="搜索排序" prop="SortBy">
@@ -81,6 +84,7 @@ export default {
   name: 'DataForm',
   components: { ElDragSelect },
   props: {
+    temp: { type: Object, default: Object },
     dialogStatus: { type: String, default: String },
     loading: { type: Boolean, default: false },
     taskType: { type: Number, default: null },
@@ -91,29 +95,22 @@ export default {
   },
   data() {
     return {
-      zidingyi: false,
-      temp: {
-        TaskName: '',
-        TaskType: this.taskType, // 这是后台让传的参数：关键词分析0，同行分析1，精准分析2。必填
-        TaskSource: '',
-        TitleKeyWords: '',
-        SortBy: '0',
-        PublishFromNowDay: '0',
-        VideoUpLimitCount: 300,
-        CommentUpLimitCount: this.taskTypeComment
-      },
+      zidingyi2: false,
+      zidingyi3: false,
       rules: {
         TaskName: [{ required: true, trigger: 'blur', validator: validateTaskName }],
         TaskSource: [{ required: true, trigger: 'blur', validator: this.validateTaskSource }]
       },
       CommentKeyWords: [],
       CommentKeyWords2: '',
-      CommentShieldWords: []
+      CommentShieldWords: [],
+      CommentShieldWords2: ''
     }
   },
   created() {
-    console.log(this.temp.taskTypeComment)
-    console.log(this.temp.CommentUpLimitCount)
+    this.$nextTick(() => {
+      this.$refs['dataForm'].clearValidate()
+    })
   },
   methods: {
     // 单独验证分析源
@@ -146,15 +143,20 @@ export default {
     changeCommentUpLimitCount(value) {
       this.temp.CommentUpLimitCount = value
     },
+    getWords2(v) {
+      this.CommentKeyWords.push(v)
+      this.CommentKeyWords2 = ''
+      this.zidingyi2 = false
+    },
+    getWords3(v) {
+      this.CommentShieldWords.push(v)
+      this.CommentShieldWords2 = ''
+      this.zidingyi3 = false
+    },
     createData() {
       this.temp.CommentKeyWords = this.CommentKeyWords
-      // console.log(this.CommentKeyWords)
-      // console.log(this.CommentKeyWords2)
-      // console.log(this.CommentKeyWords.push(this.CommentKeyWords2))
       this.temp.CommentShieldWords = this.CommentShieldWords
       this.temp2 = `TaskName=${this.temp.TaskName}&TaskType=${this.temp.TaskType}&TaskSource=${this.temp.TaskSource}&CommentKeyWords=${this.temp.CommentKeyWords}&CommentShieldWords=${this.temp.CommentShieldWords}&TitleKeyWords=${this.temp.TitleKeyWords}&SortBy=${this.temp.SortBy}&PublishFromNowDay=${this.temp.PublishFromNowDay}&VideoUpLimitCount=${this.temp.VideoUpLimitCount}&CommentUpLimitCount=${this.temp.CommentUpLimitCount}`
-      // console.log(this.temp2)
-      // return
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.$emit('createDataEmit', this.temp2)

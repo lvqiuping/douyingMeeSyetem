@@ -69,7 +69,7 @@ export default {
   padding: 32px;
   background-color: rgb(240, 242, 245);
   position: relative;
-
+  min-height: inherit;
   .github-corner {
     position: absolute;
     top: 0px;

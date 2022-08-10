@@ -51,7 +51,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '操作盘', icon: 'dashboard' }
+      meta: { title: '数据大屏', icon: 'dashboard' }
     }]
   },
   {
@@ -69,42 +69,34 @@ export const constantRoutes = [
         path: 'index',
         name: '关键词分析',
         component: () => import('@/views/videoCapture/index'),
-        meta: { title: '关键词分析', icon: 'table' }
+        meta: { title: '关键词分析', icon: 'el-icon-full-screen' }
       },
       {
         path: 'peerBlogger',
         name: '同行博主分析',
         component: () => import('@/views/videoCapture/peerBlogger'),
-        meta: { title: '同行博主分析', icon: 'table' }
+        meta: { title: '同行博主分析', icon: 'el-icon-s-custom' }
       },
       {
         path: 'accurateVideo',
         name: '精准视频分析',
         component: () => import('@/views/videoCapture/accurateVideo'),
-        meta: { title: '精准视频分析', icon: 'table' }
+        meta: { title: '精准视频分析', icon: 'el-icon-video-camera' }
       },
       {
         path: 'video',
         name: '视频库',
         hidden: true,
         component: () => import('@/views/videoCapture/sub/video/index'),
-        meta: { title: '视频库', icon: 'table' }
+        meta: { title: '视频库', icon: 'el-icon-video-camera-solid' }
       },
       {
         path: 'comment/:taskId?/:videoId?',
-        name: '评论列表',
+        name: '客户列表',
         hidden: true,
         component: () => import('@/views/videoCapture/sub/comment/index'),
-        meta: { title: '评论列表', icon: 'table' }
+        meta: { title: '客户列表', icon: 'el-icon-user-solid' }
       }
-      // ,
-      // {
-      //   path: 'customer',
-      //   name: '客户库',
-      //   hidden: true,
-      //   component: () => import('@/views/videoCapture/sub/customer/index'),
-      //   meta: { title: '客户库', icon: 'table' }
-      // }
     ]
   },
   {
@@ -115,20 +107,14 @@ export const constantRoutes = [
     name: '系统管理',
     meta: {
       title: '系统管理',
-      icon: 'el-icon-s-help'
+      icon: 'el-icon-s-tools'
     },
     children: [
       {
         path: 'index',
-        name: '新增系统用户',
+        name: '系统用户',
         component: () => import('@/views/systemManagement/index'),
-        meta: { title: '新增系统用户', icon: 'table' }
-      },
-      {
-        path: 'systemUser',
-        name: '系统用户列表',
-        component: () => import('@/views/systemManagement/systemUser'),
-        meta: { title: '系统用户列表', icon: 'table' }
+        meta: { title: '系统用户', icon: 'el-icon-user' }
       }
     ]
   },

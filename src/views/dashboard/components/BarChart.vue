@@ -38,17 +38,6 @@ export default {
       chart: null
     }
   },
-  // watch: {
-  //   barChartData: {
-  //     deep: true,
-  //     handler(val) {
-  //       console.log('kkkkkkkkkkkkkkkk222222222', val)
-  //       this.setOptions(val)
-  //     }
-  //   }
-  // },
-  // created() {
-  // },
   mounted() {
     this.$nextTick(() => {
       this.initChart()

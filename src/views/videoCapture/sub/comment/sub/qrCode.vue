@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-left: 30%">
+  <div class="qrBox">
     <div id="qrCodeId" ref="qrCodeRef" />
   </div>
 </template>
@@ -37,3 +37,10 @@ export default {
   }
 }
 </script>
+<style scoped>
+.qrBox{
+  width: 200px;
+  height: 200px;
+  margin: auto;
+}
+</style>

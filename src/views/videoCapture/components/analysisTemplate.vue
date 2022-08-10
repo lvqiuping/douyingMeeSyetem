@@ -58,6 +58,7 @@
           :task-type-comment="taskTypeComment"
           :options1="options1"
           :options2="options2"
+          :temp="temp"
           @createDataEmit="createDataEmit"
           @dialogFormVisibleEmit="dialogFormVisibleEmit"
         />
@@ -197,12 +198,12 @@ export default {
           show: true
         },
         {
-          label: '评论筛选关键词',
+          label: '筛选关键词',
           value: 'commentKeyWords',
           show: true
         },
         {
-          label: '评论屏蔽关键词',
+          label: '屏蔽关键词',
           value: 'commentShieldWords',
           show: true
         },
@@ -211,12 +212,6 @@ export default {
           value: 'titleKeyWords',
           show: true
         }
-        // ,
-        // {
-        //   label: '创建时间',
-        //   value: 'createOn',
-        //   show: true
-        // }
       ],
       tableData: null,
       total: 0,
@@ -226,7 +221,17 @@ export default {
         taskName: '',
         taskType: ''
       },
-      taskNameCopy: ''
+      taskNameCopy: '',
+      temp: {
+        TaskName: '',
+        TaskType: this.taskType, // 这是后台让传的参数：关键词分析0，同行分析1，精准分析2。必填
+        TaskSource: '',
+        TitleKeyWords: '',
+        SortBy: '0',
+        PublishFromNowDay: '0',
+        VideoUpLimitCount: 300,
+        CommentUpLimitCount: this.taskTypeComment
+      }
     }
   },
   created() {
@@ -234,7 +239,7 @@ export default {
   },
   methods: {
     searchFormEmit2(v) {
-      console.log('页面', v)
+      this.listQuery.pageIndex = 1
       this.getPageList(this.taskType, v)
     },
     resetTemp() {
@@ -242,22 +247,18 @@ export default {
         TaskName: '',
         TaskType: this.taskType, // 这是后台让传的参数：关键词分析0，同行分析1，精准分析2。必填
         TaskSource: '',
-        CommentKeyWords: '',
-        CommentShieldWords: '',
         TitleKeyWords: '',
         SortBy: '0',
         PublishFromNowDay: '0',
-        VideoUpLimitCount: 0,
-        CommentUpLimitCount: 0
+        VideoUpLimitCount: 300,
+        CommentUpLimitCount: this.taskTypeComment
       }
     },
     handleCreate() {
       this.resetTemp()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
+      // 从后台获取的关键词
       GetTaskParameters().then((res) => {
         var a = res.data.commnetFilterWords.split(',')
         var b = res.data.commnetShiledWords.split(',')
@@ -266,7 +267,6 @@ export default {
       })
     },
     createDataEmit(v) {
-      console.log('添加参数', v)
       AddGrabTask(v).then((res) => {
         this.loading = true
         if (res.statusCode === 200) {
@@ -278,7 +278,6 @@ export default {
       })
     },
     handleUpdate(row) {
-      console.log('row', row)
       this.temp = Object.assign({}, row) // copy obj 热更新
       this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
@@ -292,13 +291,10 @@ export default {
     },
     handleOperation(op, row) {
       if (op.types === 'video') {
-        console.log('video', row.id)
         this.$router.push({ path: 'video', query: { taskId: row.id }})
       } else if (op.types === 'comment') {
-        console.log('comment', row.id)
         this.$router.push({ path: 'comment', query: { taskId: row.id }})
       } else if (op.types === 'edit') {
-        console.log(row)
         this.handleUpdate(row)
       } else if (op.types === 'del') {
         QueryBox().then(() => {
@@ -309,7 +305,6 @@ export default {
       } else if (op.types === 'revoke') {
         QueryBox('是否撤销该数据?').then(() => {
           const params = `taskId=${row.id}`
-          console.log(params)
           this.revoke(params)
         })
       }

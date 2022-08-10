@@ -7,8 +7,10 @@
       :loading="loading"
       :operates-width="180"
       :user-home-url="userHomeUrl"
+      :search-form="'comment'"
       @batchDeleted="batchDeleted"
       @refresh="getPageList"
+      @searchFormEmit2="searchFormEmit2"
     >
       <template v-slot:userHomeUrl="scope">
         <a :href="scope.scope.row.userHomePageUrl" target="_blank" style="color: #409eff">
@@ -115,7 +117,7 @@ export default {
           show: true
         },
         {
-          label: '评论时间',
+          label: '咨询时间',
           value: 'commentTime',
           show: true
         }
@@ -129,7 +131,9 @@ export default {
         pageIndex: 1,
         pageSize: 10,
         taskId: '',
-        videoId: ''
+        videoId: '',
+        endDate: '',
+        beginDate: ''
       },
       link: ''
     }
@@ -140,15 +144,24 @@ export default {
     this.getPageList()
   },
   methods: {
-    getPageList() {
+    // sousuo
+    searchFormEmit2(v) {
+      this.listQuery.beginDate = v[0]
+      this.listQuery.endDate = v[1]
+      this.listQuery.pageIndex = 1
+      this.getPageList(this.listQuery.beginDate, this.listQuery.endDate)
+    },
+    // liebiao
+    getPageList(beginDate, endDate) {
       var params = {}
       if (this.taskId) { // 从任务进来或则从视频进来
-        params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskId': this.taskId }
+        params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskId': this.taskId, 'beginDate': beginDate, 'endDate': endDate }
       } else if (this.videoId) {
-        params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'videoId': this.videoId }
+        params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'videoId': this.videoId, 'beginDate': beginDate, 'endDate': endDate }
       }
       getList(this, getCommentCountList, params)
     },
+    // caozuo
     handleOperation(op, row) {
       if (op.types === 'wechart') {
         this.qrCodeDialogVisible = true

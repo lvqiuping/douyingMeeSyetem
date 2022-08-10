@@ -33,36 +33,6 @@
         </div>
       </div>
     </el-col>
-    <!-- <el-col :xs="12" :sm="12" :lg="4" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('shoppings')">
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            剩余点数
-          </div>
-          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
-        </div>
-      </div>
-    </el-col>
-    <el-col :xs="12" :sm="12" :lg="4" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('shoppings')">
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            消耗点数
-          </div>
-          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
-        </div>
-      </div>
-    </el-col>
-    <el-col :xs="12" :sm="12" :lg="4" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('shoppings')">
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            总充值
-          </div>
-          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
-        </div>
-      </div>
-    </el-col> -->
   </el-row>
 </template>
 
@@ -138,22 +108,7 @@ export default {
     .icon-shopping {
       color: #34bfa3
     }
-
-    // .card-panel-icon-wrapper {
-    //   float: left;
-    //   margin: 14px 0 0 14px;
-    //   padding: 16px;
-    //   transition: all 0.38s ease-out;
-    //   border-radius: 6px;
-    // }
-
-    // .card-panel-icon {
-    //   float: left;
-    //   font-size: 48px;
-    // }
-
     .card-panel-description {
-      // float: right;
       text-align: center;
       font-weight: bold;
       margin: 26px;

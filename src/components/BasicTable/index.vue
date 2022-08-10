@@ -1,13 +1,16 @@
 <template>
   <div>
     <div style="display: flex;flex-direction: row;justify-content: space-between; margin-bottom: 20px;height: 40px;">
-      <div style="display: flex;flex-direction: row;justify-content: space-between;">
-        <search-form
-          :search-form="searchForm"
-          @searchFormEmit="searchFormEmit"
-        />
-        <slot v-if="addSlot" name="addSlot" />
-        <el-button type="danger" icon="el-icon-delete" style="margin-left: 10px;" @click="batchDeleted">批量删除</el-button>
+      <div>
+        <div v-if="leftButton" style="display: flex;flex-direction: row;justify-content: space-between;">
+          <search-form
+            v-if="searching"
+            :search-form="searchForm"
+            @searchFormEmit="searchFormEmit"
+          />
+          <slot v-if="addSlot" name="addSlot" />
+          <el-button v-if="batchDeletedButton" type="danger" icon="el-icon-delete" style="margin-left: 10px;" @click="batchDeleted">批量删除</el-button>
+        </div>
       </div>
       <div style="display: flex;flex-direction: row;justify-content: space-between;">
         <el-button type="" icon="el-icon-refresh" style="margin-right: 10px; margin-left: 10px;" @click="refresh" />
@@ -123,6 +126,9 @@ export default {
     status: { type: Object, default: null },
     searchForm: { type: String, default: null },
     loading: { type: Boolean, default: false },
+    leftButton: { type: Boolean, default: true },
+    searching: { type: Boolean, default: true },
+    batchDeletedButton: { type: Boolean, default: true },
     // 特别操作
     addSlot: { type: Boolean, default: false },
     playUrl: { type: Object, default: null },

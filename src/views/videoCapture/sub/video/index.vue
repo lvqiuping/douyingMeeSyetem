@@ -7,9 +7,11 @@
       :loading="loading"
       :operates-width="180"
       :play-url="playUrl"
+      :search-form="'video'"
       :comment-count="commentCount"
       @batchDeleted="batchDeleted"
-      @refresh="getPageList"
+      @refresh="getPageList(taskId)"
+      @searchFormEmit2="searchFormEmit2"
     >
       <template v-slot:commentCount="scope">
         <router-link :to="{path: 'comment', query: {videoId: scope.scope.row.id}}" :style="{'color': '#409eff' }">
@@ -63,7 +65,7 @@ export default {
       url: '',
       loading: false,
       commentCount: {
-        label: '评论数'
+        label: '客户数量'
       },
       playUrl: {
         state: true,
@@ -76,7 +78,7 @@ export default {
       },
       operations: [
         {
-          types: 'edit',
+          types: 'comment',
           title: '客户',
           type: 'success',
           size: 'mini',
@@ -128,26 +130,33 @@ export default {
       listQuery: {
         pageIndex: 1,
         pageSize: 10,
-        taskId: ''
+        taskId: '',
+        title: ''
       },
       dialogFormVisible: false
     }
   },
   created() {
     this.taskId = this.$route.query.taskId
-    this.getPageList()
+    this.getPageList(this.taskId)
   },
   methods: {
+    // sousuo
+    searchFormEmit2(v) {
+      this.listQuery.pageIndex = 1
+      this.listQuery.title = v
+      this.getPageList(this.taskId, this.listQuery.title)
+    },
     // 获取表格数据
-    getPageList() {
+    getPageList(taskId, title) {
       this.loading = true
-      const params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskId': this.taskId }
+      const params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskId': taskId, 'title': title }
       getList(this, getVideoList, params)
     },
     // 操作列按钮
     handleOperation(op, row) {
-      if (op.types === 'edit') {
-        console.log(row)
+      if (op.types === 'comment') {
+        this.$router.push({ path: 'comment', query: { taskId: this.taskId }})
       } else if (op.types === 'del') {
         QueryBox().then(() => {
           const form = getFormData(row.id, 'videoIds[]')
@@ -157,7 +166,6 @@ export default {
       }
     },
     batchDeleted(v) {
-      console.log(v)
       if (!v.length) {
         TipsBox('warning', '请选择需要删除的数据')
         return false

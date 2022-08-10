@@ -14,6 +14,28 @@ export function logout(data) {
     data: data
   })
 }
+export function getUserList(query) {
+  return request({
+    url: '/api/User/GetPageList',
+    method: 'get',
+    params: query
+  })
+}
+
+export function DisableUser(data) {
+  return request({
+    url: '/api/User/DisableUser?' + data,
+    method: 'post'
+  })
+}
+
+export function EnableUser(data) {
+  return request({
+    url: '/api/User/EnableUser?' + data,
+    method: 'post'
+  })
+}
+
 export function getInfo(token) {
   return request({
     url: '/WeatherForecast',

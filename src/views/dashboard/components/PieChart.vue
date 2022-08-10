@@ -6,7 +6,6 @@
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
-import { unref } from 'vue'
 
 export default {
   mixins: [resize],
