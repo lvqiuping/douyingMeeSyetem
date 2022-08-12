@@ -14,7 +14,7 @@
       @searchFormEmit2="searchFormEmit2"
     >
       <template v-slot:commentCount="scope">
-        <router-link :to="{path: 'comment', query: {videoId: scope.scope.row.id}}" :style="{'color': '#409eff' }">
+        <router-link :to="{path: 'comment', query: {taskId: taskId, videoId: scope.scope.row.id}}" :style="{'color': '#409eff' }">
           <span> {{ scope.scope.row.commentCount }}</span>
         </router-link>
       </template>
@@ -131,6 +131,7 @@ export default {
         pageIndex: 1,
         pageSize: 10,
         taskId: '',
+        videoId: '',
         title: ''
       },
       dialogFormVisible: false
@@ -156,7 +157,7 @@ export default {
     // 操作列按钮
     handleOperation(op, row) {
       if (op.types === 'comment') {
-        this.$router.push({ path: 'comment', query: { taskId: this.taskId }})
+        this.$router.push({ path: 'comment', query: { taskId: this.taskId, videoId: row.id }})
       } else if (op.types === 'del') {
         QueryBox().then(() => {
           const form = getFormData(row.id, 'videoIds[]')

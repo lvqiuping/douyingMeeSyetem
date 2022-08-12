@@ -25,7 +25,7 @@
         />
       </template>
     </basic-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageIndex" :limit.sync="listQuery.pageSize" @pagination="getPageList" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageIndex" :limit.sync="listQuery.pageSize" @pagination="getPageList(listQuery.beginDate, listQuery.endDate)" />
     <!-- 弹框 -->
     <el-dialog
       title="用抖音APP扫描下方二维码"
@@ -141,7 +141,7 @@ export default {
   created() {
     this.taskId = this.$route.query.taskId
     this.videoId = this.$route.query.videoId
-    this.getPageList()
+    this.getPageList(this.listQuery.beginDate, this.listQuery.endDate)
   },
   methods: {
     // sousuo
@@ -154,10 +154,10 @@ export default {
     // liebiao
     getPageList(beginDate, endDate) {
       var params = {}
-      if (this.taskId) { // 从任务进来或则从视频进来
+      if (this.taskId && this.videoId) { // 从任务进来或则从视频进来
+        params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskId': this.taskId, 'videoId': this.videoId, 'beginDate': beginDate, 'endDate': endDate }
+      } else {
         params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskId': this.taskId, 'beginDate': beginDate, 'endDate': endDate }
-      } else if (this.videoId) {
-        params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'videoId': this.videoId, 'beginDate': beginDate, 'endDate': endDate }
       }
       getList(this, getCommentCountList, params)
     },

@@ -35,7 +35,20 @@ export function EnableUser(data) {
     method: 'post'
   })
 }
-
+export function UpdatePassword(data) {
+  return request({
+    url: '/api/User/UpdatePassword',
+    method: 'post',
+    data: data
+  })
+}
+export function DeleteUsers(data) {
+  return request({
+    url: '/api/User/DeleteUsers',
+    method: 'post',
+    data: data
+  })
+}
 export function getInfo(token) {
   return request({
     url: '/WeatherForecast',

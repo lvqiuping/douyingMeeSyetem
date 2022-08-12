@@ -61,9 +61,12 @@ service.interceptors.response.use(
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          store.dispatch('user/resetToken').then(() => {
+          store.dispatch('user/logout').then(() => {
             location.reload()
           })
+          // store.dispatch('user/resetToken').then(() => {
+          //   location.reload()
+          // })
         })
       }
 

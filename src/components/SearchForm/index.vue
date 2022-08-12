@@ -20,8 +20,11 @@
           @change="getCommentTime"
         />
       </el-form-item>
-      <el-form-item v-show="searchForm === 'user'" prop="userName">
+      <el-form-item v-show="searchForm === 'user'" prop="userName" style="margin-right: 10px;">
         <el-input v-model.trim="temp.userName" clearable placeholder="输入用户名" @keyup.enter.native="searching(temp.userName)" />
+      </el-form-item>
+      <el-form-item v-show="searchForm === 'user'" prop="realName" style="margin-right: 10px;">
+        <el-input v-model.trim="temp.realName" clearable placeholder="输入真实姓名" @keyup.enter.native="searching(temp.realName)" />
       </el-form-item>
       <el-button type="primary" icon="el-icon-search" style="margin-right: 10px;" @click.native.prevent="searching(temp)" />
     </el-form>
@@ -41,7 +44,8 @@ export default {
         TaskName: '',
         title: '',
         commentTime: '',
-        userName: ''
+        userName: '',
+        realName: ''
       },
       pickerOptions: {
         shortcuts: [
@@ -97,7 +101,6 @@ export default {
   methods: {
     //
     getCommentTime(v) {
-      console.log(v)
     },
     //
     searching(p) {
@@ -120,11 +123,11 @@ export default {
           return
         }
       } else if (this.searchForm === 'user') {
-        this.params = p.userName
-        if (!this.params) {
-          TipsBox('warning', '请输入用户名')
+        if (p.userName === '' && p.realName === '') {
+          TipsBox('warning', '请输入用户名或真实姓名')
           return
         }
+        this.params = { 'userName': p.userName, 'realName': p.realName }
       }
       this.$emit('searchFormEmit', this.params)
     }

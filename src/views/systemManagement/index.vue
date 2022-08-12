@@ -4,10 +4,12 @@
       :table-title="tableTitle"
       :table-data="tableData"
       :loading="loading"
+      :operates="operates"
       :add-slot="true"
       :multiple-table="false"
       :batch-deleted-button="false"
       :search-form="'user'"
+      :operates-width="280"
       @refresh="getPageList"
       @searchFormEmit2="searchFormEmit2"
     >
@@ -35,24 +37,36 @@
         />
       </div>
     </el-dialog>
+    <el-dialog :title="'修改密码'" :visible.sync="dialogPasswordVisible" top="3%">
+      <div class="el-dialog-div">
+        <password-form
+          :loading="loading"
+          :passwordtemp="passwordtemp"
+          @createPassword="createPassword"
+          @dialogPasswordVisibleEmit="dialogPasswordVisibleEmit"
+        />
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
 import DataForm from '@/views/systemManagement/components/dataForm.vue'
+import PasswordForm from '@/views/systemManagement/components/passwordForm.vue'
 import Pagination from '@/components/BasicTable/Pagination.vue'
 import BasicTable from '@/components/BasicTable/index.vue'
 import TableOperation from '@/components/BasicTable/TableOperation.vue'
-import { getUserList, DisableUser, EnableUser } from '@/api/user'
+import { getUserList, DisableUser, EnableUser, UpdatePassword, DeleteUsers } from '@/api/user'
 import { createUser } from '@/api/system'
 import { TipsBox } from '@/utils/feedback.js'
 import { getList } from '@/utils'
 import { QueryBox } from '@/utils/feedback'
 export default {
   name: 'SystemUser',
-  components: { BasicTable, Pagination, TableOperation, DataForm },
+  components: { BasicTable, Pagination, TableOperation, DataForm, PasswordForm },
   data() {
     return {
       dialogFormVisible: false,
+      dialogPasswordVisible: false,
       user: {},
       loading: false,
       operates: {
@@ -61,8 +75,24 @@ export default {
       },
       operations: [
         {
-          types: 'del',
+          types: 'password',
+          title: '修改密码',
+          type: 'primary',
+          size: 'mini',
+          icon: ['far', 'trash-can']
+
+        },
+        {
+          types: 'disable',
           title: '禁用',
+          type: 'warning',
+          size: 'mini',
+          icon: ['far', 'trash-can']
+
+        },
+        {
+          types: 'del',
+          title: '删除',
           type: 'danger',
           size: 'mini',
           icon: ['far', 'trash-can']
@@ -71,9 +101,25 @@ export default {
       ],
       operations2: [
         {
+          types: 'password',
+          title: '修改密码',
+          type: 'primary',
+          size: 'mini',
+          icon: ['far', 'trash-can']
+
+        },
+        {
           types: 'usering',
           title: '启用',
           type: 'success',
+          size: 'mini',
+          icon: ['far', 'trash-can']
+
+        },
+        {
+          types: 'del',
+          title: '删除',
+          type: 'danger',
           size: 'mini',
           icon: ['far', 'trash-can']
 
@@ -86,6 +132,11 @@ export default {
           show: true
         },
         {
+          label: '用户名',
+          value: 'userName',
+          show: true
+        },
+        {
           label: '真实姓名',
           value: 'realName',
           show: true
@@ -93,11 +144,6 @@ export default {
         {
           label: '角色名',
           value: 'roleName',
-          show: true
-        },
-        {
-          label: '用户名',
-          value: 'userName',
           show: true
         },
         {
@@ -122,22 +168,29 @@ export default {
         UserName: '',
         RealName: '',
         Pwd: ''
+      },
+      passwordtemp: {
+        newPassword: '',
+        userId: ''
       }
     }
   },
   created() {
     this.user = this.$store.state.user
     this.getPageList()
-    // this.user.userName
   },
   methods: {
     dialogFormVisibleEmit(v) {
       this.dialogFormVisible = v
     },
+    dialogPasswordVisibleEmit(v) {
+      this.dialogPasswordVisible = v
+    },
     // sousuo
     searchFormEmit2(v) {
       this.listQuery.pageIndex = 1
-      this.getPageList(v)
+      const u = v.userName; const r = v.realName
+      this.getPageList(u, r)
     },
     // add
     handleCreate() {
@@ -151,6 +204,12 @@ export default {
         Pwd: ''
       }
     },
+    resetPasswordtemp() {
+      this.passwordtemp = {
+        newPassword: '',
+        userId: ''
+      }
+    },
     createDataEmit(v) {
       createUser(v).then((res) => {
         this.loading = true
@@ -162,10 +221,21 @@ export default {
         }
       })
     },
+    createPassword(v) {
+      UpdatePassword(v).then((res) => {
+        this.loading = true
+        if (res.statusCode === 200) {
+          this.loading = false
+          TipsBox('success', res.data)
+          this.dialogPasswordVisible = false
+          this.getPageList()
+        }
+      })
+    },
     // 获取表格数据
-    getPageList(userName) {
+    getPageList(userName, realName) {
       this.loading = true
-      const params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'userName': userName }
+      const params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'userName': userName, 'realName': realName }
       getList(this, getUserList, params)
     },
     // 操作列按钮
@@ -183,7 +253,7 @@ export default {
           })
         })
           .catch(err => { console.error(err) })
-      } else if (op.types === 'del') {
+      } else if (op.types === 'disable') {
         QueryBox('是否禁用此用户').then(() => {
           const params = `userId=${row.id}`
           DisableUser(params).then((res) => {
@@ -196,7 +266,25 @@ export default {
           })
         })
           .catch(err => { console.error(err) })
+      } else if (op.types === 'password') {
+        this.dialogPasswordVisible = true
+        this.resetPasswordtemp()
+        this.passwordtemp.userId = row.id
+      } else if (op.types === 'del') {
+        QueryBox().then(() => {
+          const params = `userIds=${row.id}`
+          this.del(params)
+        })
+          .catch(err => { console.error(err) })
       }
+    },
+    del(p) {
+      DeleteUsers(p).then(response => {
+        if (response.statusCode === 200) {
+          TipsBox('success', response.data)
+          this.getPageList()
+        }
+      })
     }
   }
 }
