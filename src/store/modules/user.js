@@ -87,7 +87,7 @@ const actions = {
 
   // remove token
   resetToken({ commit }) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       removeToken() // must remove  token  first
       commit('RESET_STATE')
       resolve()
@@ -96,6 +96,7 @@ const actions = {
 }
 
 export default {
+  namespaced: true, // 必须写
   state,
   mutations,
   actions

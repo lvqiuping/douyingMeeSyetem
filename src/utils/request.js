@@ -1,7 +1,10 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
-import { getToken } from '@/utils/auth'
+import { logout } from '@/api/user'
+import { getToken, setToken, removeToken } from '@/utils/auth'
+import { resetRouter } from '@/router'
+import Cookies from 'js-cookie'
 
 // create an axios instance
 const service = axios.create({
@@ -65,6 +68,7 @@ service.interceptors.response.use(
             location.reload()
           })
           // store.dispatch('user/resetToken').then(() => {
+          //   console.log(333)
           //   location.reload()
           // })
         })
