@@ -2,10 +2,10 @@
   <div>
     <el-form ref="searchForm" :model="temp" label-position="" label-width="" style="display: flex;height: 40px;">
       <el-form-item v-show="searchForm === 'videoCapture'" prop="TaskName">
-        <el-input v-model.trim="temp.TaskName" clearable placeholder="请输入任务名" @keyup.enter.native="searching(temp.TaskName)" />
+        <el-input v-model.trim="temp.taskName" clearable placeholder="请输入任务名" @keyup.enter.native="searching()" />
       </el-form-item>
       <el-form-item v-show="searchForm === 'video'" prop="title">
-        <el-input v-model.trim="temp.title" clearable placeholder="输入标题" @keyup.enter.native="searching(temp.title)" />
+        <el-input v-model.trim="temp.title" clearable placeholder="输入标题" @keyup.enter.native="searching()" />
       </el-form-item>
       <el-form-item v-show="searchForm === 'comment'" prop="title">
         <el-date-picker
@@ -17,22 +17,20 @@
           end-placeholder="结束日期"
           align="right"
           value-format="yyyy-MM-dd HH:MM:ss"
-          @change="getCommentTime"
         />
       </el-form-item>
       <el-form-item v-show="searchForm === 'user'" prop="userName" style="margin-right: 10px;">
-        <el-input v-model.trim="temp.userName" clearable placeholder="输入用户名" @keyup.enter.native="searching(temp.userName)" />
+        <el-input v-model.trim="temp.userName" clearable placeholder="输入用户名" @keyup.enter.native="searching()" />
       </el-form-item>
       <el-form-item v-show="searchForm === 'user'" prop="realName" style="margin-right: 10px;">
-        <el-input v-model.trim="temp.realName" clearable placeholder="输入真实姓名" @keyup.enter.native="searching(temp.realName)" />
+        <el-input v-model.trim="temp.realName" clearable placeholder="输入真实姓名" @keyup.enter.native="searching()" />
       </el-form-item>
-      <el-button type="primary" icon="el-icon-search" style="margin-right: 10px;" @click.native.prevent="searching(temp)" />
+      <el-button type="primary" icon="el-icon-search" style="margin-right: 10px;" @click.native.prevent="searching()" />
     </el-form>
   </div>
 </template>
 
 <script>
-import { TipsBox } from '@/utils/feedback'
 export default {
   name: 'SearchForm',
   props: {
@@ -41,7 +39,7 @@ export default {
   data() {
     return {
       temp: {
-        TaskName: '',
+        taskName: '',
         title: '',
         commentTime: '',
         userName: '',
@@ -49,6 +47,14 @@ export default {
       },
       pickerOptions: {
         shortcuts: [
+          {
+            text: '全部',
+            onClick(picker) {
+              const end = ''
+              const start = ''
+              picker.$emit('pick', [start, end])
+            }
+          },
           {
             text: '3天内',
             onClick(picker) {
@@ -94,42 +100,21 @@ export default {
             }
           }
         ]
+      }
+    }
+  },
+  watch: {
+    // 监听对象temp，
+    temp: {
+      handler(newVal) {
+        this.$emit('searchFormEmit', newVal)
       },
-      params: ''
+      deep: true
     }
   },
   methods: {
-    //
-    getCommentTime(v) {
-    },
-    //
-    searching(p) {
-      if (this.searchForm === 'videoCapture') {
-        this.params = p.TaskName
-        if (!this.params) {
-          TipsBox('warning', '请输入任务名')
-          return
-        }
-      } else if (this.searchForm === 'video') {
-        this.params = p.title
-        if (!this.params) {
-          TipsBox('warning', '请输入标题')
-          return
-        }
-      } else if (this.searchForm === 'comment') {
-        this.params = p.commentTime
-        if (!this.params) {
-          TipsBox('warning', '请选择时间')
-          return
-        }
-      } else if (this.searchForm === 'user') {
-        if (p.userName === '' && p.realName === '') {
-          TipsBox('warning', '请输入用户名或真实姓名')
-          return
-        }
-        this.params = { 'userName': p.userName, 'realName': p.realName }
-      }
-      this.$emit('searchFormEmit', this.params)
+    searching() {
+      this.$emit('searchFormEmit', this.temp)
     }
   }
 }

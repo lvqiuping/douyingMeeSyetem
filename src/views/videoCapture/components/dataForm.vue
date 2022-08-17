@@ -11,25 +11,25 @@
         <div v-show="taskType === 2"> <div class="secondColor">填当前分析视频的网址（搜索视频列表点击详情，或者博主作品点击进去的地址）。例如： https://www.douyin.com/video/***</div></div>
       </el-form-item>
       <el-form-item label="筛选关键词">
-        <el-drag-select v-model="CommentKeyWords" style="width:500px;" multiple placeholder="请选择">
+        <el-drag-select v-model="temp.CommentKeyWords" style="width:500px;" multiple placeholder="请选择">
           <el-option v-for="item in options1" :key="item" :label="item" :value="item" />
         </el-drag-select>
         <div style="display: flex;">
           <div class="secondColor">系统推荐关键词<span class="seatColor">（选择关键词快速添加到词库）</span></div>
           <span style="color: #409eff" @click="zidingyi2=!zidingyi2">点击自定义值(每次定义一个值，回车即可)</span>
         </div>
-        <el-input v-show="zidingyi2 === true" v-model.trim="CommentKeyWords2" @keyup.enter.native="getWords2(CommentKeyWords2)" placeholder="如：二手车" />
+        <el-input v-show="zidingyi2 === true" v-model.trim="temp.CommentKeyWords2" placeholder="如：二手车" @keyup.enter.native="getWords2(temp.CommentKeyWords2)" />
       </el-form-item>
 
       <el-form-item label="屏蔽关键词">
-        <el-drag-select v-model="CommentShieldWords" style="width:500px;" multiple placeholder="请选择">
+        <el-drag-select v-model="temp.CommentShieldWords" style="width:500px;" multiple placeholder="请选择">
           <el-option v-for="item in options2" :key="item" :label="item" :value="item" />
         </el-drag-select>
         <div style="display: flex;">
           <div class="secondColor">系统推荐屏蔽关键词<span class="seatColor">（选择屏蔽关键词快速添加到词库)</span></div>
           <span style="color: #409eff" @click="zidingyi3=!zidingyi3">点击自定义值(每次定义一个值，回车即可)</span>
         </div>
-        <el-input v-show="zidingyi3 === true" v-model.trim="CommentShieldWords2" @keyup.enter.native="getWords3(CommentShieldWords2)" placeholder="如：二手车" />
+        <el-input v-show="zidingyi3 === true" v-model.trim="temp.CommentShieldWords2" placeholder="如：二手车" @keyup.enter.native="getWords3(temp.CommentShieldWords2)" />
       </el-form-item>
 
       <el-form-item label="视频标题再筛选">
@@ -100,11 +100,7 @@ export default {
       rules: {
         TaskName: [{ required: true, trigger: 'blur', validator: validateTaskName }],
         TaskSource: [{ required: true, trigger: 'blur', validator: this.validateTaskSource }]
-      },
-      CommentKeyWords: [],
-      CommentKeyWords2: '',
-      CommentShieldWords: [],
-      CommentShieldWords2: ''
+      }
     }
   },
   created() {
@@ -138,24 +134,22 @@ export default {
       }
     },
     changeVideoUpLimitCount(value) {
-      this.VideoUpLimitCount = value
+      this.temp.VideoUpLimitCount = value
     },
     changeCommentUpLimitCount(value) {
       this.temp.CommentUpLimitCount = value
     },
     getWords2(v) {
-      this.CommentKeyWords.push(v)
-      this.CommentKeyWords2 = ''
+      this.temp.CommentKeyWords.push(v)
+      this.temp.CommentKeyWords2 = ''
       this.zidingyi2 = false
     },
     getWords3(v) {
-      this.CommentShieldWords.push(v)
-      this.CommentShieldWords2 = ''
+      this.temp.CommentShieldWords.push(v)
+      this.temp.CommentShieldWords2 = ''
       this.zidingyi3 = false
     },
     createData() {
-      this.temp.CommentKeyWords = this.CommentKeyWords
-      this.temp.CommentShieldWords = this.CommentShieldWords
       this.temp2 = `TaskName=${this.temp.TaskName}&TaskType=${this.temp.TaskType}&TaskSource=${this.temp.TaskSource}&CommentKeyWords=${this.temp.CommentKeyWords}&CommentShieldWords=${this.temp.CommentShieldWords}&TitleKeyWords=${this.temp.TitleKeyWords}&SortBy=${this.temp.SortBy}&PublishFromNowDay=${this.temp.PublishFromNowDay}&VideoUpLimitCount=${this.temp.VideoUpLimitCount}&CommentUpLimitCount=${this.temp.CommentUpLimitCount}`
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {

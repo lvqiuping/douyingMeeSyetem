@@ -10,7 +10,7 @@
       :batch-deleted-button="false"
       :search-form="'user'"
       :operates-width="280"
-      @refresh="getPageList"
+      @refresh="getPageList()"
       @searchFormEmit2="searchFormEmit2"
     >
       <template v-slot:addSlot>
@@ -67,7 +67,7 @@ export default {
     return {
       dialogFormVisible: false,
       dialogPasswordVisible: false,
-      user: {},
+      // user: {},
       loading: false,
       operates: {
         operate: true,
@@ -161,8 +161,7 @@ export default {
       total: 0,
       listQuery: {
         pageIndex: 1,
-        pageSize: 10,
-        taskId: ''
+        pageSize: 10
       },
       temp: {
         UserName: '',
@@ -176,7 +175,7 @@ export default {
     }
   },
   created() {
-    this.user = this.$store.state.user
+    // this.user = this.$store.state.user
     this.getPageList()
   },
   methods: {
@@ -189,8 +188,8 @@ export default {
     // sousuo
     searchFormEmit2(v) {
       this.listQuery.pageIndex = 1
-      const u = v.userName; const r = v.realName
-      this.getPageList(u, r)
+      this.listQuery = Object.assign({}, this.listQuery, v)
+      this.getPageList()
     },
     // add
     handleCreate() {
@@ -233,10 +232,9 @@ export default {
       })
     },
     // 获取表格数据
-    getPageList(userName, realName) {
+    getPageList() {
       this.loading = true
-      const params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'userName': userName, 'realName': realName }
-      getList(this, getUserList, params)
+      getList(this, getUserList, this.listQuery)
     },
     // 操作列按钮
     handleOperation(op, row) {

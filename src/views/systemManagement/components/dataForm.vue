@@ -8,7 +8,7 @@
         <el-input v-model.trim="temp.RealName" placeholder="请输入真实姓名" />
       </el-form-item>
       <el-form-item label="密码" prop="Pwd">
-        <el-input type="password" v-model.trim="temp.Pwd" placeholder="请输入密码" />
+        <el-input v-model.trim="temp.Pwd" type="password" placeholder="请输入密码" />
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -27,11 +27,11 @@ import { validateUsername, validatePassword } from '@/utils/validator'
 export default {
   name: 'DataForm',
   props: {
-    temp: { type: Object, default: Object }
+    temp: { type: Object, default: Object },
+    loading: { type: Boolean, default: false }
   },
   data() {
     return {
-      loading: false,
       rules: {
         UserName: [{ required: true, trigger: 'blur', validator: validateUsername }],
         Pwd: [{ required: true, trigger: 'blur', validator: validatePassword }]
@@ -43,7 +43,7 @@ export default {
       this.temp2 = `UserName=${this.temp.UserName}&RealName=${this.temp.RealName}&Pwd=${this.temp.Pwd}`
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.$emit('createDataEmit', this.temp2)
+          this.$emit('createDataEmit', this.temp2, true)
         }
       })
     }

@@ -8,6 +8,8 @@
             :search-form="searchForm"
             @searchFormEmit="searchFormEmit"
           />
+                      <!-- @refresh="refresh()" -->
+
           <slot v-if="addSlot" name="addSlot" />
           <el-button v-if="batchDeletedButton" type="danger" icon="el-icon-delete" style="margin-left: 10px;" @click="batchDeleted">批量删除</el-button>
         </div>
@@ -141,7 +143,7 @@ export default {
       selectDate: [],
       selectTableData: [],
       total: 0,
-      b_data: ''
+      b_data: {}
     }
   },
   methods: {

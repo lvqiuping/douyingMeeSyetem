@@ -10,11 +10,11 @@
       :search-form="'video'"
       :comment-count="commentCount"
       @batchDeleted="batchDeleted"
-      @refresh="getPageList(taskId)"
+      @refresh="getPageList()"
       @searchFormEmit2="searchFormEmit2"
     >
       <template v-slot:commentCount="scope">
-        <router-link :to="{path: 'comment', query: {taskId: taskId, videoId: scope.scope.row.id}}" :style="{'color': '#409eff' }">
+        <router-link :to="{path: 'comment', query: {taskId: listQuery.taskId, videoId: scope.scope.row.id}}" :style="{'color': '#409eff' }">
           <span> {{ scope.scope.row.commentCount }}</span>
         </router-link>
       </template>
@@ -32,7 +32,7 @@
         />
       </template>
     </basic-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageIndex" :limit.sync="listQuery.pageSize" @pagination="getPageList(taskId)" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageIndex" :limit.sync="listQuery.pageSize" @pagination="getPageList()" />
 
     <el-dialog title="视频查看" :visible.sync="dialogFormVisible" top="3%">
       <video src="https://www.douyin.com/video/6670682915216706827" controls autoplay width="100%" />
@@ -130,34 +130,30 @@ export default {
       listQuery: {
         pageIndex: 1,
         pageSize: 10,
-        taskId: '',
-        videoId: '',
-        title: ''
+        taskId: this.$route.query.taskId
       },
       dialogFormVisible: false
     }
   },
   created() {
-    this.taskId = this.$route.query.taskId
-    this.getPageList(this.taskId)
+    this.getPageList()
   },
   methods: {
     // sousuo
     searchFormEmit2(v) {
       this.listQuery.pageIndex = 1
-      this.listQuery.title = v
-      this.getPageList(this.taskId, this.listQuery.title)
+      this.listQuery = Object.assign({}, this.listQuery, v)
+      this.getPageList()
     },
     // 获取表格数据
-    getPageList(taskId, title) {
+    getPageList() {
       this.loading = true
-      const params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskId': taskId, 'title': title }
-      getList(this, getVideoList, params)
+      getList(this, getVideoList, this.listQuery)
     },
     // 操作列按钮
     handleOperation(op, row) {
       if (op.types === 'comment') {
-        this.$router.push({ path: 'comment', query: { taskId: this.taskId, videoId: row.id }})
+        this.$router.push({ path: 'comment', query: { taskId: this.listQuery.taskId, videoId: row.id }})
       } else if (op.types === 'del') {
         QueryBox().then(() => {
           const form = getFormData(row.id, 'videoIds[]')
@@ -178,10 +174,12 @@ export default {
       })
     },
     del(p) {
+      this.loading = true
       DeleteVideos(p).then(response => {
         if (response.statusCode === 200) {
           TipsBox('success', response.data)
-          this.getPageList(this.taskId)
+          this.getPageList()
+          this.loading = false
         }
       })
     }

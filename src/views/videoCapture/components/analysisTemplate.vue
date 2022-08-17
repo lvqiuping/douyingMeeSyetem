@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="">
     <basic-table
       :table-title="tableTitle"
       :table-data="tableData"
@@ -13,7 +13,7 @@
       :loading="loading"
       @batchDeleted="batchDeleted"
       @searchFormEmit2="searchFormEmit2"
-      @refresh="getPageList"
+      @refresh="getPageList()"
     >
       <template v-slot:addSlot>
         <div>
@@ -36,6 +36,7 @@
           <span v-if="scope.scope.row.taskStatus === 1">进行中</span>
           <span v-if="scope.scope.row.taskStatus === 2">已撤销</span>
           <span v-if="scope.scope.row.taskStatus === 3">已完成</span>
+          <span v-if="scope.scope.row.taskStatus === 4">任务异常</span>
         </el-link>
       </template>
       <template v-slot:operates="scope">
@@ -47,7 +48,7 @@
         />
       </template>
     </basic-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageIndex" :limit.sync="listQuery.pageSize" @pagination="getPageList(taskType)" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageIndex" :limit.sync="listQuery.pageSize" @pagination="getPageList()" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" top="3%">
       <div class="el-dialog-div">
@@ -218,8 +219,7 @@ export default {
       listQuery: {
         pageIndex: 1,
         pageSize: 10,
-        taskName: '',
-        taskType: ''
+        taskType: this.taskType
       },
       taskNameCopy: '',
       temp: {
@@ -230,17 +230,27 @@ export default {
         SortBy: '0',
         PublishFromNowDay: '0',
         VideoUpLimitCount: 300,
-        CommentUpLimitCount: this.taskTypeComment
+        CommentUpLimitCount: this.taskTypeComment,
+        CommentKeyWords: [],
+        CommentKeyWords2: '',
+        CommentShieldWords: [],
+        CommentShieldWords2: ''
       }
     }
   },
   created() {
-    this.getPageList(this.taskType)
+    this.getPageList()
   },
   methods: {
+    // 获取表格数据
+    getPageList() {
+      this.loading = true
+      getList(this, getTaskList, this.listQuery)
+    },
     searchFormEmit2(v) {
       this.listQuery.pageIndex = 1
-      this.getPageList(this.taskType, v)
+      this.listQuery = Object.assign({}, this.listQuery, v)
+      this.getPageList()
     },
     resetTemp() {
       this.temp = {
@@ -251,7 +261,11 @@ export default {
         SortBy: '0',
         PublishFromNowDay: '0',
         VideoUpLimitCount: 300,
-        CommentUpLimitCount: this.taskTypeComment
+        CommentUpLimitCount: this.taskTypeComment,
+        CommentKeyWords: [],
+        CommentKeyWords2: '',
+        CommentShieldWords: [],
+        CommentShieldWords2: ''
       }
     },
     handleCreate() {
@@ -267,13 +281,14 @@ export default {
       })
     },
     createDataEmit(v) {
+      this.loading = true
       AddGrabTask(v).then((res) => {
-        this.loading = true
         if (res.statusCode === 200) {
-          this.loading = false
           TipsBox('success', res.data)
           this.dialogFormVisible = false
-          this.getPageList(this.taskType)
+          this.listQuery.pageIndex = 1
+          this.getPageList()
+          this.loading = false
         }
       })
     },
@@ -309,13 +324,6 @@ export default {
         })
       }
     },
-    // 获取表格数据
-    getPageList(taskType, taskName) {
-      this.loading = true
-      // get用json格式
-      const params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskType': taskType, 'taskName': taskName }
-      getList(this, getTaskList, params)
-    },
     batchDeleted(v) {
       if (!v.length) {
         TipsBox('warning', '请选择需要删除的数据')
@@ -339,18 +347,22 @@ export default {
       }
     },
     del(p) {
+      this.loading = true
       DeleteTasks(p).then(response => {
         if (response.statusCode === 200) {
           TipsBox('success', response.data)
-          this.getPageList(this.taskType)
+          this.getPageList()
+          this.loading = false
         }
       })
     },
     revoke(p) {
+      this.loading = true
       RevokeTask(p).then(response => {
         if (response.statusCode === 200) {
           TipsBox('success', response.data)
-          this.getPageList(this.taskType)
+          this.getPageList()
+          this.loading = false
         }
       })
     }

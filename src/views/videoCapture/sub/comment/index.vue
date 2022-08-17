@@ -9,7 +9,7 @@
       :user-home-url="userHomeUrl"
       :search-form="'comment'"
       @batchDeleted="batchDeleted"
-      @refresh="getPageList"
+      @refresh="getPageList()"
       @searchFormEmit2="searchFormEmit2"
     >
       <template v-slot:userHomeUrl="scope">
@@ -25,7 +25,7 @@
         />
       </template>
     </basic-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageIndex" :limit.sync="listQuery.pageSize" @pagination="getPageList(listQuery.beginDate, listQuery.endDate)" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageIndex" :limit.sync="listQuery.pageSize" @pagination="getPageList()" />
     <!-- 弹框 -->
     <el-dialog
       title="用抖音APP扫描下方二维码"
@@ -139,27 +139,31 @@ export default {
     }
   },
   created() {
-    this.taskId = this.$route.query.taskId
-    this.videoId = this.$route.query.videoId
-    this.getPageList(this.listQuery.beginDate, this.listQuery.endDate)
+    this.listQuery.taskId = this.$route.query.taskId
+    this.listQuery.videoId = this.$route.query.videoId
+    this.getPageList()
   },
   methods: {
     // sousuo
     searchFormEmit2(v) {
-      this.listQuery.beginDate = v[0]
-      this.listQuery.endDate = v[1]
+      console.log('v', v)
+      this.listQuery.beginDate = v.commentTime[0]
+      this.listQuery.endDate = v.commentTime[1]
       this.listQuery.pageIndex = 1
-      this.getPageList(this.listQuery.beginDate, this.listQuery.endDate)
+      this.listQuery = Object.assign({}, this.listQuery, v)
+      // console.log(this.listQuery)
+      this.getPageList()
     },
     // liebiao
-    getPageList(beginDate, endDate) {
-      var params = {}
-      if (this.taskId && this.videoId) { // 从任务进来或则从视频进来
-        params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskId': this.taskId, 'videoId': this.videoId, 'beginDate': beginDate, 'endDate': endDate }
-      } else {
-        params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskId': this.taskId, 'beginDate': beginDate, 'endDate': endDate }
-      }
-      getList(this, getCommentCountList, params)
+    getPageList() {
+      this.loading = true
+      // var params = {}
+      // if (this.taskId && this.videoId) { // 从任务进来或则从视频进来
+      //   params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskId': taskId, 'videoId': videoId, 'beginDate': beginDate, 'endDate': endDate }
+      // } else {
+      //   params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskId': taskId, 'beginDate': beginDate, 'endDate': endDate }
+      // }
+      getList(this, getCommentCountList, this.listQuery)
     },
     // caozuo
     handleOperation(op, row) {
@@ -186,10 +190,12 @@ export default {
       })
     },
     del(p) {
+      this.loading = true
       DeleteComments(p).then(response => {
         if (response.statusCode === 200) {
           TipsBox('success', response.data)
           this.getPageList()
+          this.loading = false
         }
       })
     }

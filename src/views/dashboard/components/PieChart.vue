@@ -64,7 +64,7 @@ export default {
         },
         series: [
           {
-            name: 'WEEKLY WRITE ARTICLES',
+            name: '历史统计',
             type: 'pie',
             roseType: 'radius',
             radius: [15, 95],
