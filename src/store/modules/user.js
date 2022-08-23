@@ -55,9 +55,10 @@ const actions = {
       logout(params).then(() => {
         removeToken() // must remove  token  first
         Cookies.remove('permission')
-        resetRouter()
-        commit('RESET_STATE')
-        resolve()
+        window.location.reload() // f5
+        // resetRouter()
+        // commit('RESET_STATE')
+        // resolve()
       }).catch(error => {
         reject(error)
       })

@@ -5,11 +5,12 @@ import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
-
+/* Layout */
+import Layout from '@/layout'
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 const whiteList = ['/login'] // no redirect whitelist
-
+let isAddRouter = false
 router.beforeEach(async(to, from, next) => {
   // start progress bar
   NProgress.start()
@@ -28,6 +29,52 @@ router.beforeEach(async(to, from, next) => {
     } else {
       const hasGetUserInfo = store.getters.userName
       if (hasGetUserInfo) {
+        if (hasGetUserInfo === 'admin') {
+          if (!isAddRouter) {
+            isAddRouter = true
+            router.addRoutes([
+              {
+                path: '/systemManagement',
+                component: Layout,
+                redirect: '/systemManagement/index',
+                alwaysShow: true,
+                name: '系统管理',
+                meta: {
+                  title: '系统管理',
+                  icon: 'el-icon-s-tools'
+                },
+                children: [
+                  {
+                    path: 'index',
+                    name: '系统用户',
+                    component: () => import('@/views/systemManagement/index'),
+                    meta: { title: '系统用户', icon: 'el-icon-user' }
+                  }
+                ]
+              }
+            ])
+
+            router.options.routes.push({
+              path: '/systemManagement',
+              component: Layout,
+              redirect: '/systemManagement/index',
+              alwaysShow: true,
+              name: '系统管理',
+              meta: {
+                title: '系统管理',
+                icon: 'el-icon-s-tools'
+              },
+              children: [
+                {
+                  path: 'index',
+                  name: '系统用户',
+                  component: () => import('@/views/systemManagement/index'),
+                  meta: { title: '系统用户', icon: 'el-icon-user' }
+                }
+              ]
+            })
+          }
+        }
         next()
       } else {
         try {

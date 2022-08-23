@@ -10,6 +10,7 @@
       :search-form="'videoCapture'"
       :comment-count="commentCount"
       :video-count="videoCount"
+      :create-by="createBy"
       :loading="loading"
       @batchDeleted="batchDeleted"
       @searchFormEmit2="searchFormEmit2"
@@ -18,6 +19,11 @@
       <template v-slot:addSlot>
         <div>
           <el-button type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>
+        </div>
+      </template>
+      <template v-slot:createBy="scope">
+        <div>
+          <span> {{ scope.scope.row.createBy }}</span>
         </div>
       </template>
       <template v-slot:videoCount="scope">
@@ -97,6 +103,9 @@ export default {
       },
       videoCount: {
         label: '线索视频数'
+      },
+      createBy: {
+        label: '创建人'
       },
       loading: false,
       status: {
@@ -211,6 +220,11 @@ export default {
         {
           label: '视频标题再筛选',
           value: 'titleKeyWords',
+          show: true
+        },
+        {
+          label: '创建时间',
+          value: 'createOn',
           show: true
         }
       ],

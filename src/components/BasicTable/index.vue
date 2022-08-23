@@ -8,8 +8,6 @@
             :search-form="searchForm"
             @searchFormEmit="searchFormEmit"
           />
-                      <!-- @refresh="refresh()" -->
-
           <slot v-if="addSlot" name="addSlot" />
           <el-button v-if="batchDeletedButton" type="danger" icon="el-icon-delete" style="margin-left: 10px;" @click="batchDeleted">批量删除</el-button>
         </div>
@@ -48,6 +46,15 @@
         align="center"
       />
       <el-table-column
+        v-if="createBy"
+        :label="createBy.label"
+        align="center"
+      >
+        <template v-slot="scope">
+          <slot name="createBy" :scope="scope" />
+        </template>
+      </el-table-column>
+      <el-table-column
         v-if="videoCount"
         :label="videoCount.label"
         align="center"
@@ -83,6 +90,16 @@
       >
         <template v-slot="scope">
           <slot name="playUrl" :scope="scope" />
+        </template>
+      </el-table-column>
+      <el-table-column
+        v-if="homePageUrl"
+        :label="homePageUrl.label"
+        :width="homePageUrl.width"
+        align="center"
+      >
+        <template v-slot="scope">
+          <slot name="homePageUrl" :scope="scope" />
         </template>
       </el-table-column>
       <el-table-column
@@ -134,9 +151,11 @@ export default {
     // 特别操作
     addSlot: { type: Boolean, default: false },
     playUrl: { type: Object, default: null },
+    homePageUrl: { type: Object, default: null },
     userHomeUrl: { type: Object, default: null },
     commentCount: { type: Object, default: null },
-    videoCount: { type: Object, default: null }
+    videoCount: { type: Object, default: null },
+    createBy: { type: Object, default: null }
   },
   data() {
     return {

@@ -31,6 +31,7 @@ export default {
       'sidebar'
     ]),
     routes() {
+      // todo
       return this.$router.options.routes
     },
     activeMenu() {

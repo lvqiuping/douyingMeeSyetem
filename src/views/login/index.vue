@@ -1,10 +1,10 @@
 <template>
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-
-      <div class="title-container">
+      <div style="text-align: center; margin-bottom: 30px;"><img class="" src="@/assets/logo.png" alt="北塔拓客系统"></div>
+      <!-- <div class="title-container">
         <h3 class="title">登录</h3>
-      </div>
+      </div> -->
 
       <el-form-item prop="username">
         <span class="svg-container">
@@ -43,18 +43,16 @@
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">确定</el-button>
 
-      <div class="tips">
+      <!-- <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
         <span> password: ******</span>
-      </div>
-
+      </div> -->
     </el-form>
   </div>
 </template>
 
 <script>
 import { validateUsername, validatePassword } from '@/utils/validator'
-import { getToken } from '@/utils/auth'
 export default {
   name: 'Login',
   data() {
@@ -179,7 +177,7 @@ $light_gray:#eee;
 
   .login-form {
     position: relative;
-    width: 520px;
+    width: 388px;
     max-width: 100%;
     padding: 160px 35px 0;
     margin: 0 auto;
@@ -188,7 +186,7 @@ $light_gray:#eee;
 
   .tips {
     font-size: 14px;
-    color: #fff;
+    color: #889aa4;
     margin-bottom: 10px;
 
     span {

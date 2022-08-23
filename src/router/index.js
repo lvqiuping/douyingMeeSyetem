@@ -99,40 +99,9 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: '/systemManagement',
-    component: Layout,
-    redirect: '/systemManagement/index',
-    alwaysShow: true,
-    name: '系统管理',
-    meta: {
-      title: '系统管理',
-      icon: 'el-icon-s-tools'
-    },
-    children: [
-      {
-        path: 'index',
-        name: '系统用户',
-        component: () => import('@/views/systemManagement/index'),
-        meta: { title: '系统用户', icon: 'el-icon-user' }
-      }
-    ]
-  },
-  // {
-  //   path: 'external-link',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-  //       meta: { title: 'External Link', icon: 'link' }
-  //     }
-  //   ]
-  // },
-
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
-
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),

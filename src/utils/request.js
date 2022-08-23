@@ -65,11 +65,11 @@ service.interceptors.response.use(
             location.reload()
           })
           // store.dispatch('user/resetToken').then(() => {
-          //   console.log(333)
           //   location.reload()
           // })
         })
       }
+      // 如果是403，不能禁用用户之类的操作
 
       return Promise.reject(new Error(res.errors || 'Error'))
     } else {

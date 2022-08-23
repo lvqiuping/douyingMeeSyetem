@@ -6,12 +6,18 @@
       :operates="operates"
       :loading="loading"
       :operates-width="180"
+      :home-page-url="homePageUrl"
       :user-home-url="userHomeUrl"
       :search-form="'comment'"
       @batchDeleted="batchDeleted"
       @refresh="getPageList()"
       @searchFormEmit2="searchFormEmit2"
     >
+      <template v-slot:homePageUrl="scope">
+        <a :href="scope.scope.row.homePageUrl" target="_blank" style="color: #409eff">
+          {{ scope.scope.row.homePageUrl }}
+        </a>
+      </template>
       <template v-slot:userHomeUrl="scope">
         <a :href="scope.scope.row.userHomePageUrl" target="_blank" style="color: #409eff">
           {{ scope.scope.row.userHomePageUrl }}
@@ -75,6 +81,11 @@ export default {
           icon: ['far', 'trash-can']
         }
       ],
+      homePageUrl: {
+        state: true,
+        label: '视频地址'
+        // width: 600
+      },
       userHomeUrl: {
         state: true,
         label: '用户主页地址'
@@ -146,23 +157,15 @@ export default {
   methods: {
     // sousuo
     searchFormEmit2(v) {
-      console.log('v', v)
       this.listQuery.beginDate = v.commentTime[0]
       this.listQuery.endDate = v.commentTime[1]
       this.listQuery.pageIndex = 1
       this.listQuery = Object.assign({}, this.listQuery, v)
-      // console.log(this.listQuery)
       this.getPageList()
     },
     // liebiao
     getPageList() {
       this.loading = true
-      // var params = {}
-      // if (this.taskId && this.videoId) { // 从任务进来或则从视频进来
-      //   params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskId': taskId, 'videoId': videoId, 'beginDate': beginDate, 'endDate': endDate }
-      // } else {
-      //   params = { 'pageIndex': this.listQuery.pageIndex, 'pageSize': this.listQuery.pageSize, 'taskId': taskId, 'beginDate': beginDate, 'endDate': endDate }
-      // }
       getList(this, getCommentCountList, this.listQuery)
     },
     // caozuo
