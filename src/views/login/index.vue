@@ -41,6 +41,12 @@
         </span>
       </el-form-item>
 
+
+      <div style="margin-bottom: 1rem;">
+        <Vcode :show="isShow" @success="onSuccess" @close="onClose" @fail="onFail" />
+        <el-button type="info" @click="startCaptcha">点击验证</el-button>
+      </div>
+
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">确定</el-button>
 
       <!-- <div class="tips">
@@ -53,8 +59,13 @@
 
 <script>
 import { validateUsername, validatePassword } from '@/utils/validator'
+import Vcode from 'vue-puzzle-vcode'
+import { TipsBox } from '@/utils/feedback'
 export default {
   name: 'Login',
+  components: {
+    Vcode
+  },
   data() {
     return {
       loginForm: {
@@ -67,7 +78,9 @@ export default {
       },
       loading: false,
       passwordType: 'password',
-      redirect: undefined
+      redirect: undefined,
+      isShow: false,
+      captcha: false
     }
   },
   watch: {
@@ -99,6 +112,10 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
+          if (!this.captcha) {
+            TipsBox('warning', '验证码未通过')
+            return false
+          }
           this.loading = true
           const parmas = `userName=${this.loginForm.userName}&password=${this.loginForm.password}`
           this.$store.dispatch('user/login', parmas).then(() => {
@@ -112,6 +129,24 @@ export default {
           return false
         }
       })
+    },
+    startCaptcha() {
+      this.isShow = true
+    },
+
+    onSuccess(msg) {
+      console.log(msg)
+      this.isShow = false // 通过验证后，需要手动关闭模态框
+      this.captcha = true
+    },
+
+    onFail(e) {
+      console.log(e)
+      this.captcha = false
+    },
+
+    onClose() {
+      this.isShow = false
     }
   }
 }
