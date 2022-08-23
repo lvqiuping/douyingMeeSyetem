@@ -135,13 +135,11 @@ export default {
     },
 
     onSuccess(msg) {
-      console.log(msg)
       this.isShow = false // 通过验证后，需要手动关闭模态框
       this.captcha = true
     },
 
     onFail(e) {
-      console.log(e)
       this.captcha = false
     },
 
