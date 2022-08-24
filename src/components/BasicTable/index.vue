@@ -46,7 +46,7 @@
         align="center"
       />
       <el-table-column
-        v-if="createBy"
+        v-if="createBy&&this.$store.state.user.isAdmin"
         :label="createBy.label"
         align="center"
       >

@@ -4,7 +4,7 @@
       <el-form-item v-show="searchForm === 'videoCapture'" prop="TaskName" style="margin-right: 10px;">
         <el-input v-model.trim="temp.taskName" clearable placeholder="请输入任务名" @keyup.enter.native="searching()" />
       </el-form-item>
-      <el-form-item v-show="searchForm === 'videoCapture' && this.$store.state.user.userName === 'admin'" prop="createby" style="margin-right: 10px;">
+      <el-form-item v-show="searchForm === 'videoCapture' && this.$store.state.user.isAdmin === true" prop="createby" style="margin-right: 10px;">
         <el-input v-model.trim="temp.createby" clearable placeholder="请输入创建人" @keyup.enter.native="searching()" />
       </el-form-item>
       <el-form-item v-show="searchForm === 'video'" prop="title">
@@ -116,6 +116,9 @@ export default {
       },
       deep: true
     }
+  },
+  created(){
+    console.log('this.$store.state', this.$store.state)
   },
   methods: {
     searching() {

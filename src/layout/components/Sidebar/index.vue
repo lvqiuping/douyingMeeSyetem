@@ -32,6 +32,24 @@ export default {
     ]),
     routes() {
       // todo
+      // console.log(this.$router.options.routes)
+      // this.$router.options.routes.forEach((item) => {
+      //   if (!this.$store.state.user.isAdmin) {
+      //     if (item.path === '/userManagement') {
+      //       item = Object.assign({}, item, { hidden: false })
+      //     }
+      //     if (item.path === '/systemManagement') {
+      //       item = Object.assign('', item, { hidden: true })
+      //     }
+      //   } else {
+      //     if (item.path === '/userManagement') {
+      //       item.hidden = Object.assign('', item.hidden, true)
+      //     }
+      //     if (item.path === '/systemManagement') {
+      //       item.hidden = Object.assign('', item.hidden, false)
+      //     }
+      //   }
+      // })
       return this.$router.options.routes
     },
     activeMenu() {

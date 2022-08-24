@@ -8,7 +8,9 @@ const getDefaultState = () => {
     // 这些都是state的信息
     token: getToken(),
     userName: Cookies.get('permission'),
-    permission: ''
+    permission: '',
+    isAdmin: Cookies.get('isAdmin'),
+    userId: Cookies.get('userId')
   }
 }
 
@@ -25,6 +27,12 @@ const mutations = {
   },
   SET_PERMISSION: (state, permission) => {
     state.permission = permission
+  },
+  SET_IS_ADMIN: (state, isAdmin) => {
+    state.isAdmin = isAdmin
+  },
+  SET_USER_ID: (state, userId) => {
+    state.userId = userId
   }
 }
 const actions = {
@@ -38,9 +46,13 @@ const actions = {
           obj[e.split('=')[0]] = e.split('=')[1]
         })
         commit('SET_USER_NAME', obj.userName)
-        commit('SET_TOKEN', response.data)
-        setToken(response.data)
         Cookies.set('permission', obj.userName)
+        Cookies.set('userId', response.data.userId)
+        Cookies.set('isAdmin', response.data.isAdmin)
+        commit('SET_IS_ADMIN', response.data.isAdmin)
+        commit('SET_USER_ID', response.data.userId)
+        commit('SET_TOKEN', response.data.token)
+        setToken(response.data.token)
         resolve()
       }).catch(error => {
         reject(error)
@@ -55,10 +67,11 @@ const actions = {
       logout(params).then(() => {
         removeToken() // must remove  token  first
         Cookies.remove('permission')
+        Cookies.remove('userId')
+        Cookies.remove('isAdmin')
         window.location.reload() // f5
-        // resetRouter()
-        // commit('RESET_STATE')
-        // resolve()
+        resetRouter()
+        // resolve() //
       }).catch(error => {
         reject(error)
       })

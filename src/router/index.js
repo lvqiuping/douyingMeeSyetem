@@ -47,6 +47,7 @@ export const constantRoutes = [
     path: '/',
     component: Layout,
     redirect: '/dashboard',
+    hidden: false,
     children: [{
       path: 'dashboard',
       name: 'Dashboard',
@@ -64,6 +65,7 @@ export const constantRoutes = [
       title: 'D音视频获客', // 设置该路由在侧边栏和面包屑中展示的名字
       icon: 'el-icon-s-help'
     },
+    hidden: false,
     children: [
       {
         path: 'index',
@@ -99,8 +101,28 @@ export const constantRoutes = [
       }
     ]
   },
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  {
+    path: '/userManagement',
+    component: Layout,
+    redirect: '/userManagement/index',
+    alwaysShow: true,
+    name: '修改密码',
+    meta: {
+      title: '修改密码',
+      icon: 'el-icon-s-tools'
+    },
+    hidden: false,
+    children: [
+      {
+        path: 'index',
+        name: '修改密码',
+        component: () => import('@/views/userManagement/index'),
+        meta: { title: '修改密码', icon: 'el-icon-user' }
+      }
+    ]
+  },
+  // 404 page must be placed at the end !!! 这里本来到404页面，现在到首页
+  { path: '*', redirect: '/', hidden: true }
 ]
 const createRouter = () => new Router({
   // mode: 'history', // require service support

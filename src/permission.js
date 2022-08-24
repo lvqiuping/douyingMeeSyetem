@@ -29,7 +29,7 @@ router.beforeEach(async(to, from, next) => {
     } else {
       const hasGetUserInfo = store.getters.userName
       if (hasGetUserInfo) {
-        if (hasGetUserInfo === 'admin') {
+        if (store.state.user.isAdmin === true) {
           if (!isAddRouter) {
             isAddRouter = true
             router.addRoutes([

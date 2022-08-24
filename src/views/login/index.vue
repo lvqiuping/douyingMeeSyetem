@@ -2,16 +2,12 @@
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
       <div style="text-align: center; margin-bottom: 30px;"><img class="" src="@/assets/logo.png" alt="北塔拓客系统"></div>
-      <!-- <div class="title-container">
-        <h3 class="title">登录</h3>
-      </div> -->
-
-      <el-form-item prop="username">
+      <el-form-item prop="userName">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
         <el-input
-          ref="username"
+          ref="userName"
           v-model="loginForm.userName"
           placeholder="用户名"
           name="userName"
@@ -40,19 +36,17 @@
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
-
-
       <div style="margin-bottom: 1rem;">
         <Vcode :show="isShow" @success="onSuccess" @close="onClose" @fail="onFail" />
-        <el-button type="info" @click="startCaptcha">点击验证</el-button>
+        <el-button
+          style="border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    color: rgba(255,255,255,.7);"
+          @click="startCaptcha"
+        >点击验证</el-button>
       </div>
-
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登 录</el-button>
-
-      <!-- <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: ******</span>
-      </div> -->
     </el-form>
   </div>
 </template>
