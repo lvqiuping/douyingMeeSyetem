@@ -58,7 +58,7 @@ export default {
     },
     setOptions({ expectedData, actualData } = {}) {
       this.chart.setOption({
-        title: { text: '任务获客量统计' },
+        // title: { text: '任务获客量统计' },
         tooltip: {
           trigger: 'axis',
           axisPointer: { // 坐标轴指示器，坐标轴触发有效
@@ -66,10 +66,10 @@ export default {
           }
         },
         grid: {
-          top: 50,
+          top: 0,
           left: '2%',
           right: '2%',
-          bottom: '3%',
+          bottom: '20%',
           containLabel: true
         },
         xAxis: [{
@@ -77,12 +77,34 @@ export default {
           data: actualData,
           axisTick: {
             alignWithLabel: true
+          },
+          axisLabel: { // x轴文字
+            textStyle: {
+              color: '#BDE4FF'
+            }
+          },
+          axisLine: { // x轴线
+            show: false,
+            lineStyle: {
+              color: '#BDE4FF'
+            }
           }
         }],
         yAxis: [{
           type: 'value',
           axisTick: {
             show: false
+          },
+          axisLabel: { // y轴文字
+            textStyle: {
+              color: '#BDE4FF'
+            }
+          },
+          axisLine: { // y轴线
+            show: true,
+            lineStyle: {
+              color: '#BDE4FF'
+            }
           }
         }],
         series: [{
@@ -91,7 +113,10 @@ export default {
           stack: 'vistors',
           barWidth: '60%',
           data: expectedData,
-          animationDuration
+          animationDuration,
+          color: [ // 柱子颜色
+            '#58D6FF'
+          ]
         }]
       })
     }

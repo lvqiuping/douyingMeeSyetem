@@ -1,5 +1,5 @@
 import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, getRefreshToken, setToken, setRefreshToken, removeToken, removeRefreshToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 import Cookies from 'js-cookie'
 
@@ -7,6 +7,7 @@ const getDefaultState = () => {
   return {
     // 这些都是state的信息
     token: getToken(),
+    refreshToken: getRefreshToken(),
     userName: Cookies.get('permission'),
     permission: '',
     isAdmin: Cookies.get('isAdmin'),
@@ -21,6 +22,9 @@ const mutations = {
   },
   SET_TOKEN: (state, token) => {
     state.token = token
+  },
+  RE_FRESH_TOKEN: (state, refreshToken) => {
+    state.refreshToken = refreshToken
   },
   SET_USER_NAME: (state, userName) => {
     state.userName = userName
@@ -40,6 +44,7 @@ const actions = {
   login({ commit }, userInfo) {
     return new Promise((resolve, reject) => {
       login(userInfo).then(response => {
+        console.log('response', response)
         var str = userInfo.split('&')
         var obj = {}
         str.map((e) => {
@@ -51,8 +56,14 @@ const actions = {
         Cookies.set('isAdmin', response.data.isAdmin)
         commit('SET_IS_ADMIN', response.data.isAdmin)
         commit('SET_USER_ID', response.data.userId)
-        commit('SET_TOKEN', response.data.token)
-        setToken(response.data.token)
+        // token 如果token失效会返回新的refreshToken
+        var token = response.data.token
+        var refreshToken = response.data.refreshToken
+        commit('SET_TOKEN', token)
+        setToken(token)
+        commit('RE_FRESH_TOKEN', refreshToken)
+        setRefreshToken(refreshToken)
+
         resolve()
       }).catch(error => {
         reject(error)
@@ -66,6 +77,7 @@ const actions = {
       const params = `userName=${state.userName}`
       logout(params).then(() => {
         removeToken() // must remove  token  first
+        removeRefreshToken()
         Cookies.remove('permission')
         Cookies.remove('userId')
         Cookies.remove('isAdmin')

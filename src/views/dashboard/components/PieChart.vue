@@ -52,14 +52,14 @@ export default {
     initChart(pieChartData) {
       this.chart = echarts.init(document.getElementById(this.id))
       this.chart.setOption({
-        title: { text: '历史统计分析' },
+        // title: { text: '历史统计分析' },
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b} : {c} ({d}%)'
         },
         legend: {
           left: 'center',
-          bottom: '10',
+          bottom: '50',
           data: ['Industries', 'Technology', 'Forex', 'Gold', 'Forecasts']
         },
         series: [
@@ -71,7 +71,12 @@ export default {
             center: ['50%', '38%'],
             data: pieChartData,
             animationEasing: 'cubicInOut',
-            animationDuration: 2600
+            animationDuration: 2600,
+            color: [
+              '#58D6FF',
+              '#4EEE94',
+              '#FFB64E'
+            ]
           }
         ]
       })

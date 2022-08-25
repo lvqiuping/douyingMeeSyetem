@@ -1,35 +1,35 @@
 <template>
   <el-row :gutter="40" class="panel-group">
-    <el-col :xs="12" :sm="12" :lg="4" class="card-panel-col">
-      <div class="card-panel">
-        <!-- <div class="card-panel-icon-wrapper icon-people">
-          <svg-icon icon-class="peoples" class-name="card-panel-icon" />
-        </div> -->
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            当前运行任务
-          </div>
-          <count-to :start-val="0" :end-val="panelData.processingTaskCount" :duration="2600" class="card-panel-num" />
+    <el-col :xs="12" :sm="12" :lg="8" class="card-panel-col">
+      <div class="card-panel" :style="{backgroundImage: `url(${panelImage})`}">
+        <div class="card-panel-text">
+          当前运行任务
+        </div>
+        <div class="card-panel-content">
+          <img src="@/assets/panel1.png" style="width: 100px; height: auto;">
+          <count-to :start-val="0" :end-val="panelData.processingTaskCount" :duration="2600" class="card-panel-num color1" />
         </div>
       </div>
     </el-col>
-    <el-col :xs="12" :sm="12" :lg="4" class="card-panel-col">
-      <div class="card-panel">
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            获取客户档案
-          </div>
-          <count-to :start-val="0" :end-val="panelData.commentTotalCount" :duration="3000" class="card-panel-num" />
+    <el-col :xs="12" :sm="12" :lg="8" class="card-panel-col">
+      <div class="card-panel" :style="{backgroundImage: `url(${panelImage})`}">
+        <div class="card-panel-text">
+          获取客户档案
+        </div>
+        <div class="card-panel-content">
+          <img src="@/assets/panel2.png" style="width: 100px; height: auto">
+          <count-to :start-val="0" :end-val="panelData.commentTotalCount" :duration="2600" class="card-panel-num color2" />
         </div>
       </div>
     </el-col>
-    <el-col :xs="12" :sm="12" :lg="4" class="card-panel-col">
-      <div class="card-panel">
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            总视频数
-          </div>
-          <count-to :start-val="0" :end-val="panelData.videoTotalCount" :duration="3200" class="card-panel-num" />
+    <el-col :xs="12" :sm="12" :lg="8" class="card-panel-col">
+      <div class="card-panel" :style="{backgroundImage: `url(${panelImage})`}">
+        <div class="card-panel-text">
+          总视频数
+        </div>
+        <div class="card-panel-content">
+          <img src="@/assets/panel3.png" style="width: 100px; height: auto">
+          <count-to :start-val="0" :end-val="panelData.videoTotalCount" :duration="2600" class="card-panel-num color3" />
         </div>
       </div>
     </el-col>
@@ -44,6 +44,11 @@ export default {
     CountTo
   },
   props: { panelData: { type: Object, default: null }},
+  data() {
+    return {
+      panelImage: require('@/assets/panel.png')
+    }
+  },
   methods: {
     handleSetLineChartData(type) {
       this.$emit('handleSetLineChartData', type)
@@ -58,92 +63,42 @@ export default {
 
   .card-panel-col {
     margin-bottom: 32px;
+
   }
 
   .card-panel {
-    height: 108px;
     cursor: pointer;
     font-size: 12px;
     position: relative;
-    overflow: hidden;
     color: #666;
-    background: #fff;
     box-shadow: 4px 4px 40px rgba(0, 0, 0, .05);
-    border-color: rgba(0, 0, 0, .05);
-
-    &:hover {
-      .card-panel-icon-wrapper {
-        color: #fff;
-      }
-
-      .icon-people {
-        background: #40c9c6;
-      }
-
-      .icon-message {
-        background: #36a3f7;
-      }
-
-      .icon-money {
-        background: #f4516c;
-      }
-
-      .icon-shopping {
-        background: #34bfa3
-      }
-    }
-
-    .icon-people {
-      color: #40c9c6;
-    }
-
-    .icon-message {
-      color: #36a3f7;
-    }
-
-    .icon-money {
-      color: #f4516c;
-    }
-
-    .icon-shopping {
-      color: #34bfa3
-    }
-    .card-panel-description {
-      text-align: center;
-      font-weight: bold;
-      margin: 26px;
-      margin-left: 0px;
-
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+    height: 300px;
       .card-panel-text {
+        text-align: center;
         line-height: 18px;
-        color: rgba(0, 0, 0, 0.45);
-        font-size: 16px;
-        margin-bottom: 12px;
+        color: #BDE4FF;
+        font-size: 25px;
       }
-
-      .card-panel-num {
-        font-size: 20px;
+      .card-panel-content {
+        text-align: center;
+        line-height: 350px;
       }
-    }
   }
-}
-
-@media (max-width:550px) {
-  .card-panel-description {
-    display: none;
-  }
-
-  .card-panel-icon-wrapper {
-    float: none !important;
-    width: 100%;
-    height: 100%;
-    margin: 0 !important;
-
-    .svg-icon {
-      display: block;
-      margin: 14px auto !important;
-      float: none !important;
-    }
-  }
+   .card-panel-num {
+        font-size: 25px;
+        margin-left: 20px;
+      }
+      .color1{
+            color: #FE693B;
+        }
+         .color2{
+            color: #F6C603;
+        }
+         .color3{
+            color: #01FBAF;
+        }
 }
 </style>

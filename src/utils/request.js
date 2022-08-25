@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
-import { getToken } from '@/utils/auth'
+import { getToken, getRefreshToken, setToken, setRefreshToken } from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
@@ -14,12 +14,15 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     // do something before request is sent
-
+    // const req = new XMLHttpRequest()
+    // var xx = req.getResponseHeader('x-powered-by')
+    // console.log(req)
     if (store.getters.token) {
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
       config.headers['Authorization'] = 'Bearer ' + getToken()
+      config.headers['X-Authorization'] = 'Bearer ' + getRefreshToken()
     }
     return config
   },
@@ -43,8 +46,20 @@ service.interceptors.response.use(
    * You can also judge the status by HTTP Status Code
    */
   response => {
+    console.log('response', response)
+    const accesstoken = response.headers['access-token']
+    const xaccesstoken = response.headers['x-access-token']
+    if (accesstoken) {
+      // commit('SET_TOKEN', accesstoken)
+      setToken(accesstoken)
+      console.log(getToken())
+    }
+    if (xaccesstoken) {
+      // commit('RE_FRESH_TOKEN', xaccesstoken)
+      setRefreshToken(xaccesstoken)
+      console.log(getRefreshToken())
+    }
     const res = response.data
-    // console.log(res)
     // if the custom code is not 20000, it is judged as an error.
     if (res.statusCode !== 200) {
       Message({
@@ -64,9 +79,6 @@ service.interceptors.response.use(
           store.dispatch('user/logout').then(() => {
             location.reload()
           })
-          // store.dispatch('user/resetToken').then(() => {
-          //   location.reload()
-          // })
         })
       }
       // 如果是403，不能禁用用户之类的操作
