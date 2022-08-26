@@ -1,15 +1,11 @@
 <template>
-  <div class="navbar">
+  <div v-show="top" class="navbar">
     <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-
     <breadcrumb class="breadcrumb-container" />
-
     <div class="right-menu">
       <div style="margin-right: 10px;">{{ userName }}</div>
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <!-- <img class="user-avatar" src="@/assets/404_images/404.png" alt="404"> -->
-          <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar"> -->
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -37,12 +33,33 @@ export default {
     Breadcrumb,
     Hamburger
   },
+  data() {
+    return {
+      top: true
+    }
+  },
   computed: {
     ...mapGetters([
       'sidebar',
       'avatar',
       'userName'
     ])
+  },
+  watch: {
+    $route(to, from) {
+      if (to.fullPath === '/dashboard' || to.fullPath === '/') {
+        this.top = false
+      } else {
+        this.top = true
+      }
+    }
+  },
+  created() {
+    if (this.$route.fullPath === '/dashboard' || this.$route.fullPath === '/') {
+      this.top = false
+    } else {
+      this.top = true
+    }
   },
   methods: {
     toggleSideBar() {

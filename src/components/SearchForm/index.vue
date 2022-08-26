@@ -117,9 +117,6 @@ export default {
       deep: true
     }
   },
-  created(){
-    console.log('this.$store.state', this.$store.state)
-  },
   methods: {
     searching() {
       this.$emit('searchFormEmit', this.temp)

@@ -34,9 +34,7 @@ export default {
       }
     },
     createPassword(v) {
-      console.log(v)
       UpdatePassword(v).then((res) => {
-        console.log(res)
         this.loading = true
         if (res.statusCode === 200) {
           this.loading = false

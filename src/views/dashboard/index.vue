@@ -96,15 +96,15 @@ export default {
   padding: 10px 0;
 }
 .dashboard-editor-container {
-  padding: 0 32px 0 32px;
+  padding: 32px;
   background-color: #304156;
   position: relative;
   min-height: inherit;
-   background-repeat: no-repeat;
-    background-position: center;
-    background-size: 50%;
-    
-  .github-corner {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 45%;
+
+.github-corner {
     position: absolute;
     top: 0px;
     border: 0;

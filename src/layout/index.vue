@@ -25,28 +25,6 @@ export default {
     TagsView
   },
   mixins: [ResizeMixin],
-  // computed: {
-  //   sidebar() {
-  //     return this.$store.state.app.sidebar
-  //   },
-  //   device() {
-  //     return this.$store.state.app.device
-  //   },
-  //   needTagsView() {
-  //     return this.$store.state.settings.tagsView
-  //   },
-  //   fixedHeader() {
-  //     return this.$store.state.settings.fixedHeader
-  //   },
-  //   classObj() {
-  //     return {
-  //       hideSidebar: !this.sidebar.opened,
-  //       openSidebar: this.sidebar.opened,
-  //       withoutAnimation: this.sidebar.withoutAnimation,
-  //       mobile: this.device === 'mobile'
-  //     }
-  //   }
-  // },
   computed: {
     ...mapState({
       sidebar: state => state.app.sidebar,
