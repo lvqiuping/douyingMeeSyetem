@@ -118,8 +118,8 @@ export default {
           show: true
         },
         {
-          label: '用户微信',
-          value: 'userWechat',
+          label: '抖音ID',
+          value: 'douYinId',
           show: true
         },
         {

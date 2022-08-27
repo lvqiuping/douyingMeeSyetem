@@ -3,7 +3,7 @@ import store from './store'
 import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-import { getToken } from '@/utils/auth' // get token from cookie
+import { getToken, getRefreshToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
 /* Layout */
 import Layout from '@/layout'
@@ -20,8 +20,9 @@ router.beforeEach(async(to, from, next) => {
 
   // determine whether the user has logged in
   const hasToken = getToken()
+  const hasRefreshToken = getRefreshToken()
 
-  if (hasToken) {
+  if (hasToken && hasRefreshToken) {
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
       next({ path: '/' })
@@ -29,7 +30,7 @@ router.beforeEach(async(to, from, next) => {
     } else {
       const hasGetUserInfo = store.getters.userName
       if (hasGetUserInfo) {
-        if (store.state.user.isAdmin === true) {
+        if (store.state.user.isAdmin) {
           if (!isAddRouter) {
             isAddRouter = true
             router.addRoutes([

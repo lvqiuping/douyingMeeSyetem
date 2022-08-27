@@ -46,18 +46,13 @@ service.interceptors.response.use(
    * You can also judge the status by HTTP Status Code
    */
   response => {
-    console.log('response', response)
     const accesstoken = response.headers['access-token']
     const xaccesstoken = response.headers['x-access-token']
     if (accesstoken) {
-      // commit('SET_TOKEN', accesstoken)
       setToken(accesstoken)
-      console.log(getToken())
     }
     if (xaccesstoken) {
-      // commit('RE_FRESH_TOKEN', xaccesstoken)
       setRefreshToken(xaccesstoken)
-      console.log(getRefreshToken())
     }
     const res = response.data
     // if the custom code is not 20000, it is judged as an error.
