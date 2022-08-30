@@ -10,7 +10,7 @@
       <el-form-item v-show="searchForm === 'video'" prop="title">
         <el-input v-model.trim="temp.title" clearable placeholder="输入标题" @keyup.enter.native="searching()" />
       </el-form-item>
-      <el-form-item v-show="searchForm === 'comment'" prop="title">
+      <el-form-item v-show="searchForm === 'comment'">
         <span>咨询时间：</span>
         <el-date-picker
           v-model="temp.commentTime"
@@ -29,6 +29,22 @@
       <el-form-item v-show="searchForm === 'user'" prop="realName" style="margin-right: 10px;">
         <el-input v-model.trim="temp.realName" clearable placeholder="输入真实姓名" @keyup.enter.native="searching()" />
       </el-form-item>
+      <el-form-item v-show="searchForm === 'userStatistics'">
+        <span>时间：</span>
+        <el-date-picker
+          v-model="temp.userStatisticsTime"
+          type="datetimerange"
+          :picker-options="pickerOptions"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          align="right"
+          value-format="yyyy-MM-dd HH:MM:ss"
+        />
+      </el-form-item>
+      <el-form-item v-show="searchForm === 'userStatistics'" prop="createBy" style="margin: 0 10px;">
+        <el-input v-model.trim="temp.createBy" clearable placeholder="输入创建者" @keyup.enter.native="searching()" />
+      </el-form-item>
       <el-button type="primary" icon="el-icon-search" style="margin-right: 10px;" @click.native.prevent="searching()" />
     </el-form>
   </div>
@@ -46,9 +62,11 @@ export default {
         taskName: '',
         title: '',
         commentTime: '',
+        userStatisticsTime: '',
         userName: '',
         realName: '',
-        createby: ''
+        createby: '',
+        createBy: ''
       },
       pickerOptions: {
         shortcuts: [

@@ -50,6 +50,19 @@
       <el-form-item v-show="taskType === 2" label="抓取数量上限" prop="CommentUpLimitCount">
         <el-input-number v-model="temp.CommentUpLimitCount" :min="0" :max="taskTypeComment" size="small" @change="changeCommentUpLimitCount" />
       </el-form-item>
+      <el-form-item label="任务刷新" prop="status">
+        <el-switch
+          v-model="temp.status"
+          active-color="#67C23A"
+          inactive-color="#409EFF"
+          active-text="启用"
+          inactive-text="不启用"
+          @change="changeStatus"
+        />
+      </el-form-item>
+      <el-form-item v-show="temp.status" label="刷新周期（天）" prop="intervalDays">
+        <el-input-number v-model="temp.intervalDays" :min="0" size="small" @change="changeIntervalDays" />
+      </el-form-item>
       <el-form-item label="搜索排序" prop="SortBy">
         <el-radio v-model="temp.SortBy" label="0">默认排序</el-radio>
         <el-radio v-model="temp.SortBy" label="1">最多点赞</el-radio>
@@ -78,7 +91,6 @@
 
 <script>
 import ElDragSelect from '@/components/DragSelect' // base on element-ui
-// import { updateTable } from '@/api/table'
 import { validateTaskName } from '@/utils/validator'
 export default {
   name: 'DataForm',
@@ -109,9 +121,14 @@ export default {
     })
   },
   methods: {
+    changeStatus(value) {
+      console.log(value)
+      if (!value) {
+        this.temp.intervalDays = 0
+      }
+    },
     // 单独验证分析源
     validateTaskSource(rule, value, callback) {
-      // var reg = /^(http([s]{0, 1}):\/\/)(www.douyin.com\/user\/.+)$/gi
       if (this.taskType === 0) {
         if (value === '') {
           callback(new Error('请输入分析源'))
@@ -133,6 +150,9 @@ export default {
         }
       }
     },
+    changeIntervalDays(value) {
+      this.temp.intervalDays = value
+    },
     changeVideoUpLimitCount(value) {
       this.temp.VideoUpLimitCount = value
     },
@@ -150,33 +170,30 @@ export default {
       this.zidingyi3 = false
     },
     createData() {
-      this.temp2 = `TaskName=${this.temp.TaskName}&TaskType=${this.temp.TaskType}&TaskSource=${this.temp.TaskSource}&CommentKeyWords=${this.temp.CommentKeyWords}&CommentShieldWords=${this.temp.CommentShieldWords}&TitleKeyWords=${this.temp.TitleKeyWords}&SortBy=${this.temp.SortBy}&PublishFromNowDay=${this.temp.PublishFromNowDay}&VideoUpLimitCount=${this.temp.VideoUpLimitCount}&CommentUpLimitCount=${this.temp.CommentUpLimitCount}`
+      if (this.temp.status) {
+        this.temp.status = 1
+      } else {
+        this.temp.status = 0
+      }
+      this.temp2 = `TaskName=${this.temp.TaskName}
+      &TaskType=${this.temp.TaskType}
+      &TaskSource=${this.temp.TaskSource}
+      &CommentKeyWords=${this.temp.CommentKeyWords}
+      &CommentShieldWords=${this.temp.CommentShieldWords}
+      &TitleKeyWords=${this.temp.TitleKeyWords}
+      &SortBy=${this.temp.SortBy}
+      &PublishFromNowDay=${this.temp.PublishFromNowDay}
+      &VideoUpLimitCount=${this.temp.VideoUpLimitCount}
+      &CommentUpLimitCount=${this.temp.CommentUpLimitCount}
+      &status=${this.temp.status}
+      &intervalDays=${this.temp.intervalDays}
+      `
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.$emit('createDataEmit', this.temp2)
         }
       })
     }
-    // 确认编辑
-    // updateData() {
-    //   this.$refs['dataForm'].validate((valid) => {
-    //     if (valid) {
-    //       const tempData = Object.assign({}, this.temp)
-    //       tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-    //       updateTable(tempData).then(() => {
-    //         const index = this.list.findIndex(v => v.id === this.temp.id)
-    //         this.list.splice(index, 1, this.temp)
-    //         this.dialogFormVisible = false
-    //         this.$notify({
-    //           title: 'Success',
-    //           message: 'Update Successfully',
-    //           type: 'success',
-    //           duration: 2000
-    //         })
-    //       })
-    //     }
-    //   })
-    // }
   }
 }
 </script>

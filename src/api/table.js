@@ -46,7 +46,13 @@ export function RevokeTask(data) {
     data
   })
 }
-
+export function GetAdminUserTaskStats(query) {
+  return request({
+    url: '/api/Task/GetAdminUserTaskStats',
+    method: 'get',
+    params: query
+  })
+}
 /**
  *
  * @param {*} query

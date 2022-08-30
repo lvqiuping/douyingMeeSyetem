@@ -248,7 +248,9 @@ export default {
         CommentKeyWords: [],
         CommentKeyWords2: '',
         CommentShieldWords: [],
-        CommentShieldWords2: ''
+        CommentShieldWords2: '',
+        status: false,
+        intervalDays: 0
       }
     }
   },
@@ -279,7 +281,9 @@ export default {
         CommentKeyWords: [],
         CommentKeyWords2: '',
         CommentShieldWords: [],
-        CommentShieldWords2: ''
+        CommentShieldWords2: '',
+        status: false,
+        intervalDays: 0
       }
     },
     handleCreate() {
@@ -295,6 +299,8 @@ export default {
       })
     },
     createDataEmit(v) {
+      console.log(v)
+      return
       this.loading = true
       AddGrabTask(v).then((res) => {
         if (res.statusCode === 200) {
