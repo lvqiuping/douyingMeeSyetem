@@ -52,6 +52,25 @@ router.beforeEach(async(to, from, next) => {
                     meta: { title: '系统用户', icon: 'el-icon-user' }
                   }
                 ]
+              },
+              {
+                path: '/userStatistics',
+                component: Layout,
+                redirect: '/userStatistics/index',
+                alwaysShow: true,
+                name: '用户统计',
+                meta: {
+                  title: '用户统计',
+                  icon: 'el-icon-s-tools'
+                },
+                children: [
+                  {
+                    path: 'index',
+                    name: '用户统计',
+                    component: () => import('@/views/userStatistics/index'),
+                    meta: { title: '用户统计', icon: 'el-icon-user' }
+                  }
+                ]
               }
             ])
 
@@ -73,7 +92,27 @@ router.beforeEach(async(to, from, next) => {
                   meta: { title: '系统用户', icon: 'el-icon-user' }
                 }
               ]
-            })
+            },
+            {
+              path: '/userStatistics',
+              component: Layout,
+              redirect: '/userStatistics/index',
+              alwaysShow: true,
+              name: '用户统计',
+              meta: {
+                title: '用户统计',
+                icon: 'el-icon-s-tools'
+              },
+              children: [
+                {
+                  path: 'index',
+                  name: '用户统计',
+                  component: () => import('@/views/userStatistics/index'),
+                  meta: { title: '用户统计', icon: 'el-icon-user' }
+                }
+              ]
+            }
+            )
           }
         }
         next()
