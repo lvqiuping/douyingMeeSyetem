@@ -29,7 +29,7 @@
       <el-form-item v-show="searchForm === 'user'" prop="realName" style="margin-right: 10px;">
         <el-input v-model.trim="temp.realName" clearable placeholder="输入真实姓名" @keyup.enter.native="searching()" />
       </el-form-item>
-      <el-form-item v-show="searchForm === 'userStatistics'">
+      <el-form-item v-show="searchForm === 'userStatistics2'">
         <span>时间：</span>
         <el-date-picker
           v-model="temp.userStatisticsTime"

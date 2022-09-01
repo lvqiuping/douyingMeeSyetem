@@ -7,9 +7,35 @@
       :search-form="'userStatistics'"
       :multiple-table="false"
       :batch-deleted-button="false"
+      :type-one="typeOne"
+      :type-two="typeTwo"
+      :type-three="typeThree"
       @refresh="getPageList()"
       @searchFormEmit2="searchFormEmit2"
-    />
+      @sortChange="sortChange"
+    >
+      <template v-slot:typeOne="scope">
+        <div>
+          <router-link :to="{path: '/videoCapture'}" :style="{'color': '#409eff' }">
+            <span>{{ scope.scope.row.type0TaskCount }}</span>
+          </router-link>
+        </div>
+      </template>
+      <template v-slot:typeTwo="scope">
+        <div>
+          <router-link :to="{path: '/videoCapture/peerBlogger'}" :style="{'color': '#409eff' }">
+          <span> {{ scope.scope.row.type1TaskCount }}</span>
+          </router-link>
+        </div>
+      </template>
+      <template v-slot:typeThree="scope">
+        <div>
+          <router-link :to="{path: '/videoCapture/accurateVideo'}" :style="{'color': '#409eff' }">
+          <span> {{ scope.scope.row.type2TaskCount }}</span>
+          </router-link>
+        </div>
+      </template>
+    </basic-table>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageIndex" :limit.sync="listQuery.pageSize" @pagination="getPageList()" />
   </div>
 </template>
@@ -24,25 +50,19 @@ export default {
   data() {
     return {
       loading: false,
+      typeOne: {
+        label: '关键词分析'
+      },
+      typeTwo: {
+        label: '同行博主分析'
+      },
+      typeThree: {
+        label: '精准视频分析'
+      },
       tableTitle: [
         {
           label: '创建者',
           value: 'createBy',
-          show: true
-        },
-        {
-          label: '关键词分析',
-          value: 'type0TaskCount',
-          show: true
-        },
-        {
-          label: '同行博主分析',
-          value: 'type1TaskCount',
-          show: true
-        },
-        {
-          label: '精准视频分析',
-          value: 'type2TaskCount',
           show: true
         },
         {
@@ -63,7 +83,8 @@ export default {
         pageSize: 10,
         createBy: '',
         beginTime: '',
-        endTime: ''
+        endTime: '',
+        orderBy: ''
       }
     }
   },
@@ -74,6 +95,11 @@ export default {
     searchFormEmit2(v) {
       this.listQuery.beginTime = v.userStatisticsTime[0]
       this.listQuery.endTime = v.userStatisticsTime[1]
+      this.listQuery.pageIndex = 1
+      this.listQuery = Object.assign({}, this.listQuery, v)
+      this.getPageList()
+    },
+    sortChange(v) {
       this.listQuery.pageIndex = 1
       this.listQuery = Object.assign({}, this.listQuery, v)
       this.getPageList()

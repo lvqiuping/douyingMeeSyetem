@@ -37,6 +37,7 @@
       :row-class-name="tableRowClassName"
       @row-click="onRowClick"
       @selection-change="handleSelectionChange"
+      @sort-change="sortChange"
     >
       <el-table-column v-if="multipleTable === true" type="selection" width="55" />
       <el-table-column
@@ -54,6 +55,39 @@
       >
         <template v-slot="scope">
           <slot name="createBy" :scope="scope" />
+        </template>
+      </el-table-column>
+      <el-table-column
+        v-if="typeOne"
+        :label="typeOne.label"
+        prop="type0TaskCount"
+        sortable="custom"
+        align="center"
+      >
+        <template v-slot="scope">
+          <slot name="typeOne" :scope="scope" />
+        </template>
+      </el-table-column>
+      <el-table-column
+        v-if="typeTwo"
+        :label="typeTwo.label"
+        prop="type1TaskCount"
+        sortable="custom"
+        align="center"
+      >
+        <template v-slot="scope">
+          <slot name="typeTwo" :scope="scope" />
+        </template>
+      </el-table-column>
+      <el-table-column
+        v-if="typeThree"
+        :label="typeThree.label"
+        prop="type2TaskCount"
+        sortable="custom"
+        align="center"
+      >
+        <template v-slot="scope">
+          <slot name="typeThree" :scope="scope" />
         </template>
       </el-table-column>
       <el-table-column
@@ -167,17 +201,32 @@ export default {
     commentCount: { type: Object, default: null },
     videoCount: { type: Object, default: null },
     createBy: { type: Object, default: null },
-    refreshStatus: { type: Object, default: null }
+    refreshStatus: { type: Object, default: null },
+    typeOne: { type: Object, default: null },
+    typeTwo: { type: Object, default: null },
+    typeThree: { type: Object, default: null }
+
   },
   data() {
     return {
       selectDate: [],
       selectTableData: [],
       total: 0,
-      b_data: {}
+      b_data: {},
+      temp: {
+        orderBy: ''
+      }
     }
   },
   methods: {
+    sortChange({ column, prop, order }) {
+      if (order === 'ascending') {
+        this.temp.orderBy = prop
+      } else if (order === 'descending') {
+        this.temp.orderBy = prop + ' desc'
+      }
+      this.$emit('sortChange', this.temp)
+    },
     tableRowClassName({ row, rowIndex }) {
       row.row_index = rowIndex
     },
