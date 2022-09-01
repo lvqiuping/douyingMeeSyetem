@@ -32,6 +32,12 @@ export function DeleteTasks(data) {
     data
   })
 }
+export function UpdateRefreshStatus(data) {
+  return request({
+    url: '/api/Task/UpdateRefreshStatus?' + data,
+    method: 'post'
+  })
+}
 export function GetTaskParameters(query) {
   return request({
     url: '/api/Task/GetTaskParameters',

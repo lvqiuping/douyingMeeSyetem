@@ -50,18 +50,19 @@
       <el-form-item v-show="taskType === 2" label="抓取数量上限" prop="CommentUpLimitCount">
         <el-input-number v-model="temp.CommentUpLimitCount" :min="0" :max="taskTypeComment" size="small" @change="changeCommentUpLimitCount" />
       </el-form-item>
-      <el-form-item label="任务刷新" prop="status">
+      <el-form-item label="任务刷新" prop="RefreshStatus">
         <el-switch
-          v-model="temp.status"
-          active-color="#67C23A"
-          inactive-color="#409EFF"
+          v-model="temp.RefreshStatus"
+          active-color="#409EFF"
+          inactive-color="#909399"
           active-text="启用"
           inactive-text="不启用"
-          @change="changeStatus"
+          :active-value="1"
+          :inactive-value="0"
         />
       </el-form-item>
-      <el-form-item v-show="temp.status" label="刷新周期（天）" prop="intervalDays">
-        <el-input-number v-model="temp.intervalDays" :min="0" size="small" @change="changeIntervalDays" />
+      <el-form-item v-show="temp.RefreshStatus == 1" label="刷新周期（天）" prop="RefreshInterval">
+        <el-input-number v-model="temp.RefreshInterval" :min="1" size="small" @change="changeRefreshInterval" />
       </el-form-item>
       <el-form-item label="搜索排序" prop="SortBy">
         <el-radio v-model="temp.SortBy" label="0">默认排序</el-radio>
@@ -121,12 +122,6 @@ export default {
     })
   },
   methods: {
-    changeStatus(value) {
-      console.log(value)
-      if (!value) {
-        this.temp.intervalDays = 0
-      }
-    },
     // 单独验证分析源
     validateTaskSource(rule, value, callback) {
       if (this.taskType === 0) {
@@ -150,8 +145,8 @@ export default {
         }
       }
     },
-    changeIntervalDays(value) {
-      this.temp.intervalDays = value
+    changeRefreshInterval(value) {
+      this.temp.RefreshInterval = value
     },
     changeVideoUpLimitCount(value) {
       this.temp.VideoUpLimitCount = value
@@ -170,24 +165,7 @@ export default {
       this.zidingyi3 = false
     },
     createData() {
-      if (this.temp.status) {
-        this.temp.status = 1
-      } else {
-        this.temp.status = 0
-      }
-      this.temp2 = `TaskName=${this.temp.TaskName}
-      &TaskType=${this.temp.TaskType}
-      &TaskSource=${this.temp.TaskSource}
-      &CommentKeyWords=${this.temp.CommentKeyWords}
-      &CommentShieldWords=${this.temp.CommentShieldWords}
-      &TitleKeyWords=${this.temp.TitleKeyWords}
-      &SortBy=${this.temp.SortBy}
-      &PublishFromNowDay=${this.temp.PublishFromNowDay}
-      &VideoUpLimitCount=${this.temp.VideoUpLimitCount}
-      &CommentUpLimitCount=${this.temp.CommentUpLimitCount}
-      &status=${this.temp.status}
-      &intervalDays=${this.temp.intervalDays}
-      `
+      this.temp2 = `TaskName=${this.temp.TaskName}&TaskType=${this.temp.TaskType}&TaskSource=${this.temp.TaskSource}&CommentKeyWords=${this.temp.CommentKeyWords}&CommentShieldWords=${this.temp.CommentShieldWords}&TitleKeyWords=${this.temp.TitleKeyWords}&SortBy=${this.temp.SortBy}&PublishFromNowDay=${this.temp.PublishFromNowDay}&VideoUpLimitCount=${this.temp.VideoUpLimitCount}&CommentUpLimitCount=${this.temp.CommentUpLimitCount}&RefreshStatus=${this.temp.RefreshStatus}&RefreshInterval=${this.temp.RefreshInterval}`
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.$emit('createDataEmit', this.temp2)

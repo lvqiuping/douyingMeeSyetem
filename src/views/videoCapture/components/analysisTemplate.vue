@@ -11,6 +11,7 @@
       :comment-count="commentCount"
       :video-count="videoCount"
       :create-by="createBy"
+      :refresh-status="refreshStatus"
       :loading="loading"
       @batchDeleted="batchDeleted"
       @searchFormEmit2="searchFormEmit2"
@@ -21,10 +22,20 @@
           <el-button type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>
         </div>
       </template>
+      <!-- 单独一列是因为普通用户不需要展示 -->
       <template v-slot:createBy="scope">
         <div>
           <span> {{ scope.scope.row.createBy }}</span>
         </div>
+      </template>
+      <template v-slot:refreshStatus="scope">
+        <el-switch
+          v-model="scope.scope.row.refreshStatus"
+          :active-value="1"
+          :inactive-value="0"
+          disabled
+        />
+        <el-button type="text" style="margin-left: 5px" @click.native="changeRefreshStatus(scope.scope.row)">刷新</el-button>
       </template>
       <template v-slot:videoCount="scope">
         <router-link :to="{path: 'video', query: {taskId: scope.scope.row.id}}" :style="{'color': '#409eff' }">
@@ -71,6 +82,27 @@
         />
       </div>
     </el-dialog>
+    <el-dialog title="修改刷新" :visible.sync="refreshStatusDialog">
+      <el-form :model="refreshForm">
+        <el-form-item label="任务刷新" prop="refreshStatus">
+          <el-switch
+            v-model="temp.refreshStatus"
+            active-text="启用"
+            inactive-text="不启用"
+            :active-value="1"
+            :inactive-value="0"
+            @change="getSwitch"
+          />
+        </el-form-item>
+        <el-form-item v-show="temp.refreshStatus == 1" label="刷新周期（天）" prop="refreshInterval">
+          <el-input-number v-model="temp.refreshInterval" :min="1" size="small" @change="changeRefreshInterval" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="refreshStatusDialog = false">取 消</el-button>
+        <el-button type="primary" @click="refreshForms">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -78,7 +110,7 @@
 import Pagination from '@/components/BasicTable/Pagination.vue'
 import BasicTable from '@/components/BasicTable/index.vue'
 import TableOperation from '@/components/BasicTable/TableOperation.vue'
-import { getTaskList, AddGrabTask, DeleteTasks, GetTaskParameters, RevokeTask } from '@/api/table'
+import { getTaskList, AddGrabTask, DeleteTasks, GetTaskParameters, RevokeTask, UpdateRefreshStatus } from '@/api/table'
 import { TipsBox, QueryBox } from '@/utils/feedback.js'
 import DataForm from '@/views/videoCapture/components/dataForm.vue'
 import { StatusFilter } from '@/utils/status-filter.js'
@@ -96,6 +128,9 @@ export default {
   },
   data() {
     return {
+      refreshStatusDialog: false,
+      refreshForm: {},
+      //
       options1: [],
       options2: [],
       commentCount: {
@@ -106,6 +141,9 @@ export default {
       },
       createBy: {
         label: '创建人'
+      },
+      refreshStatus: {
+        label: '刷新状态'
       },
       loading: false,
       status: {
@@ -223,6 +261,11 @@ export default {
           show: true
         },
         {
+          label: '刷新周期（天）',
+          value: 'refreshInterval',
+          show: true
+        },
+        {
           label: '创建时间',
           value: 'createOn',
           show: true
@@ -249,15 +292,43 @@ export default {
         CommentKeyWords2: '',
         CommentShieldWords: [],
         CommentShieldWords2: '',
-        status: false,
-        intervalDays: 0
-      }
+        RefreshStatus: 0,
+        RefreshInterval: 7 // 默认7天开启不开启都是，开启的话可以修改
+      },
+      rowIndex: 0,
+      refreshparamsId: 0
     }
   },
   created() {
     this.getPageList()
   },
   methods: {
+    getSwitch(v) {
+      if (v === 0) {
+        this.temp.refreshInterval = 7
+      }
+    },
+    changeRefreshInterval(value) {
+      this.temp.refreshInterval = value
+    },
+    changeRefreshStatus(row) {
+      this.temp = Object.assign({}, row)
+      this.refreshStatusDialog = true
+      this.refreshparamsId = row.id
+    },
+    refreshForms() {
+      const refreshparams = `taskId=${this.refreshparamsId}&intervalDays=${this.temp.refreshInterval}&status=${this.temp.refreshStatus}`
+      console.log(refreshparams)
+      this.loading = true
+      UpdateRefreshStatus(refreshparams).then(response => {
+        if (response.statusCode === 200) {
+          TipsBox('success', response.data)
+          this.getPageList()
+          this.loading = false
+          this.refreshStatusDialog = false
+        }
+      })
+    },
     // 获取表格数据
     getPageList() {
       this.loading = true
@@ -282,8 +353,8 @@ export default {
         CommentKeyWords2: '',
         CommentShieldWords: [],
         CommentShieldWords2: '',
-        status: false,
-        intervalDays: 0
+        RefreshStatus: false,
+        RefreshInterval: 7 // 默认7天开启不开启都是，开启的话可以修改
       }
     },
     handleCreate() {
@@ -300,7 +371,6 @@ export default {
     },
     createDataEmit(v) {
       console.log(v)
-      return
       this.loading = true
       AddGrabTask(v).then((res) => {
         if (res.statusCode === 200) {

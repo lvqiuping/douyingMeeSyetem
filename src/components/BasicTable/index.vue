@@ -34,6 +34,8 @@
       :data="tableData"
       style="width: 100%"
       border
+      :row-class-name="tableRowClassName"
+      @row-click="onRowClick"
       @selection-change="handleSelectionChange"
     >
       <el-table-column v-if="multipleTable === true" type="selection" width="55" />
@@ -80,6 +82,15 @@
       >
         <template v-slot="scope">
           <slot name="status" :scope="scope" />
+        </template>
+      </el-table-column>
+      <el-table-column
+        v-if="refreshStatus"
+        :label="refreshStatus.label"
+        align="center"
+      >
+        <template v-slot="scope">
+          <slot name="refreshStatus" :scope="scope" />
         </template>
       </el-table-column>
       <el-table-column
@@ -155,7 +166,8 @@ export default {
     userHomeUrl: { type: Object, default: null },
     commentCount: { type: Object, default: null },
     videoCount: { type: Object, default: null },
-    createBy: { type: Object, default: null }
+    createBy: { type: Object, default: null },
+    refreshStatus: { type: Object, default: null }
   },
   data() {
     return {
@@ -166,6 +178,12 @@ export default {
     }
   },
   methods: {
+    tableRowClassName({ row, rowIndex }) {
+      row.row_index = rowIndex
+    },
+    onRowClick(row, event, column) {
+      // this.$emit('rowIndex', row.row_index)
+    },
     searchFormEmit(v) {
       this.b_data = v
       this.$emit('searchFormEmit2', this.b_data)
