@@ -16,7 +16,7 @@
     >
       <template v-slot:typeOne="scope">
         <div>
-          <router-link :to="{path: '/videoCapture'}" :style="{'color': '#409eff' }">
+          <router-link :to="{path: '/videoCapture', query: {createby: scope.scope.row.createBy}}" :style="{'color': '#409eff' }">
             <span>{{ scope.scope.row.type0TaskCount }}</span>
           </router-link>
         </div>

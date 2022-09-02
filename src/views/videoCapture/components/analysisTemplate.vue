@@ -301,15 +301,12 @@ export default {
   },
   created() {
     // console.log('this.$route.query', this.$route.query)
-    // if (this.$route.query) {
-    //   this.temp = {
-    //     createby: this.$route.query.createby
-    //   }
-    //   this.searchFormEmit2(this.temp)
-    // } else {
-    //   this.temp = {
-    //   }
-    // }
+    if (this.$route.query) {
+      this.temp = {
+        createby: this.$route.query.createby
+      }
+      this.searchFormEmit2(this.temp)
+    }
     this.getPageList()
   },
   methods: {
