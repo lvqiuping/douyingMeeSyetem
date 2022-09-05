@@ -16,22 +16,22 @@
     >
       <template v-slot:typeOne="scope">
         <div>
-          <router-link :to="{path: '/videoCapture', component: () => import('@/views/videoCapture/index'), props: {createby: scope.scope.row.createBy}}" :style="{'color': '#409eff' }">
+          <router-link :to="{path: '/videoCapture', query: { createby: scope.scope.row.createBy }}" :style="{'color': '#409eff' }">
             <span>{{ scope.scope.row.type0TaskCount }}</span>
           </router-link>
         </div>
       </template>
       <template v-slot:typeTwo="scope">
         <div>
-          <router-link :to="{path: '/videoCapture/peerBlogger'}" :style="{'color': '#409eff' }">
-          <span> {{ scope.scope.row.type1TaskCount }}</span>
+          <router-link :to="{path: '/videoCapture/peerBlogger', query: { createby: scope.scope.row.createBy }}" :style="{'color': '#409eff' }">
+            <span> {{ scope.scope.row.type1TaskCount }}</span>
           </router-link>
         </div>
       </template>
       <template v-slot:typeThree="scope">
         <div>
-          <router-link :to="{path: '/videoCapture/accurateVideo'}" :style="{'color': '#409eff' }">
-          <span> {{ scope.scope.row.type2TaskCount }}</span>
+          <router-link :to="{path: '/videoCapture/accurateVideo', query: { createby: scope.scope.row.createBy }}" :style="{'color': '#409eff' }">
+            <span> {{ scope.scope.row.type2TaskCount }}</span>
           </router-link>
         </div>
       </template>

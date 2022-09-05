@@ -8,12 +8,7 @@ import AnalysisTemplate from '@/views/videoCapture/components/analysisTemplate.v
 
 export default {
   name: 'KeywordAnalysis',
-  components: { AnalysisTemplate },
-  // eslint-disable-next-line vue/require-prop-types
-  props: ['createby'],
-  setup(props) {
-    console.log(props)
-  }
+  components: { AnalysisTemplate }
 }
 </script>
 

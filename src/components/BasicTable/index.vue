@@ -34,8 +34,6 @@
       :data="tableData"
       style="width: 100%"
       border
-      :row-class-name="tableRowClassName"
-      @row-click="onRowClick"
       @selection-change="handleSelectionChange"
       @sort-change="sortChange"
     >
@@ -205,7 +203,6 @@ export default {
     typeOne: { type: Object, default: null },
     typeTwo: { type: Object, default: null },
     typeThree: { type: Object, default: null }
-
   },
   data() {
     return {
@@ -226,12 +223,6 @@ export default {
         this.temp.orderBy = prop + ' desc'
       }
       this.$emit('sortChange', this.temp)
-    },
-    tableRowClassName({ row, rowIndex }) {
-      row.row_index = rowIndex
-    },
-    onRowClick(row, event, column) {
-      // this.$emit('rowIndex', row.row_index)
     },
     searchFormEmit(v) {
       this.b_data = v

@@ -52,6 +52,13 @@ export function RevokeTask(data) {
     data
   })
 }
+export function BeginTask(data) {
+  return request({
+    url: '/api/Task/BeginTask',
+    method: 'post',
+    data
+  })
+}
 export function GetAdminUserTaskStats(query) {
   return request({
     url: '/api/Task/GetAdminUserTaskStats',

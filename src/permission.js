@@ -101,14 +101,14 @@ router.beforeEach(async(to, from, next) => {
               name: '用户统计',
               meta: {
                 title: '用户统计',
-                icon: 'el-icon-s-tools'
+                icon: 'el-icon-s-data'
               },
               children: [
                 {
                   path: 'index',
                   name: '用户统计',
                   component: () => import('@/views/userStatistics/index'),
-                  meta: { title: '用户统计', icon: 'el-icon-user' }
+                  meta: { title: '用户统计', icon: 'el-icon-data-analysis' }
                 }
               ]
             }

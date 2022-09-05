@@ -110,7 +110,7 @@
 import Pagination from '@/components/BasicTable/Pagination.vue'
 import BasicTable from '@/components/BasicTable/index.vue'
 import TableOperation from '@/components/BasicTable/TableOperation.vue'
-import { getTaskList, AddGrabTask, DeleteTasks, GetTaskParameters, RevokeTask, UpdateRefreshStatus } from '@/api/table'
+import { getTaskList, AddGrabTask, DeleteTasks, GetTaskParameters, RevokeTask, UpdateRefreshStatus, BeginTask } from '@/api/table'
 import { TipsBox, QueryBox } from '@/utils/feedback.js'
 import DataForm from '@/views/videoCapture/components/dataForm.vue'
 import { StatusFilter } from '@/utils/status-filter.js'
@@ -300,7 +300,6 @@ export default {
     }
   },
   created() {
-    // console.log('this.$route.query', this.$route.query)
     if (this.$route.query) {
       this.temp = {
         createby: this.$route.query.createby
@@ -418,7 +417,10 @@ export default {
         QueryBox('是否撤销该数据?').then(() => {
           const params = `taskId=${row.id}`
           this.revoke(params)
-        })
+        }).catch(err => { console.error(err) })
+      } else if (op.types === 'start') {
+        const params = `taskId=${row.id}`
+        this.begin(params)
       }
     },
     batchDeleted(v) {
@@ -456,6 +458,16 @@ export default {
     revoke(p) {
       this.loading = true
       RevokeTask(p).then(response => {
+        if (response.statusCode === 200) {
+          TipsBox('success', response.data)
+          this.getPageList()
+          this.loading = false
+        }
+      })
+    },
+    begin(p) {
+      this.loading = true
+      BeginTask(p).then(response => {
         if (response.statusCode === 200) {
           TipsBox('success', response.data)
           this.getPageList()

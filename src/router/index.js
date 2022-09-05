@@ -109,7 +109,7 @@ export const constantRoutes = [
     name: '修改密码',
     meta: {
       title: '修改密码',
-      icon: 'el-icon-s-tools'
+      icon: 'el-icon-lock'
     },
     hidden: false,
     children: [
@@ -117,7 +117,7 @@ export const constantRoutes = [
         path: 'index',
         name: '修改密码',
         component: () => import('@/views/userManagement/index'),
-        meta: { title: '修改密码', icon: 'el-icon-user' }
+        meta: { title: '修改密码', icon: 'el-icon-key' }
       }
     ]
   },
