@@ -13,6 +13,7 @@
       :create-by="createBy"
       :refresh-status="refreshStatus"
       :loading="loading"
+      :grab-platform="grabPlatform"
       @batchDeleted="batchDeleted"
       @searchFormEmit2="searchFormEmit2"
       @refresh="getPageList()"
@@ -26,6 +27,13 @@
       <template v-slot:createBy="scope">
         <div>
           <span> {{ scope.scope.row.createBy }}</span>
+        </div>
+      </template>
+      <template v-slot:grabPlatform="scope">
+        <div>
+          <el-tag v-if="scope.scope.row.grabPlatform === 0" type="info">抖音</el-tag>
+          <el-tag v-if="scope.scope.row.grabPlatform === 1" type="danger">快手</el-tag>
+          <el-tag v-if="scope.scope.row.grabPlatform === 2" type="warning">视频号</el-tag>
         </div>
       </template>
       <template v-slot:refreshStatus="scope">
@@ -130,9 +138,11 @@ export default {
     return {
       refreshStatusDialog: false,
       refreshForm: {},
-      //
       options1: [],
       options2: [],
+      grabPlatform: {
+        label: '抓取平台'
+      },
       commentCount: {
         label: '意向客户数'
       },
@@ -293,7 +303,8 @@ export default {
         CommentShieldWords: [],
         CommentShieldWords2: '',
         RefreshStatus: 0,
-        RefreshInterval: 7 // 默认7天开启不开启都是，开启的话可以修改
+        RefreshInterval: 7, // 默认7天开启不开启都是，开启的话可以修改
+        GrabPlatform: 0
       },
       rowIndex: 0,
       refreshparamsId: 0
@@ -324,7 +335,7 @@ export default {
     },
     refreshForms() {
       const refreshparams = `taskId=${this.refreshparamsId}&intervalDays=${this.temp.refreshInterval}&status=${this.temp.refreshStatus}`
-      console.log(refreshparams)
+      // console.log(refreshparams)
       this.loading = true
       UpdateRefreshStatus(refreshparams).then(response => {
         if (response.statusCode === 200) {
@@ -359,8 +370,9 @@ export default {
         CommentKeyWords2: '',
         CommentShieldWords: [],
         CommentShieldWords2: '',
-        RefreshStatus: false,
-        RefreshInterval: 7 // 默认7天开启不开启都是，开启的话可以修改
+        RefreshStatus: 0,
+        RefreshInterval: 7, // 默认7天开启不开启都是，开启的话可以修改
+        GrabPlatform: 0
       }
     },
     handleCreate() {
@@ -376,7 +388,8 @@ export default {
       })
     },
     createDataEmit(v) {
-      console.log(v)
+      // console.log(v)
+      // return
       this.loading = true
       AddGrabTask(v).then((res) => {
         if (res.statusCode === 200) {

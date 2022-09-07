@@ -46,11 +46,19 @@ const TaskTitle = (rule, value, callback) => {
   }
 }
 
+const validateCommentKeyWords = (rule, value, callback) => {
+  if (value.length === 0) {
+    callback(new Error('请选择或者自定义一个筛选关键词'))
+  } else {
+    callback()
+  }
+}
 export {
   validateUsername,
   validatePassword,
   validateTaskName,
   validateTaskType,
   validateTaskSource,
-  TaskTitle
+  TaskTitle,
+  validateCommentKeyWords
 }

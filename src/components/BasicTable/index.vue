@@ -56,6 +56,15 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="grabPlatform"
+        :label="grabPlatform.label"
+        align="center"
+      >
+        <template v-slot="scope">
+          <slot name="grabPlatform" :scope="scope" />
+        </template>
+      </el-table-column>
+      <el-table-column
         v-if="typeOne"
         :label="typeOne.label"
         prop="type0TaskCount"
@@ -202,7 +211,8 @@ export default {
     refreshStatus: { type: Object, default: null },
     typeOne: { type: Object, default: null },
     typeTwo: { type: Object, default: null },
-    typeThree: { type: Object, default: null }
+    typeThree: { type: Object, default: null },
+    grabPlatform: { type: Object, default: null }
   },
   data() {
     return {
