@@ -116,16 +116,20 @@ export default {
   data() {
     return {
       // eslint-disable-next-line vue/no-dupe-keys
-      options: [{
-        value: 0,
-        label: '抖音'
-      }, {
-        value: 1,
-        label: '快手'
-      }, {
-        value: 2,
-        label: '视频号'
-      }],
+      options: [
+        {
+          value: 0,
+          label: '抖音'
+        },
+        {
+          value: 1,
+          label: '快手'
+        }
+      // {
+      //   value: 2,
+      //   label: '视频号'
+      // }
+      ],
       zidingyi2: false,
       zidingyi3: false,
       rules: {
